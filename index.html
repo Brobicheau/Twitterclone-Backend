@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.min.js"></script>
+    <script type="text/javascript" src="public/js/controller.js"></script>		
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<title>WELCOME TO TWITTER SERVER 1</title>
+</head>
+<body ng-app="myApp" ng-controller="AppCtrl">
+	Create Account SERVER 4
+
+
+
+	<div ng-switch="pageSwitch">
+		<div ng-switch-when="createUser-page">
+
+			Username: <input class="form-controler" ng-model="createUserInfo.username"><br>
+
+			Email: <input class="form-controler" ng-model="createUserInfo.email"><br>
+
+			Password: <input class="form-controler" ng-model="createUserInfo.password"><br>
+
+			<button class="btn-primary" ng-click="createAccount()">Create new Account!</button>
+
+			<br><br><br>
+
+			<button class="btn" ng-click="verify()">Verify this account</button>
+
+			<br><br><br>
+
+			<button class="btn" ng-click="switchToLogin()">Click here to go to login page!</button>
+
+			<br><br><br>
+
+			<button class="btn" ng-click="switchToMain()">Click here to go to main page!</button>
+
+			<button class="btn" ng-click="logout()">Click here to logout!</button>
+
+
+
+		</div>
+
+
+
+		<div ng-switch-when="login-page">
+
+			Username: <input class="form-controler" ng-model="loginInfo.username"><br>
+
+			Password: <input class="form-controler" ng-model="loginInfo.password">
+
+			<button class="btn-primary" ng-click="login()">Login!</button>
+			<br><br><br>
+
+			<button class="btn" ng-click="switchToCreate()">Click here to create account!</button>
+
+			<br><br><br>
+
+			<button class="btn" ng-click="switchToMain()">Click here to go to main page!</button>
+
+			<button class="btn" ng-click="logout()">Click here to logout!</button>
+
+
+
+
+		</div>
+
+
+		<div ng-switch-when="main-page">
+
+
+			Tweet: <input class="form-controler" ng-model="tweet.tweet">
+
+			<button class="btn-primary" ng-click="addTweet()">Post Tweet!</button>
+
+			<button class="btn" ng-click="switchToCreate()">Click here to create account!</button>
+
+			<br><br><br>
+
+
+			<button class="btn" ng-click="switchToLogin()">Click here to go to login page!</button>
+
+			<button class="btn" ng-click="logout()">Click here to logout!</button>
+
+		</div>
+	</div>
+
+
+
+
+</body>
+
+</html>
+<div id = 'app'></div>
