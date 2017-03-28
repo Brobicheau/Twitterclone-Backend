@@ -41,19 +41,61 @@ var myHasher = function (password, tempUserData, insertTempUser, callback){
 
 /********** Configure Email verification **********/
 
+nev.configure({
 
+	persistentUserModel: User,
+	tempUserModel: TempUser,
+	expirationTime: 1000,
+	URLFieldName: "URL",
+	verificationURL: "http://130.245.168.124/verify/${URL}",
+	hashingFunction: myHasher,
+	passwordFieldName:"password",
+	//check proper transportOption configuration
+
+	transportOptions: {
+	    service: "Gmail",
+	    auth: {
+	    	user:"twittercloneverifyemial",
+	    	pass: "!password"
+	    }
+	},
+	verifyMailOptions: {
+		from: 'Do Not Reply brobicheaucse356',
+		subject: "Confirm Eliza Account",
+		html: "Click the link to confirm account: $URL",
+		text: 'Confirm Account by clicking the link:${URL}'
+	},
+	shouldSendConfirmation: true,
+	confirmMailOptionsL:{
+		from:'Do Not Reply brobicheaucse356',
+		subject: 'Successfully verified',
+		html: '<p>Your account has been successfully verified.</p>',
+		text:'Your account has been successfully verified.'
+	}
+	}, function (error, options){
+
+});
 
 //MAIN PAGE OF TWITTER
 app.post('/', function(req, res) {
-	console.log("GET REQUEST SUCCESSFUL");
+
+
 	res.send();
 });
 
 app.get('/', function(req, res){
-	console.log("TESTING");
 	res.send();
 })
 
+app.get('/init', function(req, res){
+
+	if(typeof req.session.currentUser !== 'undefined'){
+		res.send({"username":req.session.currentUser, "status":"OK"});
+	}
+
+	res.send();
+
+})
 
 /********************************************
 *	/adduser description - POST: 
@@ -81,43 +123,61 @@ app.post('/adduser', function(req,res){
 	var password = req.body.password;
 	var email = req.body.email;
 
-	//create a json obejct to create the user containing
-	// the user information and status ok for checking
+	var newUser = User({
+		email:email,
+		password:password
+	})
 
+	nev.createTempUser(newUser, function(err, existingPersistentUser, newTempUser){
 
-	bcrypt.hash(password, 10).then(function(hashed_pass){
-		console.log(hashed_pass);
-		var newUser = TempUser ({
-			username : username,
-			password : hashed_pass,
-			email : email,
-			status : "OK"
-		});
+		console.log
 
-		newUser.save(function(err, results){
-			console.log(password);
-			if(err)
-			{
-				console.log("error")
-				var response = {
-					"status": "error",
-					"error": err
+		console.log("increateuser method");
+		//if there was a problem in creating the temp user
+		if(err){
+			//should send some sort of error back to client 
+			console.log(err);
+		}
+
+		//if the user alreadt exsists in the database
+		if(existingPersistentUser){
+			console.log("exsisting");
+			//should send back respnose
+		}
+
+		//otherwise we have successfully created a new temp user
+		if(newTempUser){
+			console.log(newTempUser);
+			//grab the URL from the new users data
+			var URL = newTempUser[nev.options.URLFieldName]; 
+
+			console.log(URL);
+
+			//send an email with that url to the user to verify their account
+			nev.sendVerificationEmail(email, URL, function(err, info){
+
+				//if there was an error in sending the email
+				if(err){
+					//send some sort of error back to tuser
+					console.log(err);
+					return;
 				}
-				res.send(response);
-			}
-			else {
-				console.log("success");
-				var response = {
-					"status": "OK",
-				}
-				res.send(response);
 
-			}
-		});
-	});
+				//if everything went back send the data back to the client
+				console.log(newUser);
+				res.send(newUser);	
 
+			});//end send emmail
 
+		}
+		else {
+			//dont realyl need this else
+			//its the error field for if threr was no temp user either
+			console.log("ERROR");	
+		}
+	})
 });//end /adduser
+
 
 
 /********************************************
@@ -218,6 +278,36 @@ app.post('/logout', function(req,res){
 	res.send({status: "OK"});
 });//end /logout
 
+
+app.get('/verify/:URL', function(req, res){
+
+	var url = req.params.URL;
+
+		//confirm the user with the URL we got 
+	nev.confirmTempUser(url, function(err, user){
+
+		//if there was an error
+		if (err){
+
+			//display error and send client an error message
+			console.log(err);
+			json = {
+				status: "ERROR"
+			};	
+			res.json(json);
+		}
+
+		//otherwise let user know it all went ok
+		if(user){
+
+			json = {
+				status: "OK"
+			};
+			res.json(json);
+		}
+	})
+
+})
 
 /********************************************
 *	/verify description - POST: 
@@ -428,7 +518,7 @@ app.get('/item/:id', function(req,res){
 	}
 	else {
 		console.log('not valid ID');
-		res.status(404).send("ERROR FINDNG TWEET");
+		res.status(404).send({"status":"error"});
 	}
 
 
@@ -436,7 +526,7 @@ app.get('/item/:id', function(req,res){
 
 /********************************************
 *	/item/<id> description - DELETE (STAGE 2): 
-*	Deletes tweet of given ID, also deleteds associated media
+*	Deletes tweet of given ID, also deletes associated media
 *
 *	Request Parameters
 *		- NONE
@@ -447,6 +537,27 @@ app.get('/item/:id', function(req,res){
 ************************************************/
 app.delete('/item/<id>', function(req,res){
 
+/******************************************************************
+*
+*							JAY 
+*
+*******************************************************************/
+
+	//Pull id from request ( req.params.id)
+
+	//find the item to remove via Tweet.find(id).remove(callback)
+
+		//if its an error 
+
+			//send back status error
+
+		//else we deleted user
+
+			//return back success
+
+		//END IF ELSE
+
+	//END FIND ITEM
 
 });
 
@@ -551,6 +662,29 @@ app.post('/search', function(req,res){
 ************************************************/
 app.get('/user/<username>', function(req,res){
 
+/******************************************************************
+*
+*							JAY 
+*
+*******************************************************************/	
+
+	//pull username from params via req.params.username
+
+	//Search for account with correct username via Users.findOne(username, function(err, user))
+
+		//if theres an error
+
+			//return status error
+
+		//else if we found user
+
+			//create json to return call user (see function description for details)
+
+			//return user info
+
+		//END IF ELSE
+
+	//END FIND USERNAME
 
 });
 
@@ -570,7 +704,47 @@ app.get('/user/<username>', function(req,res){
 *	- users: list of usernames (strings) 
 *
 *******************************************************************/
-app.get('/user/<username>/followers', function(req,res){
+app.get('/user/:username/followers', function(req,res){
+
+
+	/******************************************************************
+	*
+	*							VINNY 
+	*
+	*******************************************************************/
+
+	//pull username from params via req.params.username
+
+	//pull limit from request via req.params.limit (maybe)
+
+	//find username via User.findOne(username, function(err, user))
+
+	//ACCESS FOLOWERS BY user.followers GIVES ARRAY
+
+		//if err 
+
+			//return error status
+
+		//else if we found user
+
+			//if limit is defined
+
+				//create response json with array of followers the size of limit (max of 200) (and status)
+
+				//send response json
+
+			//else we use default limit
+
+				//create json response with array of 50 followers (any order)
+
+				//send response json
+
+			//END IF ELSE
+
+		//END IF ELSE
+
+	//END FIND USERNAME
+
 
 
 });
@@ -591,8 +765,45 @@ app.get('/user/<username>/followers', function(req,res){
 *	- users: list of usernames (strings) 
 *
 *******************************************************************/
-app.post('/user/<username>/following', function(req,res){
+app.post('/user/:username/following', function(req,res){
 
+/******************************************************************
+*
+*							VINNY 
+*
+*******************************************************************/
+
+	//pull username from params via req.params.username
+
+	//pull limit from request via req.params.limit (maybe)
+
+	//find username via User.findOne(username, function(err, user))
+
+	//ACCESS FOLLOWINGS BY user.followings GIVES ARRAY
+
+		//if err 
+
+			//return error status
+
+		//else if we found user
+
+			//if limit is defined
+
+				//create response json with array of users hes following the size of limit (max of 200) (and status)
+
+				//send response json
+
+			//else we use default limit
+
+				//create json response with array of 50 hes following (any order)
+
+				//send response json
+
+			//END IF ELSE
+
+		//END IF ELSE
+
+	//END FIND USERNAME
 
 });
 
@@ -613,6 +824,33 @@ app.post('/user/<username>/following', function(req,res){
 *******************************************************************/
 app.post('/follow', function(req,res){
 
+
+/******************************************************************
+*
+*							VINNY 
+*
+*******************************************************************/	
+
+	//pull usename to follow via req.body.username
+
+	//pull follow bool via req.body.follow
+
+	//find the user to follow via User.findOne(username, function(err, user))
+
+		//if theres an array
+
+			//send error response
+
+		//else
+
+			//add the currentUser to users array, access to current user is req.session.currentUser
+			//access to users follower array is user.followers, gives array.
+
+			///send OK response
+
+		//END IF ELSE
+
+	//END FIND USER
 
 });
 
@@ -670,6 +908,31 @@ app.post('/media/<id>', function(req,res){
 
 
 });
+
+app.get('/feed', function(req, res){
+
+	Tweet.find({}).sort({"timestamp":-1}).limit(100).exec(function(err, data){
+
+		if(err)
+			res.send({"status": "error"});
+
+		var fill = ""
+
+
+		for(i = 0; i < data.length ;i++){
+			fill = fill + data[i].username + ": " + data[i].content + "\n";
+		}
+
+		console.log(fill);
+
+		var response = {
+			tweets: fill
+		};
+
+
+		res.send(response);
+	});
+})
 
 
 

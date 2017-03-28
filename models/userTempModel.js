@@ -5,6 +5,7 @@ var userTempSchema = mongoose.Schema({
 	username: String,
 	email: String,
 	password: String,
+	URL: String,
 	status: String
 });
 

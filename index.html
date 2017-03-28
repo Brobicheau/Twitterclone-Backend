@@ -8,8 +8,8 @@
 	<title>WELCOME TO TWITTER SERVER 1</title>
 </head>
 <body ng-app="myApp" ng-controller="AppCtrl">
-	Create Account SERVER 4
 
+		{{current.user}}
 
 
 	<div ng-switch="pageSwitch">
@@ -69,11 +69,33 @@
 		<div ng-switch-when="main-page">
 
 
-			Tweet: <input class="form-controler" ng-model="tweet.tweet">
+			Tweet: <input class="form-controller" ng-model="tweet.tweet">
 
 			<button class="btn-primary" ng-click="addTweet()">Post Tweet!</button>
+			<br><br>
+
+			Search for all tweets before: <input class="form-controller" ng-model="search.timestamp">
+			<br>
+			Pick amount of tweets to show: <input class="form-controller" ng-model="search.limit">
+			<br>
+			<button class="btn" ng-click="search()">Search for tweets!</button>
+			<br><br><br>
+
+			Find by ID: <input class="form-controller" ng-model="item.id">
+
+			<br>
+			<button class="btn" ng-click="findItem()">Search by id</button>
+			<br><br>
 
 			<button class="btn" ng-click="switchToCreate()">Click here to create account!</button>
+
+						<br><br><br>
+
+			<button class="btn" ng-click="switchToMain()">Show main feed</button>
+			<br><br><br>
+
+
+			Feed: <pre>{{twitter.feed}}</pre>
 
 			<br><br><br>
 
