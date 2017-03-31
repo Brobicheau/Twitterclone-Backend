@@ -17,18 +17,6 @@
     height: 100px;
     border: 3px solid #73AD21;
 }*/
-#test{
-	margin-top: 30px;
-	margin-left: 30px;
-}
-#test2{
-	/*margin-top: 30px;*/
-	margin-left: 30px;
-}
-#testPage-css{
-    width: 900px;
-    height: 900px;
-}
 #page-css{
     width: 700px;
     height: 700px;
@@ -61,33 +49,36 @@ body {
 
 		<!-- SERVER 2		{{current.user}} -->
 
-	<div>
-		<img src="http://vignette3.wikia.nocookie.net/gtawiki/images/1/1d/Lifeinvader-GTAV.png/revision/latest?cb=20130813165601"/>
-	</div>
 	<div ng-switch="pageSwitch">
 		<div ng-switch-when="createUser-page">
-			<div class="col-lg-9" id="testPage-css">
-					<br>
-					<br>
-					<div class="bg-danger" id="test">
-					<label id="redBoldText">Username:<label><input class="form-controler" ng-model="createUserInfo.username">
+			<div class="bg-danger" id="page-css">
+				<div id="elementSpace-css">
+					<div>
+						<img src="https://lh6.ggpht.com/4h4AiWX8AQbaJiWZGud2jDulUuGf0hp5MEd0oAPcn1-wNnBf6MhmsZXT4lOUgVtFbX9ESmjwWqssGFkyuH6W=s0"></img>
 					</div>
 					<br>
 					<br>
-					<p id="redBoldText">Email:</p><input class="form-controler" ng-model="createUserInfo.email">
+					<label id="redBoldText">Username:&nbsp;</label><input class="form-controler" ng-model="createUserInfo.username">
 					<br>
 					<br>
-					<p id="redBoldText">Password:</p><input class="form-controler" ng-model="createUserInfo.password">
+					<label id="redBoldText">Email:&emsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label><input class="form-controler" ng-model="createUserInfo.email">
+					<br>
+					<br>
+					<label id="redBoldText">Password:&nbsp;</label><input class="form-controler" ng-model="createUserInfo.password">
 					<br>
 					<br>
 					<button class="btn-danger btn-lg" ng-click="createAccount()">Create new Account!</button>
 					<br>
 					<br>
 					<br>
+				</div>
 			</div>
 		</div>
 
 		<div ng-switch-when="login-page">
+			<div>
+				<img src="http://vignette3.wikia.nocookie.net/gtawiki/images/1/1d/Lifeinvader-GTAV.png/revision/latest?cb=20130813165601"/>
+			</div>
 			<div class="bg-danger" id="page-css">
 				<div id="elementSpace-css">
 					<p id="redBoldText">Username:</p> <input class="form-controler" value="username" ng-model="loginInfo.username">

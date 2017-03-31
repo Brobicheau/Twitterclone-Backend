@@ -21,7 +21,7 @@ var randomstring = require("randomstring");
 
 /*My libraries*/
 var User = require('./models/userModel.js');
-var TempUser = require("./models/userTempModel.js");
+var TempUser = require("./models/userTempModel.js"); 
 var Tweet = require("./models/tweetModel.js");
 var adduser = require('./public/js/twitter-adduser.js');
 var login = require('./public/js/twitter-login.js');
