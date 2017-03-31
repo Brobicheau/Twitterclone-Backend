@@ -67,23 +67,23 @@ body {
 	<div ng-switch="pageSwitch">
 		<div ng-switch-when="createUser-page">
 			<div class="col-lg-9" id="testPage-css">
-				<div class="bg-danger" id="test">
 					<br>
 					<br>
-					Username:<input class="form-controler" ng-model="createUserInfo.username">
+					<div class="bg-danger" id="test">
+					<label id="redBoldText">Username:<label><input class="form-controler" ng-model="createUserInfo.username">
+					</div>
 					<br>
 					<br>
-					Email:<input class="form-controler" ng-model="createUserInfo.email">
+					<p id="redBoldText">Email:</p><input class="form-controler" ng-model="createUserInfo.email">
 					<br>
 					<br>
-					Password:<input class="form-controler" ng-model="createUserInfo.password">
+					<p id="redBoldText">Password:</p><input class="form-controler" ng-model="createUserInfo.password">
 					<br>
 					<br>
 					<button class="btn-danger btn-lg" ng-click="createAccount()">Create new Account!</button>
 					<br>
 					<br>
 					<br>
-				</div>
 			</div>
 		</div>
 
