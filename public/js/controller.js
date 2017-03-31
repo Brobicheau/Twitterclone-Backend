@@ -37,9 +37,11 @@ myApp.controller('AppCtrl', ['$scope', '$http', function($scope, $http) {
 		$http.get('/init').then(initSuccess, initError)
 
 			function initSuccess(success){
+				console.log(success.data);
 
-				if(typeof success.data.user !== 'undefined'){
-					$scope.current.user= success.data.user;
+
+				if(typeof success.data.username !== 'undefined'){
+					$scope.current.user= success.data.username;
 					$scope.switchToMain();
 
 				}
@@ -63,8 +65,6 @@ myApp.controller('AppCtrl', ['$scope', '$http', function($scope, $http) {
 
 			function feedSuccess(success){
 				console.log(success.data.tweets);
-
-
 				$scope.twitter.feed = success.data.tweets;
 			}
 
@@ -75,6 +75,9 @@ myApp.controller('AppCtrl', ['$scope', '$http', function($scope, $http) {
 	}
 
 	$scope.switchToLogin = function() {
+
+		$scope.loginInfo.username = "";
+		$scope.loginInfo.password = "";
 		$scope.pageSwitch = "login-page";
 	}
 
@@ -88,6 +91,8 @@ myApp.controller('AppCtrl', ['$scope', '$http', function($scope, $http) {
 
 		function logoutSuccess (success){
 			console.log("LLOGOUT SUCCESS");
+			$scope.switchToLogin();
+
 		}
 
 		function logoutError(error){
@@ -138,7 +143,7 @@ myApp.controller('AppCtrl', ['$scope', '$http', function($scope, $http) {
 	$scope.login = function() {
 		request = {
 			username: $scope.loginInfo.username,
-			password: $scope.loginInfo.username
+			password: $scope.loginInfo.password
 		};
 		$http.post('/login', request).then(loginSuccess, loginError);
 
@@ -148,7 +153,7 @@ myApp.controller('AppCtrl', ['$scope', '$http', function($scope, $http) {
 		}
 
 		function loginError (error){
-			console.log("ERROR WHEN LOGGING IN");
+			console.log(error);
 		}
 	}
 

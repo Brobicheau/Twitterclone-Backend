@@ -4,72 +4,109 @@
 <head>
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.min.js"></script>
     <script type="text/javascript" src="public/js/controller.js"></script>		
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-	<title>WELCOME TO TWITTER SERVER 1</title>
+	  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<title>WELCOME TO TWITTER SERVER 2</title>
+
+<style>/*
+#addTweetTextBox{
+    position: relative;
+    width: 250px;
+    height: 100px;
+    border: 3px solid #73AD21;
+}*/
+#elementSpace-css{
+	margin-top: 30px;
+	margin-left: 30px;
+}
+#test{
+	/*margin-top: 30px;*/
+	margin-left: 30px;
+	margin-right: 30px;
+}
+#page-css{
+    width: 700px;
+    height: 700px;
+
+    position: absolute;
+    top:0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+    margin: auto;
+}
+#redBoldText{
+	color: #ef594f;
+	display: inline;
+}
+body {
+    background: linear-gradient(to bottom right, red, black);
+    background-repeat: no-repeat;
+    width: 700px;
+    height: 1000px;
+}
+</style>
 </head>
-<body ng-app="myApp" ng-controller="AppCtrl">
+<body ng-app="myApp" ng-controller="AppCtrl" id="body">
 
-		{{current.user}}
+		<!-- SERVER 2		{{current.user}} -->
 
-
+	<div>
+		<img src="http://vignette3.wikia.nocookie.net/gtawiki/images/1/1d/Lifeinvader-GTAV.png/revision/latest?cb=20130813165601"/>
+	</div>
 	<div ng-switch="pageSwitch">
 		<div ng-switch-when="createUser-page">
-
-			Username: <input class="form-controler" ng-model="createUserInfo.username"><br>
-
-			Email: <input class="form-controler" ng-model="createUserInfo.email"><br>
-
-			Password: <input class="form-controler" ng-model="createUserInfo.password"><br>
-
-			<button class="btn-primary" ng-click="createAccount()">Create new Account!</button>
-
-			<br><br><br>
-
-			<button class="btn" ng-click="verify()">Verify this account</button>
-
-			<br><br><br>
-
-			<button class="btn" ng-click="switchToLogin()">Click here to go to login page!</button>
-
-			<br><br><br>
-
-			<button class="btn" ng-click="switchToMain()">Click here to go to main page!</button>
-
-			<button class="btn" ng-click="logout()">Click here to logout!</button>
-
-
-
+		<!-- 	<div id=page-css>
+				<div class="bg-danger" id="test"> -->
+					<br>
+					<br>
+					Username:<input class="form-controler" ng-model="createUserInfo.username">
+					<br>
+					<br>
+					Email:<input class="form-controler" ng-model="createUserInfo.email">
+					<br>
+					<br>
+					Password:<input class="form-controler" ng-model="createUserInfo.password">
+					<br>
+					<br>
+					<button class="btn-danger btn-lg" ng-click="createAccount()">Create new Account!</button>
+					<br>
+					<br>
+					<br>
+			<!-- 	</div>
+			</div> -->
 		</div>
 
-
-
 		<div ng-switch-when="login-page">
+			<div class="bg-danger" id="page-css">
+				<div id="elementSpace-css">
+					<p id="redBoldText">Username:</p> <input class="form-controler" value="username" ng-model="loginInfo.username">
 
-			Username: <input class="form-controler" ng-model="loginInfo.username"><br>
+					<p id="redBoldText">Password:</p> <input type="password" class="form-controler" value="password" ng-model="loginInfo.password">
 
-			Password: <input class="form-controler" ng-model="loginInfo.password">
-
-			<button class="btn-primary" ng-click="login()">Login!</button>
-			<br><br><br>
-
-			<button class="btn" ng-click="switchToCreate()">Click here to create account!</button>
-
-			<br><br><br>
-
-			<button class="btn" ng-click="switchToMain()">Click here to go to main page!</button>
-
-			<button class="btn" ng-click="logout()">Click here to logout!</button>
-
-
-
-
+					<button class="btn-danger" ng-click="login()">Login!</button>
+					<br>
+					<br>
+					<button class="btn-danger btn-lg" ng-click="switchToCreate()">Click here to create account!</button>
+					<br>
+					<br>
+					<br>
+					<br>
+					<br>
+					<br>
+					<img src="https://media.rockstargames.com/rockstargames/img/global/news/upload/actual_1378781698.jpg"/>
+				</div>
+			</div>
 		</div>
 
 
 		<div ng-switch-when="main-page">
 
 
-			Tweet: <input class="form-controller" ng-model="tweet.tweet">
+			Tweet: <input id="addTweetTextBox" class="form-controller" ng-model="tweet.tweet">
 
 			<button class="btn-primary" ng-click="addTweet()">Post Tweet!</button>
 			<br><br>

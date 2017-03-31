@@ -7,23 +7,35 @@
 
 
 
+
+
 var express = require('express'); // EXPRESS MODULE
 var parser = require('body-parser');//forparsing req params, will change to multer
 var mongoose = require("mongoose");
 var path = require ("path");
 var bcrypt = require('bcrypt');
-var nev = require('email-verification')(mongoose);
+var shortid = require('shortid');
+var cookieSession = require('cookie-session');
+var sendmail = require('sendmail')();
+var randomstring = require("randomstring");
+
+/*My libraries*/
 var User = require('./models/userModel.js');
 var TempUser = require("./models/userTempModel.js");
 var Tweet = require("./models/tweetModel.js");
-var shortid = require('shortid');
-var cookieSession = require('cookie-session');
+var adduser = require('./public/js/twitter-adduser.js');
+var login = require('./public/js/twitter-login.js');
+var verify = require('./public/js/twitter-verify.js');
+var additem = require('./public/js/twitter-additem.js');
+
+
+
 
 mongoose.Promise = require('bluebird');
-const util = require('util');
 mongoose.connect('mongodb://192.168.1.16/twitterUsers');
-var app = express();
 
+const util = require('util');
+var app = express();
 
 //module setup
 app.use(parser.urlencoded({extended: true}));
@@ -41,40 +53,8 @@ var myHasher = function (password, tempUserData, insertTempUser, callback){
 
 /********** Configure Email verification **********/
 
-nev.configure({
 
-	persistentUserModel: User,
-	tempUserModel: TempUser,
-	expirationTime: 1000,
-	URLFieldName: "URL",
-	verificationURL: "http://130.245.168.124/verify/${URL}",
-	hashingFunction: myHasher,
-	passwordFieldName:"password",
-	//check proper transportOption configuration
 
-	transportOptions: {
-	    service: "Gmail",
-	    auth: {
-	    	user:"twittercloneverifyemial",
-	    	pass: "!password"
-	    }
-	},
-	verifyMailOptions: {
-		from: 'Do Not Reply brobicheaucse356',
-		subject: "Confirm Eliza Account",
-		html: "Click the link to confirm account: $URL",
-		text: 'Confirm Account by clicking the link:${URL}'
-	},
-	shouldSendConfirmation: true,
-	confirmMailOptionsL:{
-		from:'Do Not Reply brobicheaucse356',
-		subject: 'Successfully verified',
-		html: '<p>Your account has been successfully verified.</p>',
-		text:'Your account has been successfully verified.'
-	}
-	}, function (error, options){
-
-});
 
 //MAIN PAGE OF TWITTER
 app.post('/', function(req, res) {
@@ -92,8 +72,8 @@ app.get('/init', function(req, res){
 	if(typeof req.session.currentUser !== 'undefined'){
 		res.send({"username":req.session.currentUser, "status":"OK"});
 	}
-
-	res.send();
+	else
+		res.send();
 
 })
 
@@ -123,59 +103,17 @@ app.post('/adduser', function(req,res){
 	var password = req.body.password;
 	var email = req.body.email;
 
-	var newUser = User({
-		email:email,
-		password:password
-	})
+	adduser.add(username, password, email, function(err, reponse){
 
-	nev.createTempUser(newUser, function(err, existingPersistentUser, newTempUser){
-
-		console.log
-
-		console.log("increateuser method");
-		//if there was a problem in creating the temp user
-		if(err){
-			//should send some sort of error back to client 
-			console.log(err);
+		if (err){
+			console.log(err)
+			res.send(response);
 		}
-
-		//if the user alreadt exsists in the database
-		if(existingPersistentUser){
-			console.log("exsisting");
-			//should send back respnose
-		}
-
-		//otherwise we have successfully created a new temp user
-		if(newTempUser){
-			console.log(newTempUser);
-			//grab the URL from the new users data
-			var URL = newTempUser[nev.options.URLFieldName]; 
-
-			console.log(URL);
-
-			//send an email with that url to the user to verify their account
-			nev.sendVerificationEmail(email, URL, function(err, info){
-
-				//if there was an error in sending the email
-				if(err){
-					//send some sort of error back to tuser
-					console.log(err);
-					return;
-				}
-
-				//if everything went back send the data back to the client
-				console.log(newUser);
-				res.send(newUser);	
-
-			});//end send emmail
-
-		}
-		else {
-			//dont realyl need this else
-			//its the error field for if threr was no temp user either
-			console.log("ERROR");	
+		else{
+			res.send(response);
 		}
 	})
+
 });//end /adduser
 
 
@@ -200,60 +138,30 @@ app.get("/login", function(req, res){
 	console.log("GO INTO LOGIUN");
 	res.end();
 });
-app.post("/login", function(req, response){
+app.post("/login", function(req, res){
+
+	var username = req.body.username;
+	var email = req.body.email;
+	var password = req.body.password;
 
 	console.log("in login");
-	console.log(req.body.username);
-	console.log(req.body.email);
-	console.log(req.body.password);
 
-	//use the mongoose User model to find the user data with the username given
-	User.findOne({username: req.body.username}, function(err, user){
-
-		//if we found a user by that name
-		if(user){
-
-			//hash their password
-			bcrypt.hash(req.body.password, user.password).then(function(res){
-
-				//set the data and ID fields for adding to database
-				var date = Date();
-				var id = shortid.generate();
-
-				//set the cookies so we know theres a sesson going on
-				//this should be below the password check
-				req.session.id = id;
-
-				//if the password we got from the user is the one in the database
-				if (res === user.password){
-
-
-					//set the username for the session
-					req.session.currentUser = req.body.username;
-
-					//prepare response to sendt o the user
-					var json = {
-						"username": req.body.username,
-						"date": date,
-						"status": "OK"
-					};	
-
-
-					console.log("LOGGED IN");
-					//respond to user
-					response.json(json);
-				}
-				//else theres an errror
-				else 
-					//show errror
-					console.log("not user");
-			});
-		}
-		//else error
-		else
-			//theres an error here 
+	login.login(username, password, email, function(err, response, cookie_id){
+		console.log(response);
+		if(err){
 			console.log(err);
-	});// end find one function
+			res.send(response);
+		}
+		else {
+			req.session.id = cookie_id;
+			req.session.currentUser = username;
+			console.log('aboot to send response');
+			console.log(cookie_id);
+			res.status(200).json(response);
+		}
+
+	})
+	
 });//end /login
 
 /********************************************
@@ -283,30 +191,27 @@ app.get('/verify/:URL', function(req, res){
 
 	var url = req.params.URL;
 
-		//confirm the user with the URL we got 
-	nev.confirmTempUser(url, function(err, user){
+	TempUser.findOne({URL:url}, function(err, user){
 
-		//if there was an error
-		if (err){
-
-			//display error and send client an error message
-			console.log(err);
-			json = {
-				status: "ERROR"
-			};	
-			res.json(json);
-		}
-
-		//otherwise let user know it all went ok
 		if(user){
-
-			json = {
+			verifiedUser = User({
+				username: user.username,
+				password: user.password,
+				email: user.email,
 				status: "OK"
-			};
-			res.json(json);
-		}
-	})
+			})
 
+			verifiedUser.save(function(err, results){
+				 res.send({"status":"OK"});
+			})
+
+		}
+		else {
+			console.log("couldnt find user with URL");
+			res.send({"status": "error"});
+		}
+
+	})
 })
 
 /********************************************
@@ -328,58 +233,22 @@ app.post('/verify', function(req,res){
 
 	//grab the key and create varibales for the url and reutrn json
 	var key = req.body.key;
-	var url;
-	var json;
+	var email = req.body.email;
 
-	//this was probably used for testing, cant remember
-	var tempJson = {
-		email: req.body.email
-	};
+	verify.verify(email, key, function(err, response) {
 
-	console.log(req.body.email);
-	//use the temp user model and find the json with the corresponding email
-	TempUser.findOne({email:req.body.email}, function(err, user){
-
-		//if there was an error
-		if(err){
-			//should be sending the client somme sort of error
-			console.log("err");
+		if (err){
+			console.log(err);
+			res.send(response);
+		}
+		else {
+			res.send(response)
 		}
 
+	})
+	
 
-		//this is the key crap for backdooring user verification
-		if (key === "abracadabra"){
 
-			var newUser =  User ({
-				"username": user.username,
-				"email": user.email,
-				"password": user.password,
-				"status": "OK"
-			});
-
-			newUser.save(function(err, results){
-
-				if(err)
-				{
-					console.log("error")
-					var response = {
-						"status": "error",
-						"error": err
-					}
-					res.send(response);
-				}
-				else {
-					var response = {
-						"status": "OK",
-					}
-					res.send(response);
-
-				}
-
-			});
-
-		}		
-	});
 });// end /verify
 
 /********************************************
@@ -399,67 +268,21 @@ app.post('/verify', function(req,res){
 app.post('/additem', function(req,res){
 	
 
-	//make sure there is a used logged in before we make the tweet
-	if(typeof req.session.currentUser !== 'undefined'){
+	var currentUser = req.session.currentUser
+	var parent = req.body.parent;
+	var content = req.body.content;
 
+	additem.add(currentUser, parent, content, function(err, response){
 
-		//check if the optional parent param was given
-		if(typeof req.body.parent !== "undefined"){
-
-			//if it is we set it to the parent value
-			var parent = req.body.parent;
+		if (err){
+			console.log(err);
+			res.send(response);
 		}
-		else{
-
-			//otherwise we set it to null
-			var parent = "null";
+		else {
+			res.send(response);
 		}
 
-		//Get the content of the new tweet
-		var content = req.body.content;
-		console.log(content);
-
-		//make a new unique ID for the tweet
-		var id = shortid.generate();
-
-		//create the tweet schema object for storing in mongodb
-		newTweet = Tweet({
-			"id": id,
-			"username": req.session.currentUser,
-			"parent": null,
-			"timestamp": Date(),
-			"content": content
-		});
-
-		console.log(newTweet);
-		//save the sweet to the mongo database
-		newTweet.save(function (err, results){
-
-			//if there was an error
-			if(err){
-				//print out the error(and send back correct response)
-				console.log(err);
-				res.status(200).send(err);
-			}
-
-			else{
-
-			var	response = {
-				"id": id,
-				"status" : "OK"
-			};
-			//else lettuce know there was a success
-			 console.log("Successfully saved new tweet to database");
-			 res.send(response);
-			}
-		});
-
-	}//end if
-	else{
-		//telll em no user is logged in.
-		console.log("no user logged in");
-		res.send({"status":"error", "error":"no user logged in"});
-	}
+	});
 
 
 });//end additem
