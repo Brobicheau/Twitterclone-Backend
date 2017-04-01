@@ -4,27 +4,20 @@
   "description": "",
   "main": "twitter.js",
   "dependencies": {
-    "babel-core": "^6.24.0",
-    "babel-loader": "^6.4.1",
-    "babel-preset-es2015": "^6.24.0",
     "bcrypt": "^1.0.2",
     "body-parser": "^1.17.1",
     "cookie-session": "^2.0.0-beta.1",
     "email-verification": "^0.4.6",
-    "es6": "^0.0.7",
-    "es6-module-loader": "^0.17.11",
     "express": "^4.15.2",
-    "file-loader": "^0.10.1",
-    "html-webpack-plugin": "^2.28.0",
     "mongoose": "^4.9.1",
     "nodemon": "^1.11.0",
-    "react": "^15.4.2",
     "sendmail": "^1.1.1",
     "shortid": "^2.2.8",
     "webpack": "^2.2.1"
   },
   "devDependencies": {
     "mocha": "^3.2.0",
+    "randomstring": "^1.1.5",
     "should": "^11.2.1",
     "supertest": "^3.0.0"
   },
@@ -38,7 +31,10 @@
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Brobicheau/TwitterClone/issues"
+    "url": "https://github.com/Brobicheau/TwitterClone-Backend/issues"
   },
-  "homepage": "https://github.com/Brobicheau/TwitterClone#readme"
+  "homepage": "https://github.com/Brobicheau/TwitterClone-Backend#readme",
+  "directories": {
+    "test": "test"
+  }
 }
