@@ -18,15 +18,16 @@ var login = function(username, password, email, callback){
 		if(user){
 
 			//hash their password
-			bcrypt.hash(password, user.password).then(function(res){
+			bcrypt.compare(password, user.password).then(function(res){
 
 				//set the data and ID fields for adding to database
 				var date = Date();
 				var id = shortid.generate();
 
+				console.log(res + "Vs." + user.password);
 
 				//if the password we got from the user is the one in the database
-				if (res === user.password){
+				if (res){
 
 
 					//prepare response to sendt o the user
@@ -42,13 +43,14 @@ var login = function(username, password, email, callback){
 					callback(null, response, id)
 				}
 				//else theres an errror
-				else 
+				else {
 					var response = {
 						"status":"error"
 					}
 					//show errror
 					console.log("not user");
 					callback("Incorrect password", response, null)
+				}
 			});
 		}
 		//else error
