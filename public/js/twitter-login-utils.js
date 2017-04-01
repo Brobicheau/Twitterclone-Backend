@@ -8,6 +8,7 @@ var sendmail = require('sendmail')();
 var randomstring = require("randomstring");
 
 mongoose.Promise = require('bluebird');
+
 var login = function(username, password, email, callback){ 
 	console.log("in login module");
 
@@ -63,5 +64,7 @@ var login = function(username, password, email, callback){
 
 	});// end find one function
 }
+
+
 
 module.exports = {login}

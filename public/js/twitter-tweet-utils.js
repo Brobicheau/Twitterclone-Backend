@@ -1,4 +1,3 @@
-var express = require('express'); // EXPRESS MODULE
 var parser = require('body-parser');//forparsing req params, will change to multer
 var mongoose = require("mongoose");
 var path = require ("path");
@@ -73,9 +72,94 @@ var add = function(currentUser, parent, content, callback){
 			"status":"error",
 			"error":"no user logged in"
 		};
-		callback(err, response);
+		callback("error: no user logged in", response);
 
 	}
 }
 
-module.exports = {add}
+
+var getItemById = function(search_id, callback){
+
+	if(typeof search_id !== 'undefined'){
+		console.log("searching");
+		Tweet.findOne({"id": search_id}, function(err, tweet){
+
+			console.log("found something  probably");
+
+			if(err){
+				console.log(err);
+				callback(err, {"status":"error"})
+			}
+
+
+			else if(tweet){	
+				var response = {
+					"status": "OK",
+					item: {
+					"id": tweet.id,
+					"username": tweet.username,
+					"content": tweet.content,
+					"timestamp": tweet.content,
+					}
+				};
+				callback(null, response)
+			}
+		});
+	}
+	else {
+		console.log('not valid ID');
+		callback("invalid search ID",{"status":"error"});
+	}
+}
+
+var search = function(params, callback) {	
+
+	var limit = params.limit;
+	var timestamp = params.timestamp;
+	var following = params.following;
+	var username = params.username;
+	var rank = params.rank;
+	var parent = params.parent;
+
+	
+
+	if(typeof limit === 'undefined')
+		limit = 25;
+
+	Tweet.find().sort({_id:-1}).limit(limit).exec(function(err, data){
+
+		if(err){
+			console.log(err)
+			response = {
+				"status": "error",
+				"error": err
+			};
+			callback(err, response)
+		}
+		else {
+			var filler = new Array(data.lengh) ;
+
+			console.log(data);
+			for( i = 0; i < data.length; i++){
+				filler[i] = {
+					"id": data[i].id,
+					"username": data[i].username,
+					"content": data[i].content,
+					"timestamp": data[i].timestamp
+				};
+			}
+			console.log(filler);
+
+			var response = {
+				items: filler ,
+				"status":"OK"
+			}			
+			response.items = filler;
+			callback(null, response);
+		}
+
+	});
+}
+
+
+module.exports = {add, getItemById, search}

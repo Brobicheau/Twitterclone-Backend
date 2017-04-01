@@ -3,6 +3,7 @@ var bcrypt = require('bcrypt');
 var User = require('../../models/userModel.js');
 var TempUser = require("../../models/userTempModel.js");
 var Tweet = require("../../models/tweetModel.js");
+var Follow = require("../../models/followModel.js")
 var shortid = require('shortid');
 var sendmail = require('sendmail')();
 var randomstring = require("randomstring");
@@ -18,11 +19,15 @@ var checkForDuplicates = function(username, email, callback){
 	console.log(email);
 
 	TempUser.findOne({"username":username}, function(err, exsistingTempUser){
+		console.log("checked username");
+		console.log(err);
 		if(exsistingTempUser){
 			value = true;
 		}
 		finishCount++;
 		if(finishCount >= 4){
+							console.log("sending callback1");
+
 			if(value)
 				callback("Username or password in use", value);
 			else
@@ -37,6 +42,8 @@ var checkForDuplicates = function(username, email, callback){
 		}
 		finishCount++;
 		if(finishCount >= 4){
+			console.log("sending callback2");
+
 			if(value)
 				callback("Username or password in use", value);
 			else
@@ -45,8 +52,8 @@ var checkForDuplicates = function(username, email, callback){
 
 
 	User.findOne({"username":username}, function(err ,exsistingUser){
-
-		console.log(exsistingUser);
+		console.log("sending callback3");
+		console.log("exsistingUser");
 		if (exsistingUser){
 			value = true;
 		}
@@ -58,14 +65,31 @@ var checkForDuplicates = function(username, email, callback){
 				callback(null, value);
 		}
 	})
+
+	User.findOne({"email":email}, function(err ,exsistingUser){
+		console.log("sending callback3");
+		console.log("exsistingUser");
+		if (exsistingUser){
+			value = true;
+		}
+		finishCount++;
+		if(finishCount >= 4){
+			if(value)
+				callback("Username or password in use", value);
+			else
+				callback(null, value);
+		}
+	})	
 };
 
 var add = function(username, password, email, callback){
 
 	checkForDuplicates(username, email, function(err, inUse){
+
+		console.log("checked for dups");
 	
 		if (!inUse){
-			bcrypt.hash(req.body.password, 10).then(function(hash, err){
+			bcrypt.hash(password, 10).then(function(hash, err){
 				newUser = TempUser({
 					username: username,
 					email: email,
@@ -73,11 +97,15 @@ var add = function(username, password, email, callback){
 					URL: randomstring.generate(20),
 					status: "OK"
 				});
+
 				newUser.save(function(err, results){
 					console.log(results);
 					response = {
 						"status" : "OK"
 					}
+
+
+
 
 					sendmail({
 					    from: 'ubuntu@brobicheaucse356',
@@ -92,8 +120,11 @@ var add = function(username, password, email, callback){
 					    console.dir(reply);
 					});
 
+					reponse ={
+						"status":"error"
+					}
+
 					callback(null, reponse);
-					res.send(response);
 				});
 			});
 		}
@@ -107,4 +138,52 @@ var add = function(username, password, email, callback){
 	});
 };
 
-module.exports = {add}
+
+var verify = function(email, key, callback) {
+
+	TempUser.findOne({'email':email}, function(err, user){
+
+		//if there was an error
+		if(err){
+			//should be sending the client somme sort of error
+			console.log("err");
+		}
+
+
+		//this is the key crap for backdooring user verification
+		if (key === "abracadabra"){
+
+			var newUser =  User ({
+				"username": user.username,
+				"email": user.email,
+				"password": user.password,
+				"status": "OK"
+			});
+
+
+			newUser.save(function(err, results){
+
+				if(err)
+				{
+					console.log("error")
+					var response = {
+						"status": "error",
+						"error": err
+					}
+					callback(err, response)
+				}
+				else {
+					var response = {
+						"status": "OK",
+					}
+					callback(null, response)
+
+				}
+
+			});
+
+		}		
+	});
+}
+
+module.exports = {add, verify}

@@ -23,16 +23,15 @@ var randomstring = require("randomstring");
 var User = require('./models/userModel.js');
 var TempUser = require("./models/userTempModel.js"); 
 var Tweet = require("./models/tweetModel.js");
-var adduser = require('./public/js/twitter-adduser.js');
-var login = require('./public/js/twitter-login.js');
-var verify = require('./public/js/twitter-verify.js');
-var additem = require('./public/js/twitter-additem.js');
+var accountUtils = require('./public/js/twitter-account-utils.js');
+var loginUtils = require('./public/js/twitter-login-utils.js');
+var tweetUtils = require('./public/js/twitter-tweet-utils.js');
 
 
 
 
 mongoose.Promise = require('bluebird');
-mongoose.connect('mongodb://192.168.1.16/twitterUsers');
+mongoose.connect('mongodb://192.168.1.22/twitterUsers');
 
 const util = require('util');
 var app = express();
@@ -58,14 +57,14 @@ var myHasher = function (password, tempUserData, insertTempUser, callback){
 
 //MAIN PAGE OF TWITTER
 app.post('/', function(req, res) {
-
-
 	res.send();
 });
 
 app.get('/', function(req, res){
 	res.send();
 })
+
+
 
 app.get('/init', function(req, res){
 
@@ -103,7 +102,7 @@ app.post('/adduser', function(req,res){
 	var password = req.body.password;
 	var email = req.body.email;
 
-	adduser.add(username, password, email, function(err, reponse){
+	accountUtils.add(username, password, email, function(err, reponse){
 
 		if (err){
 			console.log(err)
@@ -144,9 +143,7 @@ app.post("/login", function(req, res){
 	var email = req.body.email;
 	var password = req.body.password;
 
-	console.log("in login");
-
-	login.login(username, password, email, function(err, response, cookie_id){
+	loginUtils.login(username, password, email, function(err, response, cookie_id){
 		console.log(response);
 		if(err){
 			console.log(err);
@@ -155,8 +152,6 @@ app.post("/login", function(req, res){
 		else {
 			req.session.id = cookie_id;
 			req.session.currentUser = username;
-			console.log('aboot to send response');
-			console.log(cookie_id);
 			res.status(200).json(response);
 		}
 
@@ -235,7 +230,7 @@ app.post('/verify', function(req,res){
 	var key = req.body.key;
 	var email = req.body.email;
 
-	verify.verify(email, key, function(err, response) {
+	accountUtils.verify(email, key, function(err, response) {
 
 		if (err){
 			console.log(err);
@@ -246,8 +241,6 @@ app.post('/verify', function(req,res){
 		}
 
 	})
-	
-
 
 });// end /verify
 
@@ -272,7 +265,7 @@ app.post('/additem', function(req,res){
 	var parent = req.body.parent;
 	var content = req.body.content;
 
-	additem.add(currentUser, parent, content, function(err, response){
+	tweetUtils.add(currentUser, parent, content, function(err, response){
 
 		if (err){
 			console.log(err);
@@ -315,34 +308,17 @@ app.get('/item/:id', function(req,res){
 	console.log("IN GET ITEM");
 	console.log(search_id);
 
-	if(typeof search_id !== 'undefined'){
-		console.log("searching");
-		Tweet.findOne({"id": search_id}, function(err, tweet){
+	tweetUtils.getItemById(search_id, function(err, response){
 
-			console.log("found something  probably");
+		if(err){
+			console.log(err);
+			res.send(response);
+		}
+		else{
+			res.send(response);
+		}
+	});
 
-			if(err)
-				console.log(err);
-
-			else if(tweet){	
-				var response = {
-					"status": "OK",
-					item: {
-					"id": tweet.id,
-					"username": tweet.username,
-					"content": tweet.content,
-					"timestamp": tweet.content,
-					}
-				};
-				console.log("RETURNING" + tweet.content);
-				res.status(200).send(response);
-			}
-		});
-	}
-	else {
-		console.log('not valid ID');
-		res.status(404).send({"status":"error"});
-	}
 
 
 });
@@ -367,20 +343,23 @@ app.delete('/item/<id>', function(req,res){
 *******************************************************************/
 
 	//Pull id from request ( req.params.id)
+	var delete_id = req.params.id;
 
 	//find the item to remove via Tweet.find(id).remove(callback)
+	if(typeof delete_id !== 'undefined'){
+		Tweet.find(delete_id).remove({"id": delete_id}, function(err, tweet){
+			if(err){
+				res.status(400).send({"status":"error"});
+			}
+			else if(tweet){	
+				res.status(200).send({"status":"OK"});
+			}
 
-		//if its an error 
-
-			//send back status error
-
-		//else we deleted user
-
-			//return back success
-
-		//END IF ELSE
-
-	//END FIND ITEM
+		});
+	}else{
+		console.log('not valid ID');
+		res.status(404).send({"status":"error"});
+	}
 
 });
 
@@ -422,49 +401,26 @@ app.delete('/item/<id>', function(req,res){
 app.post('/search', function(req,res){
 
 
-	//get the timestamp the user sent in
-	var timestamp = req.body.timestamp;
 
-	//get the limitfrom the user
-	var limit = req.body.limit;
+	params = {
+		"timestamp": req.body.timestamp,
+		"limit":req.body.limit,
+		"username":req.body.username,
+		"following":req.body.following,
+		"rank": req.body.rank,
+		"parent": req.body.parent
+	};
 
-	if(typeof limit === 'undefined')
-		limit = 25;
-
-	Tweet.find().sort({_id:-1}).limit(limit).exec(function(err, data){
+	tweetUtils.search(params, function(err, response){
 
 		if(err){
-			console.log(err)
-			response = {
-				"status": "error",
-				"error": err
-			};res.send(response);
-		}
-		else {
-			var filler = new Array(data.lengh) ;
-
-			console.log(data);
-			for( i = 0; i < data.length; i++){
-				filler[i] = {
-					"id": data[i].id,
-					"username": data[i].username,
-					"content": data[i].content,
-					"timestamp": data[i].timestamp
-				};
-			}
-			console.log(filler);
-
-			var response = {
-				items: filler ,
-				"status":"OK"
-			}			
-			response.items = filler;
+			console.log(err);
 			res.send(response);
 		}
-
-	});
-
-
+		else {
+			res.send(response);
+		}
+	})
 });
 
 /********************************************
@@ -487,11 +443,42 @@ app.get('/user/<username>', function(req,res){
 
 /******************************************************************
 *
-*							JAY 
+*							JAY (USER twitter-item-utils.js)
 *
 *******************************************************************/	
 
 	//pull username from params via req.params.username
+	//pull username from params via req.params.username
+	var username = req.params.username;
+
+	//Search for account with correct username via Users.findOne(username, function(err, user))
+	if(typeof username !== 'undefined'){//if user is not null
+		Users.findOne({"username":username},function(err,user){//checks if user is found
+			if(err){
+				res.send(400).send({"status":"error"});//sends error status
+			}
+			else if(user){
+				var responseUser = {//All user data is stored in here
+					"email": user.email,
+					"followers": user.followers,
+					"following": user.following
+				}
+				var finalResponse = {//building the final response JSON object
+					"status":"OK",
+					"user": responseUser
+				}
+				res.status(200).send(finalResponse);
+			}else{
+				res.send(400).send({"status":"error"});
+			}
+		});
+	}
+
+	else{
+		res.send(400).send({"status":"error"});
+	}
+
+
 
 	//Search for account with correct username via Users.findOne(username, function(err, user))
 
@@ -532,9 +519,10 @@ app.get('/user/:username/followers', function(req,res){
 
 	/******************************************************************
 	*
-	*							VINNY 
+	*							VINNY = (use twitter-follow-utils)
 	*
 	*******************************************************************/
+
 
 	//pull username from params via req.params.username
 
@@ -592,7 +580,7 @@ app.post('/user/:username/following', function(req,res){
 
 /******************************************************************
 *
-*							VINNY 
+*							VINNY = (use twitter-follow-utils)
 *
 *******************************************************************/
 
@@ -650,7 +638,7 @@ app.post('/follow', function(req,res){
 
 /******************************************************************
 *
-*							VINNY 
+*							VINNY = (use twitter-follow-utils)
 *
 *******************************************************************/	
 
@@ -658,17 +646,15 @@ app.post('/follow', function(req,res){
 
 	//pull follow bool via req.body.follow
 
-	//find the user to follow via User.findOne(username, function(err, user))
+	//find the user to follow via Follow.findOne(username, function(err, user))
 
-		//if theres an array
+		//if theres not an array
 
 			//send error response
 
 		//else
 
-			//add the currentUser to users array, access to current user is req.session.currentUser
-			//access to users follower array is user.followers, gives array.
-
+			//edit following appropriately
 			///send OK response
 
 		//END IF ELSE
