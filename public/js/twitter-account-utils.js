@@ -103,11 +103,7 @@ var add = function(username, password, email, callback){
 					response = {
 						"status" : "OK"
 					}
-
-
-
-
-					sendmail({
+					/*sendmail({
 					    from: 'ubuntu@brobicheaucse356',
 					    to: 'nexijifot@88clean.pro',
 					    subject: 'test sendmail',
@@ -118,10 +114,10 @@ var add = function(username, password, email, callback){
 					  	else console.log("SUCCESSFULLY SENT MIAL");
 					    console.log(err && err.stack);
 					    console.dir(reply);
-					});
+					});*/
 
 					reponse ={
-						"status":"error"
+						"status":"OK"
 					}
 
 					callback(null, reponse);
@@ -133,7 +129,6 @@ var add = function(username, password, email, callback){
 				"status":"error"
 			};
 			callback(err, response);
-			res.send(response);
 		}
 	});
 };
