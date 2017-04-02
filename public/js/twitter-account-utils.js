@@ -10,76 +10,42 @@ var randomstring = require("randomstring");
 
 mongoose.Promise = require('bluebird');
 
+
+
+
+
 var checkForDuplicates = function(username, email, callback){
 
-	var finishCount = 0;
-	var value = false;
 
-	console.log(username);
-	console.log(email);
 
-	TempUser.findOne({"username":username}).lean().exec(function(err ,exsistingTempUser){
-		console.log("checked username");
-		console.log(err);
-		if(exsistingTempUser){
-			value = true;
+	TempUser.count({"username":username}, function(err, count) {
+		if(count >0 ){
+			callback("Temp User or email found", true);
 		}
-		finishCount++;
-		if(finishCount >= 4){
-							console.log("sending callback1");
-
-			if(value)
-				callback("Username or password in use", value);
-			else
-				callback(null, value);
-		}	})
-
-
-	TempUser.findOne({"email":email}).lean().exec(function(err ,exsistingTempUser){
-
-		if(exsistingTempUser){
-			value = true;
+		else{
+			TempUser.count({"email":email}, function(err, count) {
+				if(count >0 ){
+					callback("Temp User or email found", true);
+				}
+				else{
+					User.count({"username":username}, function(err, count) {
+						if(count >0 ){
+							callback(" User or email found");
+						}
+						else{
+							User.count({"email":email}, function(err, count) {
+								if(count >0 ){
+									callback(" User or email found");
+								}
+								else
+									callback(null, false)
+							});
+						}
+					});
+				}
+			});
 		}
-		finishCount++;
-		if(finishCount >= 4){
-			console.log("sending callback2");
-
-			if(value)
-				callback("Username or password in use", value);
-			else
-				callback(null, value);
-		}	})	
-
-
-	User.findOne({"username":username}).lean().exec(function(err ,exsistingUser){
-		console.log("sending callback3");
-		console.log("exsistingUser");
-		if (exsistingUser){
-			value = true;
-		}
-		finishCount++;
-		if(finishCount >= 4){
-			if(value)
-				callback("Username or password in use", value);
-			else
-				callback(null, value);
-		}
-	})
-
-	User.findOne({"email":email}).lean().exec(function(err ,exsistingUser){
-		console.log("sending callback3");
-		console.log("exsistingUser");
-		if (exsistingUser){
-			value = true;
-		}
-		finishCount++;
-		if(finishCount >= 4){
-			if(value)
-				callback("Username or password in use", value);
-			else
-				callback(null, value);
-		}
-	})	
+	});
 };
 
 var add = function(username, password, email, callback){
@@ -136,7 +102,7 @@ var add = function(username, password, email, callback){
 
 var verify = function(email, key, callback) {
 
-	TempUser.findOne({'email':email}).lean().exec(function(err, user){
+	TempUser.findOne({'email':email}).exec(function(err, user){
 
 		//if there was an error
 		if(err){
@@ -155,7 +121,12 @@ var verify = function(email, key, callback) {
 				"status": "OK"
 			});
 
-
+			User.remove(user, function(err, res){
+				if(err)
+					console.log(err);
+				else
+					console.log(res);
+			});
 			newUser.save(function(err, results){
 
 				if(err)
