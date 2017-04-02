@@ -82,7 +82,7 @@ var getItemById = function(search_id, callback){
 
 	if(typeof search_id !== 'undefined'){
 		console.log("searching");
-		Tweet.findOne({"id": search_id}, function(err, tweet){
+		Tweet.findOne({"id": search_id}).lean().exec(function(err, tweet){
 
 			console.log("found something  probably");
 
@@ -126,7 +126,7 @@ var search = function(params, callback) {
 	if(typeof limit === 'undefined')
 		limit = 25;
 
-	Tweet.find().sort({_id:-1}).limit(limit).exec(function(err, data){
+	Tweet.find().sort({_id:-1}).limit(limit).lean().exec(function(err, data){
 
 		if(err){
 			console.log(err)

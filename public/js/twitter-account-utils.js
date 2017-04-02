@@ -18,7 +18,7 @@ var checkForDuplicates = function(username, email, callback){
 	console.log(username);
 	console.log(email);
 
-	TempUser.findOne({"username":username}, function(err, exsistingTempUser){
+	TempUser.findOne({"username":username}).lean().exec(function(err ,exsistingUser){
 		console.log("checked username");
 		console.log(err);
 		if(exsistingTempUser){
@@ -35,7 +35,7 @@ var checkForDuplicates = function(username, email, callback){
 		}	})
 
 
-	TempUser.findOne({"email":email}, function(err, exsistingTempUser){
+	TempUser.findOne({"email":email}).lean().exec(function(err ,exsistingUser){
 
 		if(exsistingTempUser){
 			value = true;
@@ -51,7 +51,7 @@ var checkForDuplicates = function(username, email, callback){
 		}	})	
 
 
-	User.findOne({"username":username}, function(err ,exsistingUser){
+	User.findOne({"username":username}).lean().exec(function(err ,exsistingUser){
 		console.log("sending callback3");
 		console.log("exsistingUser");
 		if (exsistingUser){
@@ -66,7 +66,7 @@ var checkForDuplicates = function(username, email, callback){
 		}
 	})
 
-	User.findOne({"email":email}, function(err ,exsistingUser){
+	User.findOne({"email":email}).lean().exec(function(err ,exsistingUser){
 		console.log("sending callback3");
 		console.log("exsistingUser");
 		if (exsistingUser){
@@ -136,7 +136,7 @@ var add = function(username, password, email, callback){
 
 var verify = function(email, key, callback) {
 
-	TempUser.findOne({'email':email}, function(err, user){
+	TempUser.findOne({'email':email}).lean().exec(function(err, user){
 
 		//if there was an error
 		if(err){

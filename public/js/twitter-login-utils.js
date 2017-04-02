@@ -13,7 +13,7 @@ var login = function(username, password, email, callback){
 	console.log("in login module");
 
 //use the mongoose User model to find the user data with the username given
-	User.findOne({'username': username}, function(err, user){
+	User.findOne({'username': username}).lean().exec(function(err, user){
 		//if we found a user by that name
 		if(user){
 
