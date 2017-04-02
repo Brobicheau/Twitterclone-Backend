@@ -18,7 +18,7 @@ var checkForDuplicates = function(username, email, callback){
 	console.log(username);
 	console.log(email);
 
-	TempUser.findOne({"username":username}).lean().exec(function(err ,exsistingUser){
+	TempUser.findOne({"username":username}).lean().exec(function(err ,exsistingTempUser){
 		console.log("checked username");
 		console.log(err);
 		if(exsistingTempUser){
@@ -35,7 +35,7 @@ var checkForDuplicates = function(username, email, callback){
 		}	})
 
 
-	TempUser.findOne({"email":email}).lean().exec(function(err ,exsistingUser){
+	TempUser.findOne({"email":email}).lean().exec(function(err ,exsistingTempUser){
 
 		if(exsistingTempUser){
 			value = true;
