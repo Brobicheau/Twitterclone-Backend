@@ -5,7 +5,7 @@ var tweetSchema = mongoose.Schema({
 	id: String,
 	username: String,
 	parent: String,
-	timestamp: Date,
+	timestamp: {type: String, index: true}
 });
 
 
