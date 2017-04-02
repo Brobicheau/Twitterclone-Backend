@@ -49,20 +49,22 @@ var add = function(currentUser, parent, content, callback){
 				response = {
 					"status" : "error"
 				}
-				callback(err, response);
+				//callback(err, response);
 			}
 
 			else{
 
-			var	response = {
+
+			//else lettuce know there was a success
+			 console.log("Successfully saved new tweet to database");
+			}
+		});
+		var	response = {
 				"id": id,
 				"status" : "OK"
 			};
-			//else lettuce know there was a success
-			 console.log("Successfully saved new tweet to database");
-			 callback(null, response)
-			}
-		});
+		callback(null, response)
+
 
 	}//end if
 	else{
