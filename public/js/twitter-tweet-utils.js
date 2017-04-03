@@ -57,13 +57,14 @@ var add = function(currentUser, parent, content, callback){
 
 			//else lettuce know there was a success
 			 console.log("Successfully saved new tweet to database");
+			var	response = {
+					"id": id,
+					"status" : "OK"
+				};
+			callback(null, response)		 
 			}
 		});
-		var	response = {
-				"id": id,
-				"status" : "OK"
-			};
-		callback(null, response)
+
 
 
 	}//end if
