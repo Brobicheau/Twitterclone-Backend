@@ -2,9 +2,8 @@ var mongoose = require('mongoose');
 var bcrypt = require('bcrypt');
 
 var followSchema = mongoose.Schema({
-	username: String,
-	following: [String],
-	followers: [String]
+	username:{type: String, index: true},
+	following: {type: String, index: true}
 });
 
 

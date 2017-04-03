@@ -26,6 +26,8 @@ var Tweet = require("./models/tweetModel.js");
 var accountUtils = require('./public/js/twitter-account-utils.js');
 var loginUtils = require('./public/js/twitter-login-utils.js');
 var tweetUtils = require('./public/js/twitter-tweet-utils.js');
+var followUtils = require('./public/js/twitter-follow-utils.js');
+
 
 
 
@@ -144,8 +146,8 @@ app.post("/login", function(req, res){
 	var password = req.body.password;
 
 	loginUtils.login(username, password, email, function(err, response, cookie_id){
-		console.log(response);
-		if(err){
+
+		if(response.status === 'error'){
 			console.log(err);
 			res.send(response);
 		}
@@ -523,6 +525,12 @@ app.get('/user/:username/followers', function(req,res){
 	*
 	*******************************************************************/
 
+	var params = {
+		"limit": req.params.limit,
+		"username": req.params.username
+	};
+
+	
 
 	//pull username from params via req.params.username
 
@@ -641,6 +649,23 @@ app.post('/follow', function(req,res){
 *							VINNY = (use twitter-follow-utils)
 *
 *******************************************************************/	
+
+	var params = {
+		"username":req.body.username,
+		"follow": req.body.follow,
+		"currentUser":req.session.currnetUser
+	};
+
+	followUtils.follow(params, function(err, response){
+
+		if(err){
+			console.log(err);
+			res.send(response);
+		}
+		else{
+			res.send(response);
+		}
+	})
 
 	//pull usename to follow via req.body.username
 
