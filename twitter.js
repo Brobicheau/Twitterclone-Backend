@@ -336,7 +336,7 @@ app.get('/item/:id', function(req,res){
 *	- success or failure
 *
 ************************************************/
-app.delete('/item/<id>', function(req,res){
+app.delete('/item/:id', function(req,res){
 
 /******************************************************************
 *
