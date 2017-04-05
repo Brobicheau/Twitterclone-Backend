@@ -105,6 +105,7 @@ var getItemById = function(search_id, callback){
 					"timestamp": tweet.content,
 					}
 				};
+				console.log("SENDING BACK TWEET");
 				callback(null, response)
 			}
 		});
@@ -130,6 +131,8 @@ var search = function(params, callback) {
 		limit = 25;
 
 	Tweet.find().sort({_id:-1}).limit(limit).lean().exec(function(err, data){
+
+		console.log("FOUND IN SEARCH");
 
 		if(err){
 			console.log(err)

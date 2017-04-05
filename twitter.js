@@ -343,9 +343,10 @@ app.delete('/item/:id', function(req,res){
 *							JAY 
 *
 *******************************************************************/
-
+	console.log("MADE IT INTO DELETE");
 	//Pull id from request ( req.params.id)
 	var delete_id = req.params.id;
+	console.log(delete_id);
 
 	//find the item to remove via Tweet.find(id).remove(callback)
 	if(typeof delete_id !== 'undefined'){
@@ -354,6 +355,7 @@ app.delete('/item/:id', function(req,res){
 				res.status(400).send({"status":"error"});
 			}
 			else if(tweet){	
+				console.log("DELETED TWEET");
 				res.status(200).send({"status":"OK"});
 			}
 
