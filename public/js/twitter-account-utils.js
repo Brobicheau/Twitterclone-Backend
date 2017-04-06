@@ -52,7 +52,6 @@ var add = function(username, password, email, callback){
 
 	checkForDuplicates(username, email, function(err, inUse){
 
-		console.log("checked for dups");
 	
 		if (!inUse){
 			bcrypt.hash(password, 10).then(function(hash, err){
@@ -65,10 +64,8 @@ var add = function(username, password, email, callback){
 				});
 
 				newUser.save(function(err, results){
-					console.log(results);
-					response = {
-						"status" : "OK"
-					}
+			
+				
 					/*sendmail({
 					    from: 'ubuntu@brobicheaucse356',
 					    to: 'nexijifot@88clean.pro',
@@ -82,11 +79,11 @@ var add = function(username, password, email, callback){
 					    console.dir(reply);
 					});*/
 
-					reponse ={
+					response ={
 						"status":"OK"
 					}
-
-					callback(null, reponse);
+					console.log(results);
+					callback(null, response);
 				});
 			});
 		}
@@ -103,6 +100,7 @@ var add = function(username, password, email, callback){
 var verify = function(email, key, callback) {
 
 	TempUser.findOne({'email':email}).exec(function(err, user){
+		console.log(email);
 
 		//if there was an error
 		if(err){
@@ -124,9 +122,7 @@ var verify = function(email, key, callback) {
 			User.remove(user, function(err, res){
 				if(err)
 					console.log(err);
-				else
-					console.log(res);
-			});
+				});
 			newUser.save(function(err, results){
 
 				if(err)

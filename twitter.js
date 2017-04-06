@@ -23,6 +23,7 @@ var randomstring = require("randomstring");
 var User = require('./models/userModel.js');
 var TempUser = require("./models/userTempModel.js"); 
 var Tweet = require("./models/tweetModel.js");
+var Follow = require("./models/followModel.js");
 var accountUtils = require('./public/js/twitter-account-utils.js');
 var loginUtils = require('./public/js/twitter-login-utils.js');
 var tweetUtils = require('./public/js/twitter-tweet-utils.js');
@@ -33,7 +34,7 @@ var followUtils = require('./public/js/twitter-follow-utils.js');
 
 
 mongoose.Promise = require('bluebird');
-mongoose.connect('mongodb://192.168.1.22/twitterUsers');
+mongoose.connect('mongodb://192.168.1.22/twitter');
 
 const util = require('util');
 var app = express();
@@ -104,7 +105,7 @@ app.post('/adduser', function(req,res){
 	var password = req.body.password;
 	var email = req.body.email;
 
-	accountUtils.add(username, password, email, function(err, reponse){
+	accountUtils.add(username, password, email, function(err, response){
 
 		if (err){
 			console.log(err)
@@ -136,7 +137,6 @@ app.post('/adduser', function(req,res){
 ************************************************/
 app.get("/login", function(req, res){
 
-	console.log("GO INTO LOGIUN");
 	res.end();
 });
 app.post("/login", function(req, res){
@@ -175,7 +175,6 @@ app.post("/login", function(req, res){
 ************************************************/
 app.post('/logout', function(req,res){
 
-	console.log("IN LOGOUT");
 	//set the cookies to null
 	req.session = null;
 
@@ -307,8 +306,6 @@ app.get('/item/:id', function(req,res){
 	//get the id of the tweet to search for
 	var search_id = req.params.id;
  
-	console.log("IN GET ITEM");
-	console.log(search_id);
 
 	tweetUtils.getItemById(search_id, function(err, response){
 
@@ -343,10 +340,8 @@ app.delete('/item/:id', function(req,res){
 *							JAY 
 *
 *******************************************************************/
-	console.log("MADE IT INTO DELETE");
 	//Pull id from request ( req.params.id)
 	var delete_id = req.params.id;
-	console.log(delete_id);
 
 	//find the item to remove via Tweet.find(id).remove(callback)
 	if(typeof delete_id !== 'undefined'){
@@ -355,7 +350,6 @@ app.delete('/item/:id', function(req,res){
 				res.status(400).send({"status":"error"});
 			}
 			else if(tweet){	
-				console.log("DELETED TWEET");
 				res.status(200).send({"status":"OK"});
 			}
 
@@ -405,8 +399,11 @@ app.delete('/item/:id', function(req,res){
 app.post('/search', function(req,res){
 
 
-
-	params = {
+	//console.log("made it to search");
+	//console.log(req.body.q);
+	params =
+	 {
+		"query":req.body.q,
 		"timestamp": req.body.timestamp,
 		"limit":req.body.limit,
 		"username":req.body.username,
@@ -414,6 +411,8 @@ app.post('/search', function(req,res){
 		"rank": req.body.rank,
 		"parent": req.body.parent
 	};
+	//console.log("GOT PARAMs");
+	//console.log(params);
 
 	tweetUtils.search(params, function(err, response){
 
@@ -422,6 +421,7 @@ app.post('/search', function(req,res){
 			res.send(response);
 		}
 		else {
+			console.log("Shit went though search");
 			res.send(response);
 		}
 	})
@@ -443,7 +443,9 @@ app.post('/search', function(req,res){
 *	}
 *
 ************************************************/
-app.get('/user/<username>', function(req,res){
+
+
+app.get('/user/:username', function(req,res){
 
 /******************************************************************
 *
@@ -455,23 +457,48 @@ app.get('/user/<username>', function(req,res){
 	//pull username from params via req.params.username
 	var username = req.params.username;
 
+
+
 	//Search for account with correct username via Users.findOne(username, function(err, user))
 	if(typeof username !== 'undefined'){//if user is not null
-		Users.findOne({"username":username},function(err,user){//checks if user is found
+
+
+
+
+
+
+
+		User.findOne({"username":username},function(err,user){//checks if user is found
 			if(err){
 				res.send(400).send({"status":"error"});//sends error status
 			}
 			else if(user){
-				var responseUser = {//All user data is stored in here
-					"email": user.email,
-					"followers": user.followers,
-					"following": user.following
-				}
-				var finalResponse = {//building the final response JSON object
-					"status":"OK",
-					"user": responseUser
-				}
-				res.status(200).send(finalResponse);
+				Follow.find({"following":username}).count( function(err, followerCount){
+					if(err){
+						res.send({"status":"error"});
+					}
+					else {
+						Follow.find({"username":username}).count( function(err, followingCount){
+							if(err){
+								res.send({"status":"error"});
+							}
+							else {
+								console.log
+								var responseUser = {//All user data is stored in here
+									"email": user.email,
+									"followers": followerCount,
+									"following": followingCount
+								}
+								var finalResponse = {//building the final response JSON object
+									"status":"OK",
+									"user": responseUser
+								}
+								res.status(200).send(finalResponse);							}
+						})
+
+					}
+				})
+
 			}else{
 				res.send(400).send({"status":"error"});
 			}
@@ -531,6 +558,17 @@ app.get('/user/:username/followers', function(req,res){
 		"limit": req.params.limit,
 		"username": req.params.username
 	};
+	followUtils.followers(params, function(err, response){
+
+		if(err){
+			console.log("errrwhen getting followers");
+			res.send(response);
+		}
+		else{
+			console.log("got followers");
+			res.send(response);
+		}
+	})
 
 	
 
@@ -586,14 +624,30 @@ app.get('/user/:username/followers', function(req,res){
 *	- users: list of usernames (strings) 
 *
 *******************************************************************/
-app.post('/user/:username/following', function(req,res){
+app.get('/user/:username/following', function(req,res){
 
 /******************************************************************
 *
 *							VINNY = (use twitter-follow-utils)
 *
 *******************************************************************/
+	var params = {
+		"limit": req.params.limit,
+		"username": req.params.username
+	};
+	console.log("IN FOLLOWING");
+	followUtils.following(params, function(err, response){
 
+		if(err){
+			console.log("errrwhen getting followers");
+			res.send(response);
+		}
+		else{
+			console.log("got followers");
+			console.log(response);
+			res.send(response);
+		}
+	})
 	//pull username from params via req.params.username
 
 	//pull limit from request via req.params.limit (maybe)
@@ -655,19 +709,32 @@ app.post('/follow', function(req,res){
 	var params = {
 		"username":req.body.username,
 		"follow": req.body.follow,
-		"currentUser":req.session.currnetUser
+		"currentUser":req.session.currentUser
 	};
+	if(req.body.follow){
+		followUtils.follow(params, function(err, response){
 
-	followUtils.follow(params, function(err, response){
+			if(err){
+				console.log(err);
+				res.send(response);
+			}
+			else{
+				res.send(response);
+			}
+		})
+	}
+	else {
+		followUtils.unFollow(params, function(err, response){
 
-		if(err){
-			console.log(err);
-			res.send(response);
-		}
-		else{
-			res.send(response);
-		}
-	})
+			if(err){
+				console.log(err);
+				res.send(response);
+			}
+			else{
+				res.send(response);
+			}
+		})
+	}
 
 	//pull usename to follow via req.body.username
 

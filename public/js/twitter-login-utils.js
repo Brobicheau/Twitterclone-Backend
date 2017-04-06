@@ -24,7 +24,6 @@ var login = function(username, password, email, callback){
 				var date = Date();
 				var id = shortid.generate();
 
-				console.log(res + "Vs." + user.password);
 
 				//if the password we got from the user is the one in the database
 				if (res){
