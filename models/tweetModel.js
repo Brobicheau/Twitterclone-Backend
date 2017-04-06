@@ -1,9 +1,9 @@
 var mongoose = require('mongoose');
 
 var tweetSchema = mongoose.Schema({
-	content: String,
+	content: {type: String, index:true}
 	id: {type: String, index:true},
-	username: String,
+	username: {type: String, index:true}
 	parent: String,
 	timestamp: {type: Number, index:true}
 });
