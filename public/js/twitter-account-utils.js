@@ -107,8 +107,8 @@ var add = function(username, password, email, callback){
 					    console.dir(reply);
 					});*/
 
-					memcached.set(username+'t', 9000, function(err){});
-					memcached.set(email+'t', 9000, function(err){});
+					memcached.set(username+'t', 20000, function(err){});
+					memcached.set(email+'t', 20000, function(err){});
 
 
 					response ={
@@ -170,8 +170,8 @@ var verify = function(email, key, callback) {
 					var response = {
 						"status": "OK",
 					}
-					memcached.set(username+'p', 9000, function(err){});
-					memcached.set(email+'p', 9000, function(err){});
+					memcached.set(username+'p', 20000, function(err){});
+					memcached.set(email+'p', 20000, function(err){});
 					callback(null, response)
 
 				}
