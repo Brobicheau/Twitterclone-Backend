@@ -55,24 +55,35 @@ var checkForDuplicates = function(username, email, callback){
 
 
 	memcached.get(username+'t', function(err, data){
-		if(typeof data === 'undefined'){
+		if(typeof data !== 'undefined'){
+			callback("Email or username already in use", true);
+		}
+		else {
 			memcached.get(email+'t', function(err, data){
-				if(typeof data === 'undefined'){
+				if(typeof data !== 'undefined'){
+					callback("Email or username already in use", true);
+				}
+				else {
 					memcached.get(username+'p', function(err, data){
-						if(typeof data === 'undefined'){
+						if(typeof data !== 'undefined'){
+							callback("Email or username already in use", true);
+						}
+						else {
 							memcached.get(email+'p', function(err, data){
-								if(typeof data === 'undefined'){
+								if(typeof data !== 'undefined'){
+									callback("Email or username already in use", true);
+								}
+								else {
+									console.log("username not in use")
 									callback(null, false)
 								}
 							})
-
 						}
 					});
 				}
 			});
 		}
 	});
-	callback("Email or username already in use", true);
 
 };
 
@@ -131,55 +142,110 @@ var add = function(username, password, email, callback){
 
 var verify = function(email, key, callback) {
 
-	TempUser.findOne({'email':email}).exec(function(err, user){
-		console.log(email);
+	memcached.get(email+'t', function(err, data){
+		if(typeof data !== 'undefined'){
 
-		//if there was an error
-		if(err){
-			//should be sending the client somme sort of error
-			console.log("err");
-		}
+			//if there was an error
+			if(err){
+				//should be sending the client somme sort of error
+				console.log("err");
+			}
 
 
-		//this is the key crap for backdooring user verification
-		if (key === "abracadabra"){
+			//this is the key crap for backdooring user verification
+			if (key === "abracadabra"){
 
-			var newUser =  User ({
-				"username": user.username,
-				"email": user.email,
-				"password": user.password,
-				"status": "OK"
-			});
-
-			User.remove(user, function(err, res){
-				if(err)
-					console.log(err);
+				var newUser =  User ({
+					"username": user.username,
+					"email": user.email,
+					"password": user.password,
+					"status": "OK"
 				});
-			newUser.save(function(err, results){
 
-				if(err)
-				{
-					console.log("error")
-					var response = {
-						"status": "error",
-						"error": err
+				User.remove(user, function(err, res){
+					if(err)
+						console.log(err);
+					});
+				newUser.save(function(err, results){
+
+					if(err)
+					{
+						console.log("error")
+						var response = {
+							"status": "error",
+							"error": err
+						}
+						callback(err, response)
 					}
-					callback(err, response)
-				}
-				else {
-					var response = {
-						"status": "OK",
+					else {
+						var response = {
+							"status": "OK",
+						}
+						memcached.set(username+'p', 20000, function(err){});
+						memcached.set(email+'p', 20000, function(err){});
+						callback(null, response);
+						
+						
+
+					}	
+				});		
+			}
+		}
+		else{
+
+			TempUser.findOne({'email':email}).exec(function(err, user){
+					console.log(email);
+
+					//if there was an error
+					if(err){
+						//should be sending the client somme sort of error
+						console.log("err");
 					}
-					memcached.set(username+'p', 20000, function(err){});
-					memcached.set(email+'p', 20000, function(err){});
-					callback(null, response)
 
-				}
 
-			});
+					//this is the key crap for backdooring user verification
+					if (key === "abracadabra"){
 
-		}		
-	});
+						var newUser =  User ({
+							"username": user.username,
+							"email": user.email,
+							"password": user.password,
+							"status": "OK"
+						});
+
+						User.remove(user, function(err, res){
+							if(err)
+								console.log(err);
+							});
+						newUser.save(function(err, results){
+
+							if(err)
+							{
+								console.log("error")
+								var response = {
+									"status": "error",
+									"error": err
+								}
+								callback(err, response)
+							}
+							else {
+								var response = {
+									"status": "OK",
+								}
+								memcached.set(user.username+'p', 20000, function(err){memcached.set(user.email+'p', 20000, function(err){callback(null, response)});});
+								
+							
+							}
+
+						});
+
+					}		
+				});
+
+			}
+		});
+
+	
 }
 
 module.exports = {add, verify}
