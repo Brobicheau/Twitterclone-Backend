@@ -34,7 +34,8 @@ var add = function(currentUser, parent, content, callback){
 			"username": currentUser,
 			"parent": null,
 			"timestamp": Math.floor(new Date() / 1000),
-			"content": content
+			"content": content,
+			"likes": []
 		});
 
 		//save the sweet to the mongo database
@@ -93,10 +94,11 @@ var getItemById = function(search_id, callback){
 				var response = {
 					"status": "OK",
 					item: {
-					"id": tweet.id,
-					"username": tweet.username,
-					"content": tweet.content,
-					"timestamp": tweet.content,
+						"id": tweet.id,
+						"username": tweet.username,
+						"content": tweet.content,
+						"timestamp": tweet.content,
+						"likes": tweet.likes
 					}
 				};
 				//console.log("SENDING BACK TWEET");
@@ -359,12 +361,35 @@ var search = function(params, callback) {
 	// 			}			
 	// 			callback(null, response);
 	// 		}
-
 	// 	});
 	// }
 
 }
 
+
+var like = function(params, callback){
+	var id = params.id;
+	var like = params.like;
+	var currentUser = params.currentUser;
+
+	tweet.findOne({"id":id}, function(err, tweet){
+		if(err){
+			callback(err, {"status":"error"});
+		}
+		if(typeof tweet !== "undefined")
+			if(like){
+				tweet.likes.append(currentUser);
+				callback(null,{"status":"OK"});
+			}
+			else{
+				tweet.likes(tweet.indexof(currentUser), 1);
+				callback(null, {"status":"OK"});
+			}
+		else {
+			callback("Couldnt find tweet with that id", {"status":"error"});
+		}
+	})
+}
 
 
 module.exports = {add, getItemById, search}

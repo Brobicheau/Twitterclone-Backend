@@ -17,7 +17,7 @@
     height: 100px;
     border: 3px solid #73AD21;
 }*/
-#page-css{
+/*#page-css{
     width: 700px;
     height: 700px;
 
@@ -42,19 +42,19 @@ body {
     background-repeat: no-repeat;
     width: 700px;
     height: 799px;
-}
+}*/
 
     /* Remove the navbar's default margin-bottom and rounded borders */ 
-    .navbar {
+   /* .navbar {
       margin-bottom: 0;
       border-radius: 0;
-    }
+    }*/
     
     /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
-    .row.content {height:686px}
+    /*.row.content {height:686px}
     
     /* Set gray background color and 100% height */
-    .sidenav {
+    /*.sidenav {
       padding-top: 20px;
       background-color: #353535;
       color:red;
@@ -62,14 +62,14 @@ body {
     }
     
     /* Set black background color, white text and some padding */
-    footer {
+  /*  footer {
       background-color: #555;
       color: white;
       padding: 15px;
     }
     
     /* On small screens, set height to 'auto' for sidenav and grid */
-    @media screen and (max-width: 700px) {
+  /*  @media screen and (max-width: 700px) {
       .sidenav {
         height: auto;
         padding: 15px;
@@ -79,84 +79,28 @@ body {
     .my .glyphicon {
       pointer-events: all;
     }
+
+
 </style>
 </head>
 <body ng-app="myApp" ng-controller="AppCtrl" id="body">
 
 		<!-- SERVER 2		{{current.user}} -->
-
 	<div ng-switch="pageSwitch">
-		<div ng-switch-when="createUser-page">
-			<div class="bg-danger" id="page-css">
-				<div id="elementSpace-css">
-					<div>
-						<img src="https://lh6.ggpht.com/4h4AiWX8AQbaJiWZGud2jDulUuGf0hp5MEd0oAPcn1-wNnBf6MhmsZXT4lOUgVtFbX9ESmjwWqssGFkyuH6W=s0"></img>
-					</div>
-					<br>
-					<br>
-					<label id="redBoldText">Username:&nbsp;</label><input class="form-controler" ng-model="createUserInfo.username">
-					<br>
-					<br>
-					<label id="redBoldText">Email:&emsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label><input class="form-controler" ng-model="createUserInfo.email">
-					<br>
-					<br>
-					<label id="redBoldText">Password:&nbsp;</label><input class="form-controler" ng-model="createUserInfo.password">
-					<br>
-					<br>
-					<button class="btn-danger btn-lg" ng-click="createAccount()">Create new Account!</button>
-					<br>
-					<br>
-					<br>
-				</div>
-			</div>
-		</div>
-
-		<div ng-switch-when="login-page">
-			<div>
-				<img src="http://vignette3.wikia.nocookie.net/gtawiki/images/1/1d/Lifeinvader-GTAV.png/revision/latest?cb=20130813165601"/>
-			</div>
-			<div class="bg-danger" id="page-css">
-				<div id="elementSpace-css">
-					<p id="redBoldText">Username:</p> <input class="form-controler" value="username" ng-model="loginInfo.username">
-
-					<p id="redBoldText">Password:</p> <input type="password" class="form-controler" value="password" ng-model="loginInfo.password">
-
-					<button class="btn-danger" ng-click="login()">Login!</button>
-					<br>
-					<br>
-					<button class="btn-danger btn-lg" ng-click="switchToCreate()">Click here to create account!</button>
-					<br>
-					<br>
-					<br>
-					<br>
-					<br>
-					<br>
-					<img src="https://media.rockstargames.com/rockstargames/img/global/news/upload/actual_1378781698.jpg"/>
-				</div>
-			</div>
-		</div>
 
 
-		<div ng-switch-when="main-page">
+
+<div ng-switch-when="main-page">
 			Tweet: <input id="addTweetTextBox" class="form-controller" ng-model="tweet.tweet">
 
 			<button class="btn-primary" ng-click="addTweet()">Post Tweet!</button>
 			<br><br>
 
-			Search for all tweets before: <input class="form-controller" ng-model="search.timestamp">
-			<br>
-			Pick amount of tweets to show: <input class="form-controller" ng-model="search.limit">
-			<br>
-			<button class="btn" ng-click="search()">Search for tweets!</button>
-			<br><br>
-						<button class="btn" ng-click="switchToLogin()">Click here to go to login page!</button>
+		
+			<button class="btn" ng-click="switchToLogin()">Click here to go to login page!</button>
 
 			<button class="btn" ng-click="logout()">Click here to logout!</button><br>
 
-			Find by ID: <input class="form-controller" ng-model="item.id">
-
-			<br>
-			<button class="btn" ng-click="findItem()">Search by id</button>
 			<br><br>
 
 			<button class="btn" ng-click="switchToCreate()">Click here to create account!</button>
@@ -165,6 +109,11 @@ body {
 
 			<button class="btn" ng-click="switchToMain()">Show main feed</button>
 			<br><br><br>
+
+			<button class="btn-danger btn-lg" ng-click="switchToSearch()">Click here to go to search page!</button>
+			<br><br>
+
+			<button class="btn" ng-click="switchToUserInfo()">Click here to go to User Info Page!</button>
 
 
 			Feed: <pre>{{twitter.feed}}</pre>
@@ -227,11 +176,136 @@ body {
 				  <p>Footer Text</p>
 				</footer>
 			</div> -->
+		</div>	
+		<div ng-switch-when="search-page">
+
+
+			<button class="btn" ng-click="switchToLogin()">Click here to go to login page!</button>
+
+			<button class="btn" ng-click="switchToUserInfo()">Click here to go to User Info Page!</button>
+						<button class="btn" ng-click="switchToMain()">Show main feed</button>
+
+
+			<br><br>
+
+			Search for all tweets before: <input class="form-controler" ng-model="	search.timestamp">
+			<br>
+			Pick amount of tweets to show: <input class="form-controler" ng-model="search.limit">
+
+			Show only tweets of user: <input class="form-controler" ng-model="search.username">
+			<br>
+
+			Show only tweets of users you are following: <input type="chekcbox" ng-model="search.following">
+
+			<button class="btn" ng-click="search()">Search for tweets!</button>
+			<br><br>
+
+
+
+			{{twitter.search}}
+
+		</div>	
+
+		<div ng-switch-when="userInfo-page">
+
+
+			Users profile to lookup: <input class="form-controler" ng-model="userInfo.username">
+
+			<button class="btn-primary" ng-click="userInfo()">Lookup!</button>
+			<br>
+			<br><br><br><br>
+
+
+
+			{{userInfo.info}}
+
+			<br><br><br>
+
+
+			Follow/Unfollow User: <input class="form-controller" ng-model="follow.username">
+			<br>
+			<button class="btn" ng-click="follow()">Follow</button>
+			<button class="btn" ng-click="unfollow()">Unfollow</button>
+			<br>
+
+			{{follow.success}}
+			<br><br><br><br>
+					<button class="btn-danger btn-lg" ng-click="switchToCreate()">Click here to create account!</button>
+					<button class="btn-danger btn-lg" ng-click="switchToSearch()">Click here to go to search page!</button>
+			<button class="btn" ng-click="switchToMain()">Show main feed</button>
+
+			<br><br><br><br><br>
+
+
 		</div>
+
+
+
+		<div ng-switch-when="createUser-page">
+
+
+			<div class="bg-danger" id="page-css">
+				<div id="elementSpace-css">
+					<!--<div>
+						<img src="https://lh6.ggpht.com/4h4AiWX8AQbaJiWZGud2jDulUuGf0hp5MEd0oAPcn1-wNnBf6MhmsZXT4lOUgVtFbX9ESmjwWqssGFkyuH6W=s0"></img>
+					</div>-->
+					<br>
+						<button class="btn" ng-click="switchToUserInfo()">Click here to go to User Info Page!</button>		
+					<br>
+					<label id="redBoldText">Username:&nbsp;</label><input class="form-controler" ng-model="createUserInfo.username">
+					<br>
+					<br>
+					<label id="redBoldText">Email:&emsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label><input class="form-controler" ng-model="createUserInfo.email">
+					<br>
+					<br>
+					<label id="redBoldText">Password:&nbsp;</label><input class="form-controler" ng-model="createUserInfo.password">
+					<br>
+					<br>
+					<button class="btn-danger btn-lg" ng-click="createAccount()">Create new Account!</button>
+					<br>
+					<br>
+					<br>
+			<button class="btn" ng-click="switchToMain()">Show main feed</button>
+
+					<button class="btn-danger btn-lg" ng-click="switchToSearch()">Click here to go to search page!</button>					
+				</div>
+			</div>
+		</div>
+
+		<div ng-switch-when="login-page">
+			<div>
+				<img src="http://vignette3.wikia.nocookie.net/gtawiki/images/1/1d/Lifeinvader-GTAV.png/revision/latest?cb=20130813165601"/>
+			</div>
+			<div class="bg-danger" id="page-css">
+				<div id="elementSpace-css">
+					<p id="redBoldText">Username:</p> <input class="form-controler" value="username" ng-model="loginInfo.username">
+
+					<p id="redBoldText">Password:</p> <input type="password" class="form-controler" value="password" ng-model="loginInfo.password">
+
+					<button class="btn-danger" ng-click="login()">Login!</button>
+					<br>
+					<br>
+					<button class="btn-danger btn-lg" ng-click="switchToCreate()">Click here to create account!</button>
+					<button class="btn-danger btn-lg" ng-click="switchToSearch()">Click here to go to search page!</button>
+					<br>
+					<br>
+					<br>
+					<br>
+								<button class="btn" ng-click="switchToMain()">Show main feed</button>
+v
+			<button class="btn" ng-click="switchToUserInfo()">Click here to go to User Info Page!</button>					
+					<br>
+					<br>
+			<!--		<img src="https://media.rockstargames.com/rockstargames/img/global/news/upload/actual_1378781698.jpg"/>
+				</div>
+			</div>-->
+		</div>
+
+
+		
+
+	
 	</div>
-
-
-
 
 </body>
 

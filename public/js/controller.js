@@ -22,7 +22,8 @@ myApp.controller('AppCtrl', ['$scope', '$http', function($scope, $http) {
 
 
 	$scope.twitter = {
-		feed:""
+		feed:"",
+		search: ""
 	}
 
 	$scope.current = {
@@ -31,6 +32,26 @@ myApp.controller('AppCtrl', ['$scope', '$http', function($scope, $http) {
 
 	$scope.item = {
 		id: ""
+	}
+
+	$scope.search = {
+		q: "",
+		timestmap: "",
+		limit: "",
+		username: "",
+		following: "",
+		rank: "",
+		parent: ""
+	}
+
+	$scope.userInfo = {
+		username: "",
+		info: ""
+	}
+
+	$scope.follow = {
+		username: "",
+		success: ""
 	}
 
 	var init = function(){
@@ -56,7 +77,13 @@ myApp.controller('AppCtrl', ['$scope', '$http', function($scope, $http) {
 
 	init();
 
+	$scope.switchToUserInfo = function(){
+		$scope.pageSwitch = "userInfo-page";
+	}
 
+	$scope.switchToSearch = function(){
+		$scope.pageSwitch = "search-page";		
+	}
 
 	$scope.switchToMain = function(){
 		$scope.pageSwitch = "main-page";
@@ -179,11 +206,21 @@ myApp.controller('AppCtrl', ['$scope', '$http', function($scope, $http) {
 
 		request = {
 			timestamp: $scope.search.timestamp,
-			limit: $scope.search.limit
+			limit: $scope.search.limit,
+			q: $scope.search.list,
+			username: $scope.search.username,
+			following: $scope.search.following,
+			parent: $scope.search.parent,
+			rank: $scope.search.rank
 		};
 
 		$scope.search.timestamp = null;
 		$scope.search.limit = null;
+		$scope.search.q = null;
+		$scope.search.username = null;
+		$scope.search.following = null;
+		$scope.search.parent = null;
+		$scope.search.rank = null;
 
 		$http.post('/search', request).then(searchSuccess, searchError);
 
@@ -199,7 +236,7 @@ myApp.controller('AppCtrl', ['$scope', '$http', function($scope, $http) {
 
 			}
 
-			$scope.twitter.feed = tweets;
+			$scope.twitter.search = tweets;
 
 		}
 
@@ -233,5 +270,77 @@ myApp.controller('AppCtrl', ['$scope', '$http', function($scope, $http) {
 		}
 
 	}
+
+	$scope.userInfo = function(){
+
+		username = $scope.userInfo.username;
+
+
+		$http.get('user/' + username ).then(infoSuccess, infoError);
+
+		function infoSuccess(success){
+			console.log("info success");
+			console.log(success.data);
+
+			$scope.userInfo.info = success.data.user;
+		}
+
+		function infoError(error){
+
+			console.log(error);
+
+
+		}
+	}
+
+	$scope.follow = function() {
+		username = $scope.follow.username;
+
+		var request = {
+			"username" : username,
+			"follow" : true
+		}
+
+		$http.post('/follow',request).then(followSuccess, followError);
+
+		function followSuccess(success){
+
+			console.log("success");
+			$scope.follow.success = "successfully followed " + username;
+
+		}
+
+		function followError(error){
+
+			console.log(error);
+		}
+
+	}
+
+	$scope.unfollow = function(){
+		username = $scope.follow.username;
+
+		var request = {
+			"username" : username,
+			"follow" : false
+		}
+
+		$http.post('/follow',request).then(unfollowSuccess, unfollowError);
+
+		function unfollowSuccess(success){
+
+			console.log("success");
+			$scope.follow.success = "successfully unfollowed " + username;
+
+		}
+
+		function unfollowError(error){
+
+			console.log(error);
+
+		}
+
+	}
+
 
 }]);//end controller

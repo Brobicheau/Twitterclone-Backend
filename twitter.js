@@ -18,6 +18,12 @@ var shortid = require('shortid');
 var cookieSession = require('cookie-session');
 var sendmail = require('sendmail')();
 var randomstring = require("randomstring");
+var multer = require('multer');
+var fs = require('fs');
+var cassandra = require('cassandra-driver');
+var upload = multer({dest: path.join(__dirname + '/uploads/temp/')})
+var client = new cassandra.Client({contactPoints: ['192.168.1.34'], keyspace: 'twitter'});
+
 
 /*My libraries*/
 var User = require('./models/userModel.js');
@@ -509,24 +515,6 @@ app.get('/user/:username', function(req,res){
 		res.send(400).send({"status":"error"});
 	}
 
-
-
-	//Search for account with correct username via Users.findOne(username, function(err, user))
-
-		//if theres an error
-
-			//return status error
-
-		//else if we found user
-
-			//create json to return call user (see function description for details)
-
-			//return user info
-
-		//END IF ELSE
-
-	//END FIND USERNAME
-
 });
 
 
@@ -572,40 +560,6 @@ app.get('/user/:username/followers', function(req,res){
 
 	
 
-	//pull username from params via req.params.username
-
-	//pull limit from request via req.params.limit (maybe)
-
-	//find username via User.findOne(username, function(err, user))
-
-	//ACCESS FOLOWERS BY user.followers GIVES ARRAY
-
-		//if err 
-
-			//return error status
-
-		//else if we found user
-
-			//if limit is defined
-
-				//create response json with array of followers the size of limit (max of 200) (and status)
-
-				//send response json
-
-			//else we use default limit
-
-				//create json response with array of 50 followers (any order)
-
-				//send response json
-
-			//END IF ELSE
-
-		//END IF ELSE
-
-	//END FIND USERNAME
-
-
-
 });
 
 
@@ -648,37 +602,6 @@ app.get('/user/:username/following', function(req,res){
 			res.send(response);
 		}
 	})
-	//pull username from params via req.params.username
-
-	//pull limit from request via req.params.limit (maybe)
-
-	//find username via User.findOne(username, function(err, user))
-
-	//ACCESS FOLLOWINGS BY user.followings GIVES ARRAY
-
-		//if err 
-
-			//return error status
-
-		//else if we found user
-
-			//if limit is defined
-
-				//create response json with array of users hes following the size of limit (max of 200) (and status)
-
-				//send response json
-
-			//else we use default limit
-
-				//create json response with array of 50 hes following (any order)
-
-				//send response json
-
-			//END IF ELSE
-
-		//END IF ELSE
-
-	//END FIND USERNAME
 
 });
 
@@ -736,24 +659,7 @@ app.post('/follow', function(req,res){
 		})
 	}
 
-	//pull usename to follow via req.body.username
 
-	//pull follow bool via req.body.follow
-
-	//find the user to follow via Follow.findOne(username, function(err, user))
-
-		//if theres not an array
-
-			//send error response
-
-		//else
-
-			//edit following appropriately
-			///send OK response
-
-		//END IF ELSE
-
-	//END FIND USER
 
 });
 
@@ -771,9 +677,26 @@ app.post('/follow', function(req,res){
 *	- status: "OK" or "error"
 *
 *******************************************************************/
-app.post('/item/<id>/like', function(req,res){
+app.post('/item/:id/like', function(req,res){
 
+	var id = req.params.id;
+	var like = req.body.like;
+	var currentUser = req.session.currentUser;
 
+	var params = {
+		"id": id,
+		"like":like,
+		"currentUser":currentUser
+	}
+	tweetUtils.like(params, function(err, response){
+		if(err){
+			console.log(err);
+			res.status(400).send(response);
+		}
+		else {
+			res.status(200).send(response);
+		}
+	})
 });
 
 
@@ -790,7 +713,25 @@ app.post('/item/<id>/like', function(req,res){
 *	- error: error message (if error)
 *
 *******************************************************************/
-app.post('/addmedia', function(req,res){
+app.post('/addmedia',  upload.single('content'), function(req,res){
+
+	fs.readFile(req.file.path, function(err, data){
+		var params = {
+			"data": data,
+			'client': client
+		};
+		mediaUtils.addmedia(params, function(err, response){
+			if(err){
+				console.log(err);
+				fs.unlink(req.file.path);
+				res.status(400).send(response);
+			}
+			else{
+				res.status(200).send(response);
+				fs.unlink(req.file.path);
+			}
+		});
+	});
 
 
 });
@@ -807,7 +748,23 @@ app.post('/addmedia', function(req,res){
 *	- returns media file (image or video)
 *
 *******************************************************************/
-app.post('/media/<id>', function(req,res){
+app.post('/media/:id', function(req,res){
+
+	var params = {
+		"id":params.body.id
+	}
+
+	mediaUtils.getMedia(params, function(err, content){
+
+		if(err){
+			res.status(400).send(response);
+		}
+		else {
+			res.writeHead(200, {'Content-Type': 'image/jpg'});
+  			res.end(content, 'binary');		
+  		}
+
+	})
 
 
 });

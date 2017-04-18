@@ -7,45 +7,73 @@ var Follow = require("../../models/followModel.js")
 var shortid = require('shortid');
 var sendmail = require('sendmail')();
 var randomstring = require("randomstring");
+var Memcached = require('memcached');
+var memcached = new Memcached(
+		'localhost:11211',
+		{
+			retries:10,
+			retry:10000,
+			remove:true,
+			failOverServers:['192.168.0.103:11211']
+		});
 
 mongoose.Promise = require('bluebird');
 
 
 
-
-
-var checkForDuplicates = function(username, email, callback){
-
-
-
-	TempUser.count({"username":username}, function(err, count) {
-		if(count >0 ){
-			callback("Temp User or email found", true);
-		}
-		else{
-			TempUser.count({"email":email}, function(err, count) {
+/*		USING ACTUAL DATABASE
+			TempUser.count({"username":username}, function(err, count) {
 				if(count >0 ){
 					callback("Temp User or email found", true);
 				}
 				else{
-					User.count({"username":username}, function(err, count) {
+					TempUser.count({"email":email}, function(err, count) {
 						if(count >0 ){
-							callback(" User or email found");
+							callback("Temp User or email found", true);
 						}
 						else{
-							User.count({"email":email}, function(err, count) {
+							User.count({"username":username}, function(err, count) {
 								if(count >0 ){
 									callback(" User or email found");
 								}
-								else
-									callback(null, false)
+								else{
+									User.count({"email":email}, function(err, count) {
+										if(count >0 ){
+											callback(" User or email found");
+										}
+										else
+											callback(null, false)
+									});
+								}
 							});
+						}
+					});
+				}
+			});*/
+
+var checkForDuplicates = function(username, email, callback){
+
+
+	memcached.get(username+'t', function(err, data){
+		if(typeof data === 'undefined'){
+			memcached.get(email+'t', function(err, data){
+				if(typeof data === 'undefined'){
+					memcached.get(username+'p', function(err, data){
+						if(typeof data === 'undefined'){
+							memcached.get(email+'p', function(err, data){
+								if(typeof data === 'undefined'){
+									callback(null, false)
+								}
+							})
+
 						}
 					});
 				}
 			});
 		}
 	});
+	callback("Email or username already in use", true);
+
 };
 
 var add = function(username, password, email, callback){
@@ -78,6 +106,10 @@ var add = function(username, password, email, callback){
 					    console.log(err && err.stack);
 					    console.dir(reply);
 					});*/
+
+					memcached.set(username+'t', 9000, function(err){});
+					memcached.set(email+'t', 9000, function(err){});
+
 
 					response ={
 						"status":"OK"
@@ -138,6 +170,8 @@ var verify = function(email, key, callback) {
 					var response = {
 						"status": "OK",
 					}
+					memcached.set(username+'p', 9000, function(err){});
+					memcached.set(email+'p', 9000, function(err){});
 					callback(null, response)
 
 				}

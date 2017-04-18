@@ -5,7 +5,8 @@ var tweetSchema = mongoose.Schema({
 	id: {type: String, index:true},
 	username: {type: String, index:true},
 	parent: String,
-	timestamp: {type: Number, index:true}
+	timestamp: {type: Number, index:true},
+	likes: [String]
 });
 tweetSchema.index({content: 'text'});
 
