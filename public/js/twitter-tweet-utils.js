@@ -93,6 +93,7 @@ var getItemById = function(search_id, callback){
 		//console.log("searching");
 		memcached.get(search_id, function(err, data){
 			if(typeof data !== 'undefined'){
+				console.log('got memcached');
 				callback(null, data);
 			}
 			else{
@@ -126,7 +127,7 @@ var getItemById = function(search_id, callback){
 					}
 				});
 			}
-		}
+		});
 	}
 	else {
 		callback("invalid search ID",{"status":"error"});
