@@ -96,9 +96,7 @@ var following = function(params, callback){
 	var username = params.username;
 	var limit = params.limit;
 	var currentUser = params.currentUser;
-	console.log(username);
-	console.log(limit);
-	console.log(currentUser);
+
 
 	Follow.find({"username":username}).limit(limit).exec(function(err, following){
 		if(err){
@@ -115,8 +113,7 @@ var following = function(params, callback){
 				"users":ret,
 				"status":"OK"
 			};
-			console.log("following function");
-			console.log(following);
+
 			callback(null, response);
 		}
 	})
@@ -132,7 +129,6 @@ var getFollowerCount = function(params, callback){
 		if(err)
 			callback(null, {"status":"error"});
 		else{
-			console.log("COUNT "+ count);
 			callback(null,count);
 		}
 	})

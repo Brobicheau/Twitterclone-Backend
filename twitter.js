@@ -103,8 +103,7 @@ app.get('/init', function(req, res){
 ************************************************/		
 app.post('/adduser', function(req,res){
 
-	console.log("IN ADDUSER");
-
+	var time = process.hrtime();
 
 	//get the username, password and email
 	var username = req.body.username;
@@ -112,12 +111,14 @@ app.post('/adduser', function(req,res){
 	var email = req.body.email;
 
 	accountUtils.add(username, password, email, function(err, response){
-
+					var diff = process.hrtime(time)
+			console.log(`adduser: ${(diff[0] * 1e9 + diff[1])/1e9} seconds`)
 		if (err){
-			console.log(err)
+			var diff = process.hrtime(time);
 			res.send(response);
 		}
 		else{
+
 			res.send(response);
 		}
 	})
@@ -147,6 +148,8 @@ app.get("/login", function(req, res){
 });
 app.post("/login", function(req, res){
 
+	var time = process.hrtime()
+
 	var username = req.body.username;
 	var email = req.body.email;
 	var password = req.body.password;
@@ -154,13 +157,16 @@ app.post("/login", function(req, res){
 	loginUtils.login(username, password, email, function(err, response, cookie_id){
 
 		if(response.status === 'error'){
-			console.log(err);
+			//console.log(err);
+			var diff = process.hrtime(time);
 			res.send(response);
 		}
 		else {
 			req.session.id = cookie_id;
 			req.session.currentUser = username;
-			res.status(200).json(response);
+			var diff = process.hrtime(time);
+  			console.log(`login: ${(diff[0] * 1e9 + diff[1])/1e9} seconds`);
+  			res.status(200).json(response);
 		}
 
 	})
@@ -209,7 +215,6 @@ app.get('/verify/:URL', function(req, res){
 
 		}
 		else {
-			console.log("couldnt find user with URL");
 			res.send({"status": "error"});
 		}
 
@@ -232,7 +237,7 @@ app.get('/verify/:URL', function(req, res){
 ************************************************/
 app.post('/verify', function(req,res){
 
-
+	var time = process.hrtime()
 	//grab the key and create varibales for the url and reutrn json
 	var key = req.body.key;
 	var email = req.body.email;
@@ -240,10 +245,13 @@ app.post('/verify', function(req,res){
 	accountUtils.verify(email, key, function(err, response) {
 
 		if (err){
-			console.log(err);
+			//console.log(err);
+			var diff = process.hrtime(time)
 			res.send(response);
 		}
 		else {
+			var diff = process.hrtime(time)
+			console.log(`verify: ${(diff[0] * 1e9 + diff[1])/1e9} seconds`);
 			res.send(response)
 		}
 
@@ -266,7 +274,8 @@ app.post('/verify', function(req,res){
 *
 ************************************************/
 app.post('/additem', function(req,res){
-	
+		
+	var time = process.hrtime()
 
 	var currentUser = req.session.currentUser
 	var parent = req.body.parent;
@@ -275,10 +284,13 @@ app.post('/additem', function(req,res){
 	tweetUtils.add(currentUser, parent, content, function(err, response){
 
 		if (err){
-			console.log(err);
+		//	console.log(err);
+			var diff = process.hrtime(time);
 			res.send(response);
 		}
 		else {
+			var diff = process.hrtime(time);
+			console.log(`additem: ${(diff[0] * 1e9 + diff[1])/1e9} seconds`);
 			res.send(response);
 		}
 
@@ -309,6 +321,8 @@ app.post('/additem', function(req,res){
 ************************************************/
 app.get('/item/:id', function(req,res){
 
+	var time = process.hrtime();
+
 	//get the id of the tweet to search for
 	var search_id = req.params.id;
  
@@ -316,10 +330,13 @@ app.get('/item/:id', function(req,res){
 	tweetUtils.getItemById(search_id, function(err, response){
 
 		if(err){
-			console.log(err);
+		//	console.log(err);
+		var diff = process.hrtime(time);
 			res.send(response);
 		}
 		else{
+			var diff = process.hrtime(time)
+			console.log(`itemsearch: ${(diff[0] * 1e9 + diff[1])/1e9} seconds`);
 			res.send(response);
 		}
 	});
@@ -361,7 +378,6 @@ app.delete('/item/:id', function(req,res){
 
 		});
 	}else{
-		console.log('not valid ID');
 		res.status(404).send({"status":"error"});
 	}
 
@@ -403,7 +419,7 @@ app.delete('/item/:id', function(req,res){
 *
 ************************************************/
 app.post('/search', function(req,res){
-
+	var time = process.hrtime();
 
 	//console.log("made it to search");
 	//console.log(req.body.q);
@@ -423,11 +439,13 @@ app.post('/search', function(req,res){
 	tweetUtils.search(params, function(err, response){
 
 		if(err){
-			console.log(err);
+		//	console.log(err);
+		process.hrtime(time);
 			res.send(response);
 		}
 		else {
-			console.log("Shit went though search");
+			var diff = process.hrtime(time);
+			console.log(`search: ${(diff[0] * 1e9 + diff[1])/1e9} seconds`);
 			res.send(response);
 		}
 	})
@@ -489,7 +507,6 @@ app.get('/user/:username', function(req,res){
 								res.send({"status":"error"});
 							}
 							else {
-								console.log
 								var responseUser = {//All user data is stored in here
 									"email": user.email,
 									"followers": followerCount,
@@ -549,11 +566,9 @@ app.get('/user/:username/followers', function(req,res){
 	followUtils.followers(params, function(err, response){
 
 		if(err){
-			console.log("errrwhen getting followers");
 			res.send(response);
 		}
 		else{
-			console.log("got followers");
 			res.send(response);
 		}
 	})
@@ -589,16 +604,12 @@ app.get('/user/:username/following', function(req,res){
 		"limit": req.params.limit,
 		"username": req.params.username
 	};
-	console.log("IN FOLLOWING");
 	followUtils.following(params, function(err, response){
 
 		if(err){
-			console.log("errrwhen getting followers");
 			res.send(response);
 		}
 		else{
-			console.log("got followers");
-			console.log(response);
 			res.send(response);
 		}
 	})
@@ -638,7 +649,7 @@ app.post('/follow', function(req,res){
 		followUtils.follow(params, function(err, response){
 
 			if(err){
-				console.log(err);
+				//console.log(err);
 				res.send(response);
 			}
 			else{
@@ -690,7 +701,7 @@ app.post('/item/:id/like', function(req,res){
 	}
 	tweetUtils.like(params, function(err, response){
 		if(err){
-			console.log(err);
+			//console.log(err);
 			res.status(400).send(response);
 		}
 		else {
@@ -722,7 +733,7 @@ app.post('/addmedia',  upload.single('content'), function(req,res){
 		};
 		mediaUtils.addmedia(params, function(err, response){
 			if(err){
-				console.log(err);
+			//	console.log(err);
 				fs.unlink(req.file.path);
 				res.status(400).send(response);
 			}
@@ -783,7 +794,6 @@ app.get('/feed', function(req, res){
 			fill = fill + data[i].username + ": " + data[i].content + "\n";
 		}
 
-		console.log(fill);
 
 		var response = {
 			tweets: fill

@@ -4,7 +4,7 @@ var tweetSchema = mongoose.Schema({
 	content: String,
 	id: {type: String, index:true},
 	username: {type: String, index:true},
-	parent: String,
+	parent:{type: String, index:true},
 	timestamp: {type: Number, index:true},
 	likes: [String]
 });

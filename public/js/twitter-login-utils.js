@@ -6,13 +6,76 @@ var Tweet = require("../../models/tweetModel.js");
 var shortid = require('shortid');
 var sendmail = require('sendmail')();
 var randomstring = require("randomstring");
+var Memcached = require('memcached');
+var memcached = new Memcached(
+		'localhost:11211',
+		{
+			retries:10,
+			retry:10000,
+			remove:true,
+			failOverServers:['192.168.0.103:11211']
+		});
 
 mongoose.Promise = require('bluebird');
 
 var login = function(username, password, email, callback){ 
-	console.log("in login module");
 
-//use the mongoose User model to find the user data with the username given
+User.findOne({'username':username}, function(err, user){
+
+		console.log(user);
+		if(user.verified){
+
+			//hash their password
+			var time = process.hrtime();
+			bcrypt.compare(password, user.password).then(function(res){
+				var diff = process.hrtime(time);
+				console.log(`: ${(diff[0] * 1e9 + diff[1])/1e9} seconds`)
+				//set the data and ID fields for adding to database
+				var date = Date();
+				var id = shortid.generate();
+
+
+				//if the password we got from the user is the one in the database
+				if (res){
+
+
+					//prepare response to sendt o the user
+					var response = {
+						"username": username,
+						"date": date,
+						"status": "OK"
+					};	
+
+
+					//respond to user
+					callback(null, response, id)
+				}
+				//else theres an errror
+				else {
+					var response = {
+						"status":"error"
+					}
+					//show errror
+					callback("Incorrect password", response, null)
+				}
+			});
+		}
+		//else error
+		else{
+
+			var response = {
+				"status" : "error"
+			}
+			//theres an error here 
+			console.log(err);
+			callback(err, response, null);
+		}
+
+
+
+});
+
+/*//use the mongoose User model to find the user data with the username given
 	User.findOne({'username': username}).lean().exec(function(err, user){
 		//if we found a user by that name
 		if(user){
@@ -37,7 +100,6 @@ var login = function(username, password, email, callback){
 					};	
 
 
-					console.log("LOGGED IN");
 					//respond to user
 					callback(null, response, id)
 				}
@@ -47,7 +109,6 @@ var login = function(username, password, email, callback){
 						"status":"error"
 					}
 					//show errror
-					console.log("not user");
 					callback("Incorrect password", response, null)
 				}
 			});
@@ -59,11 +120,11 @@ var login = function(username, password, email, callback){
 				"status" : "error"
 			}
 			//theres an error here 
-			console.log(err);
+			//console.log(err);
 			callback(err, response, null);
 		}
 
-	});// end find one function
+	});// end find one function*/
 }
 
 
