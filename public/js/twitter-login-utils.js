@@ -56,7 +56,7 @@ var login = function(username, password, email, callback){
 		else{
 
 			var response = {
-				"status" : "error"
+				"status" : "OK"
 			}
 			//theres an error here 
 			console.log(err);
