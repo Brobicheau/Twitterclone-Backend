@@ -7,84 +7,45 @@ var Follow = require("../../models/followModel.js")
 var shortid = require('shortid');
 var sendmail = require('sendmail')();
 var randomstring = require("randomstring");
-var Memcached = require('memcached');
-var memcached = new Memcached(
-		'localhost:11211',
-		{
-			retries:10,
-			retry:10000,
-			remove:true,
-			failOverServers:['192.168.0.103:11211']
-		});
 
 mongoose.Promise = require('bluebird');
 
 
 
-/*		USING ACTUAL DATABASE
-			TempUser.count({"username":username}, function(err, count) {
-				if(count >0 ){
-					callback("Temp User or email found", true);
-				}
-				else{
-					TempUser.count({"email":email}, function(err, count) {
-						if(count >0 ){
-							callback("Temp User or email found", true);
-						}
-						else{
-							User.count({"username":username}, function(err, count) {
-								if(count >0 ){
-									callback(" User or email found");
-								}
-								else{
-									User.count({"email":email}, function(err, count) {
-										if(count >0 ){
-											callback(" User or email found");
-										}
-										else
-											callback(null, false)
-									});
-								}
-							});
-						}
-					});
-				}
-			});*/
+
 
 var checkForDuplicates = function(username, email, callback){
 
 
-	memcached.get(username+'t', function(err, data){
-		if(typeof data !== 'undefined'){
-			callback("Email or username already in use", true);
+
+	TempUser.count({"username":username}, function(err, count) {
+		if(count >0 ){
+			callback("Temp User or email found", true);
 		}
-		else {
-			memcached.get(email+'t', function(err, data){
-				if(typeof data !== 'undefined'){
-					callback("Email or username already in use", true);
+		else{
+			TempUser.count({"email":email}, function(err, count) {
+				if(count >0 ){
+					callback("Temp User or email found", true);
 				}
-				else {
-					memcached.get(username+'p', function(err, data){
-						if(typeof data !== 'undefined'){
-							callback("Email or username already in use", true);
+				else{
+					User.count({"username":username}, function(err, count) {
+						if(count >0 ){
+							callback(" User or email found");
 						}
-						else {
-							memcached.get(email+'p', function(err, data){
-								if(typeof data !== 'undefined'){
-									callback("Email or username already in use", true);
+						else{
+							User.count({"email":email}, function(err, count) {
+								if(count >0 ){
+									callback(" User or email found");
 								}
-								else {
-									console.log("username not in use")
+								else
 									callback(null, false)
-								}
-							})
+							});
 						}
 					});
 				}
 			});
 		}
 	});
-
 };
 
 var add = function(username, password, email, callback){
@@ -118,10 +79,6 @@ var add = function(username, password, email, callback){
 					    console.dir(reply);
 					});*/
 
-					memcached.set(username+'t', 20000, function(err){});
-					memcached.set(email+'t', 20000, function(err){});
-
-
 					response ={
 						"status":"OK"
 					}
@@ -142,110 +99,53 @@ var add = function(username, password, email, callback){
 
 var verify = function(email, key, callback) {
 
-	memcached.get(email+'t', function(err, data){
-		if(typeof data !== 'undefined'){
+	TempUser.findOne({'email':email}).exec(function(err, user){
+		console.log(email);
 
-			//if there was an error
-			if(err){
-				//should be sending the client somme sort of error
-				console.log("err");
-			}
-
-
-			//this is the key crap for backdooring user verification
-			if (key === "abracadabra"){
-
-				var newUser =  User ({
-					"username": user.username,
-					"email": user.email,
-					"password": user.password,
-					"status": "OK"
-				});
-
-				User.remove(user, function(err, res){
-					if(err)
-						console.log(err);
-					});
-				newUser.save(function(err, results){
-
-					if(err)
-					{
-						console.log("error")
-						var response = {
-							"status": "error",
-							"error": err
-						}
-						callback(err, response)
-					}
-					else {
-						var response = {
-							"status": "OK",
-						}
-						memcached.set(username+'p', 20000, function(err){});
-						memcached.set(email+'p', 20000, function(err){});
-						callback(null, response);
-						
-						
-
-					}	
-				});		
-			}
+		//if there was an error
+		if(err){
+			//should be sending the client somme sort of error
+			console.log("err");
 		}
-		else{
-
-			TempUser.findOne({'email':email}).exec(function(err, user){
-					console.log(email);
-
-					//if there was an error
-					if(err){
-						//should be sending the client somme sort of error
-						console.log("err");
-					}
 
 
-					//this is the key crap for backdooring user verification
-					if (key === "abracadabra"){
+		//this is the key crap for backdooring user verification
+		if (key === "abracadabra"){
 
-						var newUser =  User ({
-							"username": user.username,
-							"email": user.email,
-							"password": user.password,
-							"status": "OK"
-						});
+			var newUser =  User ({
+				"username": user.username,
+				"email": user.email,
+				"password": user.password,
+				"status": "OK"
+			});
 
-						User.remove(user, function(err, res){
-							if(err)
-								console.log(err);
-							});
-						newUser.save(function(err, results){
-
-							if(err)
-							{
-								console.log("error")
-								var response = {
-									"status": "error",
-									"error": err
-								}
-								callback(err, response)
-							}
-							else {
-								var response = {
-									"status": "OK",
-								}
-								memcached.set(user.username+'p', 20000, function(err){memcached.set(user.email+'p', 20000, function(err){callback(null, response)});});
-								
-							
-							}
-
-						});
-
-					}		
+			User.remove(user, function(err, res){
+				if(err)
+					console.log(err);
 				});
+			newUser.save(function(err, results){
 
-			}
-		});
+				if(err)
+				{
+					console.log("error")
+					var response = {
+						"status": "error",
+						"error": err
+					}
+					callback(err, response)
+				}
+				else {
+					var response = {
+						"status": "OK",
+					}
+					callback(null, response)
 
-	
+				}
+
+			});
+
+		}		
+	});
 }
 
 module.exports = {add, verify}

@@ -6,16 +6,6 @@ var shortid = require('shortid');
 var cookieSession = require('cookie-session');
 var sendmail = require('sendmail')();
 var randomstring = require("randomstring");
-var Memcached = require('memcached');
-var memcached = new Memcached(
-		'localhost:11211',
-		{
-			retries:10,
-			retry:10000,
-			remove:true,
-			failOverServers:['192.168.0.103:11211']
-		});
-
 
 /*My libraries*/
 var User = require('../../models/userModel.js');
@@ -68,7 +58,6 @@ var add = function(currentUser, parent, content, callback){
 					"id": id,
 					"status" : "OK"
 				};
-			memcached.set(id, 20000, function(err){})
 			callback(null, response)		 
 			}
 		});
@@ -91,41 +80,33 @@ var getItemById = function(search_id, callback){
 
 	if(typeof search_id !== 'undefined'){
 		//console.log("searching");
-		memcached.get(search_id, function(err, data){
-			if(typeof data !== 'undefined'){
-				console.log('got memcached');
-				callback(null, data);
+		Tweet.findOne({"id": search_id}).lean().exec(function(err, tweet){
+
+			//console.log("found something  probably");
+
+			if(err){
+				console.log(err);
+				callback(err, {"status":"error"})
 			}
-			else{
-				Tweet.findOne({"id": search_id}).lean().exec(function(err, tweet){
 
-					//console.log("found something  probably");
 
-					if(err){
-						console.log(err);
-						callback(err, {"status":"error"})
+			else if(tweet){	
+				var response = {
+					"status": "OK",
+					item: {
+						"id": tweet.id,
+						"username": tweet.username,
+						"content": tweet.content,
+						"timestamp": tweet.content,
+						"likes": tweet.likes
 					}
-
-
-					else if(tweet){	
-						var response = {
-							"status": "OK",
-							item: {
-								"id": tweet.id,
-								"username": tweet.username,
-								"content": tweet.content,
-								"timestamp": tweet.content,
-								"likes": tweet.likes
-							}
-						};
-						//console.log("SENDING BACK TWEET");
-						callback(null, response)
-					}
-					else {
-						//console.log("Couldnt find tweet");
-						callback("Error: couldnt find tweet", {"status":"error"});
-					}
-				});
+				};
+				//console.log("SENDING BACK TWEET");
+				callback(null, response)
+			}
+			else {
+				//console.log("Couldnt find tweet");
+				callback("Error: couldnt find tweet", {"status":"error"});
 			}
 		});
 	}

@@ -1,0 +1,1533 @@
+[33m[nodemon] 1.11.0[39m
+[33m[nodemon] to restart at any time, enter `rs`[39m
+[33m[nodemon] watching: *.*[39m
+[32m[nodemon] starting `node twitter.js`[39m
+listening on port 3000
+IN ADDUSER
+IN ADDUSER
+IN ADDUSER
+IN ADDUSER
+IN ADDUSER
+IN ADDUSER
+IN ADDUSER
+IN ADDUSER
+IN ADDUSER
+IN ADDUSER
+IN ADDUSER
+IN ADDUSER
+IN ADDUSER
+username not in use
+username not in use
+username not in use
+username not in use
+username not in use
+username not in use
+username not in use
+username not in use
+username not in use
+IN ADDUSER
+IN ADDUSER
+IN ADDUSER
+username not in use
+username not in use
+username not in use
+IN ADDUSER
+IN ADDUSER
+IN ADDUSER
+IN ADDUSER
+username not in use
+username not in use
+username not in use
+username not in use
+username not in use
+username not in use
+username not in use
+{ __v: 0,
+  username: 'dummy1492566005.1',
+  email: 'dummy1492566005.1@eliza.cse356.compas.cs.stonybrook.edu',
+  password: '$2a$10$pzeDtxm8zLGv8U6u81W.j.JudmWXr1I3KjXAItNa4ZlF6vXrywFqa',
+  URL: '02pREaEOUaNqHQ7wG4Am',
+  status: 'OK',
+  _id: 58f6bff5ecda5b535c814ae0 }
+saved username to memcahed dummy1492566005.1t
+saved email to memcached dummy1492566005.1@eliza.cse356.compas.cs.stonybrook.edut
+before memcached
+in memcached
+found info from memcached
+in login module
+{ __v: 0,
+  username: 'dummy1492566005.09',
+  email: 'dummy1492566005.09@eliza.cse356.compas.cs.stonybrook.edu',
+  password: '$2a$10$LzQVLqtDQ57mNPhXSCCS/..sIh62ZIn.apGtKWcE5zuzOyrlJmJ.2',
+  URL: 'dcnFlwzLlkUaUE7GjwTr',
+  status: 'OK',
+  _id: 58f6bff5ecda5b535c814ae2 }
+saved username to memcahed dummy1492566005.09t
+saved email to memcached dummy1492566005.09@eliza.cse356.compas.cs.stonybrook.edut
+{ __v: 0,
+  username: 'dummy1492566005.11',
+  email: 'dummy1492566005.11@eliza.cse356.compas.cs.stonybrook.edu',
+  password: '$2a$10$RmbBxq/bqm.IshHRx80S3uI9vCPpaxZ1p7wiotyTeP.xZ7e0JHNF2',
+  URL: 'XgniJWxg6Jd9q46MjzKV',
+  status: 'OK',
+  _id: 58f6bff5ecda5b535c814ae3 }
+saved username to memcahed dummy1492566005.11t
+saved email to memcached dummy1492566005.11@eliza.cse356.compas.cs.stonybrook.edut
+undefined
+saved username to memcahed dummy1492566005.11t
+saved email to memcached dummy1492566005.11@eliza.cse356.compas.cs.stonybrook.edut
+before memcached
+before memcached
+in memcached
+in memcached
+before memcached
+in memcached
+found info from memcached
+error
+{ [MongoError: insertDocument :: caused by :: 11000 E11000 duplicate key error index: twitter.real_users.$username_1  dup key: { : "dummy1492566005.11" }]
+  name: 'MongoError',
+  message: 'insertDocument :: caused by :: 11000 E11000 duplicate key error index: twitter.real_users.$username_1  dup key: { : "dummy1492566005.11" }',
+  driver: true,
+  code: 11000,
+  index: 0,
+  errmsg: 'insertDocument :: caused by :: 11000 E11000 duplicate key error index: twitter.real_users.$username_1  dup key: { : "dummy1492566005.11" }',
+  getOperation: [Function],
+  toJSON: [Function],
+  toString: [Function] }
+undefined
+error
+{ [MongoError: insertDocument :: caused by :: 11000 E11000 duplicate key error index: twitter.real_users.$username_1  dup key: { : "dummy1492566005.11" }]
+  name: 'MongoError',
+  message: 'insertDocument :: caused by :: 11000 E11000 duplicate key error index: twitter.real_users.$username_1  dup key: { : "dummy1492566005.11" }',
+  driver: true,
+  code: 11000,
+  index: 0,
+  errmsg: 'insertDocument :: caused by :: 11000 E11000 duplicate key error index: twitter.real_users.$username_1  dup key: { : "dummy1492566005.11" }',
+  getOperation: [Function],
+  toJSON: [Function],
+  toString: [Function] }
+saved username to memcahed dummy1492566005.1t
+saved email to memcached dummy1492566005.1@eliza.cse356.compas.cs.stonybrook.edut
+in login module
+in login module
+before memcached
+in memcached
+in login module
+error
+{ [MongoError: insertDocument :: caused by :: 11000 E11000 duplicate key error index: twitter.real_users.$username_1  dup key: { : "dummy1492566005.1" }]
+  name: 'MongoError',
+  message: 'insertDocument :: caused by :: 11000 E11000 duplicate key error index: twitter.real_users.$username_1  dup key: { : "dummy1492566005.1" }',
+  driver: true,
+  code: 11000,
+  index: 0,
+  errmsg: 'insertDocument :: caused by :: 11000 E11000 duplicate key error index: twitter.real_users.$username_1  dup key: { : "dummy1492566005.1" }',
+  getOperation: [Function],
+  toJSON: [Function],
+  toString: [Function] }
+in login module
+undefined
+undefined
+saved username to memcahed dummy1492566005.11t
+saved email to memcached dummy1492566005.11@eliza.cse356.compas.cs.stonybrook.edut
+{ __v: 0,
+  username: 'dummy1492566005.12',
+  email: 'dummy1492566005.12@eliza.cse356.compas.cs.stonybrook.edu',
+  password: '$2a$10$dEUcQxXtQmET8ngnBeY9o./VlY3IeIx.jIGkra0phXjZV/Dto6.em',
+  URL: 'o6waWV0RJ8E2OnQkSC0F',
+  status: 'OK',
+  _id: 58f6bff5ecda5b535c814aeb }
+saved username to memcahed dummy1492566005.12t
+saved email to memcached dummy1492566005.12@eliza.cse356.compas.cs.stonybrook.edut
+before memcached
+in memcached
+before memcached
+in memcached
+found info from memcached
+error
+{ [MongoError: insertDocument :: caused by :: 11000 E11000 duplicate key error index: twitter.real_users.$username_1  dup key: { : "dummy1492566005.12" }]
+  name: 'MongoError',
+  message: 'insertDocument :: caused by :: 11000 E11000 duplicate key error index: twitter.real_users.$username_1  dup key: { : "dummy1492566005.12" }',
+  driver: true,
+  code: 11000,
+  index: 0,
+  errmsg: 'insertDocument :: caused by :: 11000 E11000 duplicate key error index: twitter.real_users.$username_1  dup key: { : "dummy1492566005.12" }',
+  getOperation: [Function],
+  toJSON: [Function],
+  toString: [Function] }
+in login module
+in login module
+undefined
+saved username to memcahed dummy1492566005.11t
+saved email to memcached dummy1492566005.11@eliza.cse356.compas.cs.stonybrook.edut
+ SEARCH ID r1CgeSVAg
+
+CHECK SEARCH ID r1CgeSVAg
+about to memcache search for r1CgeSVAg
+before memcached
+in memcached
+undefined
+error
+{ [MongoError: insertDocument :: caused by :: 11000 E11000 duplicate key error index: twitter.real_users.$username_1  dup key: { : "dummy1492566005.11" }]
+  name: 'MongoError',
+  message: 'insertDocument :: caused by :: 11000 E11000 duplicate key error index: twitter.real_users.$username_1  dup key: { : "dummy1492566005.11" }',
+  driver: true,
+  code: 11000,
+  index: 0,
+  errmsg: 'insertDocument :: caused by :: 11000 E11000 duplicate key error index: twitter.real_users.$username_1  dup key: { : "dummy1492566005.11" }',
+  getOperation: [Function],
+  toJSON: [Function],
+  toString: [Function] }
+saved username to memcahed dummy1492566005.11t
+saved email to memcached dummy1492566005.11@eliza.cse356.compas.cs.stonybrook.edut
+in login module
+before memcached
+in memcached
+error
+{ [MongoError: insertDocument :: caused by :: 11000 E11000 duplicate key error index: twitter.real_users.$username_1  dup key: { : "dummy1492566005.11" }]
+  name: 'MongoError',
+  message: 'insertDocument :: caused by :: 11000 E11000 duplicate key error index: twitter.real_users.$username_1  dup key: { : "dummy1492566005.11" }',
+  driver: true,
+  code: 11000,
+  index: 0,
+  errmsg: 'insertDocument :: caused by :: 11000 E11000 duplicate key error index: twitter.real_users.$username_1  dup key: { : "dummy1492566005.11" }',
+  getOperation: [Function],
+  toJSON: [Function],
+  toString: [Function] }
+in login module
+{ __v: 0,
+  username: 'dummy1492566005.13',
+  email: 'dummy1492566005.13@eliza.cse356.compas.cs.stonybrook.edu',
+  password: '$2a$10$vQRJ0U9ffT4TUJu6T4dwRuYTVOxxP2oo1rhxQ/PayNm7Qh4ZXLTlK',
+  URL: 'g0NDgNznmjflEY40ULI8',
+  status: 'OK',
+  _id: 58f6bff5ecda5b535c814af3 }
+saved username to memcahed dummy1492566005.13t
+saved email to memcached dummy1492566005.13@eliza.cse356.compas.cs.stonybrook.edut
+before memcached
+in memcached
+found info from memcached
+undefined
+saved username to memcahed dummy1492566005.13t
+saved email to memcached dummy1492566005.13@eliza.cse356.compas.cs.stonybrook.edut
+in login module
+before memcached
+in memcached
+error
+{ [MongoError: insertDocument :: caused by :: 11000 E11000 duplicate key error index: twitter.real_users.$username_1  dup key: { : "dummy1492566005.13" }]
+  name: 'MongoError',
+  message: 'insertDocument :: caused by :: 11000 E11000 duplicate key error index: twitter.real_users.$username_1  dup key: { : "dummy1492566005.13" }',
+  driver: true,
+  code: 11000,
+  index: 0,
+  errmsg: 'insertDocument :: caused by :: 11000 E11000 duplicate key error index: twitter.real_users.$username_1  dup key: { : "dummy1492566005.13" }',
+  getOperation: [Function],
+  toJSON: [Function],
+  toString: [Function] }
+in login module
+{ __v: 0,
+  username: 'dummy1492566005.14',
+  email: 'dummy1492566005.14@eliza.cse356.compas.cs.stonybrook.edu',
+  password: '$2a$10$2Ho2Ths3jMkWKli38S7MBuJ4NhetVnVFho8Ab9Z76A3obZV.c/GEy',
+  URL: 'FKVo6RrRiurqdFwfcF6K',
+  status: 'OK',
+  _id: 58f6bff5ecda5b535c814af7 }
+saved username to memcahed dummy1492566005.14t
+saved email to memcached dummy1492566005.14@eliza.cse356.compas.cs.stonybrook.edut
+before memcached
+LOGGED IN
+in memcached
+found info from memcached
+in login module
+ SEARCH ID SJbCggBVCg
+
+CHECK SEARCH ID SJbCggBVCg
+about to memcache search for SJbCggBVCg
+before memcached SJbCggBVCg
+searching mongo
+something found
+Error: couldnt find tweet
+IN ADDUSER
+Email or username already in use
+before memcached
+in memcached
+error
+{ [MongoError: insertDocument :: caused by :: 11000 E11000 duplicate key error index: twitter.real_users.$username_1  dup key: { : "abjectmorning" }]
+  name: 'MongoError',
+  message: 'insertDocument :: caused by :: 11000 E11000 duplicate key error index: twitter.real_users.$username_1  dup key: { : "abjectmorning" }',
+  driver: true,
+  code: 11000,
+  index: 0,
+  errmsg: 'insertDocument :: caused by :: 11000 E11000 duplicate key error index: twitter.real_users.$username_1  dup key: { : "abjectmorning" }',
+  getOperation: [Function],
+  toJSON: [Function],
+  toString: [Function] }
+in login module
+Email or username already in use
+before memcached
+in memcached
+error
+{ [MongoError: insertDocument :: caused by :: 11000 E11000 duplicate key error index: twitter.real_users.$username_1  dup key: { : "dummy1492566005.13" }]
+  name: 'MongoError',
+  message: 'insertDocument :: caused by :: 11000 E11000 duplicate key error index: twitter.real_users.$username_1  dup key: { : "dummy1492566005.13" }',
+  driver: true,
+  code: 11000,
+  index: 0,
+  errmsg: 'insertDocument :: caused by :: 11000 E11000 duplicate key error index: twitter.real_users.$username_1  dup key: { : "dummy1492566005.13" }',
+  getOperation: [Function],
+  toJSON: [Function],
+  toString: [Function] }
+in login module
+LOGGED IN
+LOGGED IN
+before memcached r1CgeSVAg
+searching mongo
+something found
+Error: couldnt find tweet
+ SEARCH ID Sy4AelBEAl
+
+CHECK SEARCH ID Sy4AelBEAl
+about to memcache search for Sy4AelBEAl
+before memcached Sy4AelBEAl
+searching mongo
+ SEARCH ID SyBAleH4Cg
+
+CHECK SEARCH ID SyBAleH4Cg
+about to memcache search for SyBAleH4Cg
+before memcached SyBAleH4Cg
+searching mongo
+IN ADDUSER
+something found
+Error: couldnt find tweet
+Email or username already in use
+something found
+Error: couldnt find tweet
+LOGGED IN
+before memcached
+IN ADDUSER
+in memcached
+Email or username already in use
+IN ADDUSER
+Email or username already in use
+error
+{ [MongoError: insertDocument :: caused by :: 11000 E11000 duplicate key error index: twitter.real_users.$username_1  dup key: { : "penitentlock" }]
+  name: 'MongoError',
+  message: 'insertDocument :: caused by :: 11000 E11000 duplicate key error index: twitter.real_users.$username_1  dup key: { : "penitentlock" }',
+  driver: true,
+  code: 11000,
+  index: 0,
+  errmsg: 'insertDocument :: caused by :: 11000 E11000 duplicate key error index: twitter.real_users.$username_1  dup key: { : "penitentlock" }',
+  getOperation: [Function],
+  toJSON: [Function],
+  toString: [Function] }
+before memcached
+before memcached
+in memcached
+in memcached
+in login module
+error
+{ [MongoError: insertDocument :: caused by :: 11000 E11000 duplicate key error index: twitter.real_users.$username_1  dup key: { : "tantrail" }]
+  name: 'MongoError',
+  message: 'insertDocument :: caused by :: 11000 E11000 duplicate key error index: twitter.real_users.$username_1  dup key: { : "tantrail" }',
+  driver: true,
+  code: 11000,
+  index: 0,
+  errmsg: 'insertDocument :: caused by :: 11000 E11000 duplicate key error index: twitter.real_users.$username_1  dup key: { : "tantrail" }',
+  getOperation: [Function],
+  toJSON: [Function],
+  toString: [Function] }
+error
+{ [MongoError: insertDocument :: caused by :: 11000 E11000 duplicate key error index: twitter.real_users.$username_1  dup key: { : "tightfistedtongue" }]
+  name: 'MongoError',
+  message: 'insertDocument :: caused by :: 11000 E11000 duplicate key error index: twitter.real_users.$username_1  dup key: { : "tightfistedtongue" }',
+  driver: true,
+  code: 11000,
+  index: 0,
+  errmsg: 'insertDocument :: caused by :: 11000 E11000 duplicate key error index: twitter.real_users.$username_1  dup key: { : "tightfistedtongue" }',
+  getOperation: [Function],
+  toJSON: [Function],
+  toString: [Function] }
+LOGGED IN
+undefined
+in login module
+in login module
+ SEARCH ID SyD0exB4Cl
+
+CHECK SEARCH ID SyD0exB4Cl
+about to memcache search for SyD0exB4Cl
+spuriousclub
+before memcached SyD0exB4Cl
+searching mongo
+spuriousclub
+
+
+
+
+
+
+undefined
+
+
+
+
+
+something found
+Error: couldnt find tweet
+ SEARCH ID HyFClgB4Ax
+
+CHECK SEARCH ID HyFClgB4Ax
+about to memcache search for HyFClgB4Ax
+before memcached HyFClgB4Ax
+searching mongo
+something found
+Error: couldnt find tweet
+LOGGED IN
+undefined
+saved username to memcahed dummy1492566005.14t
+saved email to memcached dummy1492566005.14@eliza.cse356.compas.cs.stonybrook.edut
+before memcached
+in memcached
+ SEARCH ID ryoAlxHVAe
+
+CHECK SEARCH ID ryoAlxHVAe
+about to memcache search for ryoAlxHVAe
+before memcached ryoAlxHVAe
+searching mongo
+error
+{ [MongoError: insertDocument :: caused by :: 11000 E11000 duplicate key error index: twitter.real_users.$username_1  dup key: { : "dummy1492566005.14" }]
+  name: 'MongoError',
+  message: 'insertDocument :: caused by :: 11000 E11000 duplicate key error index: twitter.real_users.$username_1  dup key: { : "dummy1492566005.14" }',
+  driver: true,
+  code: 11000,
+  index: 0,
+  errmsg: 'insertDocument :: caused by :: 11000 E11000 duplicate key error index: twitter.real_users.$username_1  dup key: { : "dummy1492566005.14" }',
+  getOperation: [Function],
+  toJSON: [Function],
+  toString: [Function] }
+something found
+Error: couldnt find tweet
+in login module
+{ __v: 0,
+  username: 'dummy1492566005.15',
+  email: 'dummy1492566005.15@eliza.cse356.compas.cs.stonybrook.edu',
+  password: '$2a$10$PjaIyAC.eOuN92AzcXRwJOP4lWCZvCJ2xKsfb7ofoMLGezdkVy1wK',
+  URL: '8eRxf4eZIFoczCMAeFhA',
+  status: 'OK',
+  _id: 58f6bff6ecda5b535c814b06 }
+saved username to memcahed dummy1492566005.15t
+saved email to memcached dummy1492566005.15@eliza.cse356.compas.cs.stonybrook.edut
+before memcached
+in memcached
+found info from memcached
+in login module
+undefined
+saved username to memcahed dummy1492566005.15t
+saved email to memcached dummy1492566005.15@eliza.cse356.compas.cs.stonybrook.edut
+before memcached
+in memcached
+error
+{ [MongoError: insertDocument :: caused by :: 11000 E11000 duplicate key error index: twitter.real_users.$username_1  dup key: { : "dummy1492566005.15" }]
+  name: 'MongoError',
+  message: 'insertDocument :: caused by :: 11000 E11000 duplicate key error index: twitter.real_users.$username_1  dup key: { : "dummy1492566005.15" }',
+  driver: true,
+  code: 11000,
+  index: 0,
+  errmsg: 'insertDocument :: caused by :: 11000 E11000 duplicate key error index: twitter.real_users.$username_1  dup key: { : "dummy1492566005.15" }',
+  getOperation: [Function],
+  toJSON: [Function],
+  toString: [Function] }
+in login module
+undefined
+saved username to memcahed dummy1492566005.15t
+saved email to memcached dummy1492566005.15@eliza.cse356.compas.cs.stonybrook.edut
+before memcached
+in memcached
+error
+{ [MongoError: insertDocument :: caused by :: 11000 E11000 duplicate key error index: twitter.real_users.$username_1  dup key: { : "dummy1492566005.15" }]
+  name: 'MongoError',
+  message: 'insertDocument :: caused by :: 11000 E11000 duplicate key error index: twitter.real_users.$username_1  dup key: { : "dummy1492566005.15" }',
+  driver: true,
+  code: 11000,
+  index: 0,
+  errmsg: 'insertDocument :: caused by :: 11000 E11000 duplicate key error index: twitter.real_users.$username_1  dup key: { : "dummy1492566005.15" }',
+  getOperation: [Function],
+  toJSON: [Function],
+  toString: [Function] }
+undefined
+saved username to memcahed dummy1492566005.15t
+saved email to memcached dummy1492566005.15@eliza.cse356.compas.cs.stonybrook.edut
+in login module
+before memcached
+in memcached
+error
+{ [MongoError: insertDocument :: caused by :: 11000 E11000 duplicate key error index: twitter.real_users.$username_1  dup key: { : "dummy1492566005.15" }]
+  name: 'MongoError',
+  message: 'insertDocument :: caused by :: 11000 E11000 duplicate key error index: twitter.real_users.$username_1  dup key: { : "dummy1492566005.15" }',
+  driver: true,
+  code: 11000,
+  index: 0,
+  errmsg: 'insertDocument :: caused by :: 11000 E11000 duplicate key error index: twitter.real_users.$username_1  dup key: { : "dummy1492566005.15" }',
+  getOperation: [Function],
+  toJSON: [Function],
+  toString: [Function] }
+in login module
+{ __v: 0,
+  username: 'dummy1492566005.16',
+  email: 'dummy1492566005.16@eliza.cse356.compas.cs.stonybrook.edu',
+  password: '$2a$10$c.mb8OjrjxgDGtadUt7jgOOObC8d2W9CBIJnmMUA5MQQgFNdrNbJW',
+  URL: 'PHLx8fZwSH2DNgugv9uF',
+  status: 'OK',
+  _id: 58f6bff6ecda5b535c814b0e }
+saved username to memcahed dummy1492566005.16t
+saved email to memcached dummy1492566005.16@eliza.cse356.compas.cs.stonybrook.edut
+before memcached
+in memcached
+found info from memcached
+in login module
+{ __v: 0,
+  username: 'dummy1492566005.17',
+  email: 'dummy1492566005.17@eliza.cse356.compas.cs.stonybrook.edu',
+  password: '$2a$10$y6/oaMIMPS13dDQ363br0u1Kb4ihhWwCyvTNZkEI31JRPp299poX.',
+  URL: 'nlvFnCs6h1KPumNmnwfA',
+  status: 'OK',
+  _id: 58f6bff6ecda5b535c814b10 }
+saved username to memcahed dummy1492566005.17t
+saved email to memcached dummy1492566005.17@eliza.cse356.compas.cs.stonybrook.edut
+before memcached
+in memcached
+found info from memcached
+in login module
+LOGGED IN
+LOGGED IN
+ SEARCH ID S1gk-xSVCx
+
+CHECK SEARCH ID S1gk-xSVCx
+about to memcache search for S1gk-xSVCx
+before memcached S1gk-xSVCx
+searching mongo
+something found
+Error: couldnt find tweet
+ SEARCH ID SyzJZerEAx
+
+CHECK SEARCH ID SyzJZerEAx
+about to memcache search for SyzJZerEAx
+before memcached SyzJZerEAx
+searching mongo
+something found
+Error: couldnt find tweet
+LOGGED IN
+LOGGED IN
+ SEARCH ID SkV1WgrEAe
+
+CHECK SEARCH ID SkV1WgrEAe
+about to memcache search for SkV1WgrEAe
+before memcached SkV1WgrEAe
+searching mongo
+something found
+Error: couldnt find tweet
+ SEARCH ID H1UyblrNRx
+
+CHECK SEARCH ID H1UyblrNRx
+about to memcache search for H1UyblrNRx
+before memcached H1UyblrNRx
+searching mongo
+something found
+Error: couldnt find tweet
+LOGGED IN
+LOGGED IN
+abjectmorning
+abjectmorning
+
+
+
+
+
+
+[object Object]
+
+
+
+
+
+ SEARCH ID ByY1-eH4Ae
+
+CHECK SEARCH ID ByY1-eH4Ae
+about to memcache search for ByY1-eH4Ae
+before memcached ByY1-eH4Ae
+searching mongo
+got followers
+something found
+Error: couldnt find tweet
+IN FOLLOWING
+abjectmorning
+undefined
+undefined
+following function
+[]
+got followers
+{ users: [], status: 'OK' }
+Shit went though search
+LOGGED IN
+ SEARCH ID Bk9yblrNCe
+
+CHECK SEARCH ID Bk9yblrNCe
+about to memcache search for Bk9yblrNCe
+before memcached Bk9yblrNCe
+got memcached Bk9yblrNCe
+Bk9yblrNCe
+kathryniall: madeinbatangas: nairaM17: chandriaxdj: pca_moh14: pca_moh11: yetzkieargente: SHIelabxKN: LOVEforKN: babykathniel2: #PushAwards…
+
+
+
+LOGGED IN
+tantrail
+ SEARCH ID rJ2k-eB4Cg
+
+CHECK SEARCH ID rJ2k-eB4Cg
+about to memcache search for rJ2k-eB4Cg
+tantrail
+
+
+
+
+
+
+[object Object]
+
+
+
+
+
+before memcached rJ2k-eB4Cg
+searching mongo
+something found
+Error: couldnt find tweet
+got followers
+IN FOLLOWING
+tantrail
+undefined
+undefined
+following function
+[]
+got followers
+{ users: [], status: 'OK' }
+Shit went though search
+ SEARCH ID ryR1ZeH4Ax
+
+CHECK SEARCH ID ryR1ZeH4Ax
+about to memcache search for ryR1ZeH4Ax
+before memcached ryR1ZeH4Ax
+got memcached ryR1ZeH4Ax
+ryR1ZeH4Ax
+@FunnelFiasco @codykirkpatrick Party like it's 1451606400 (epoch)!
+
+
+
+LOGGED IN
+LOGGED IN
+tightfistedtongue
+tightfistedtongue
+
+
+
+
+
+
+[object Object]
+
+
+
+
+
+got followers
+IN FOLLOWING
+tightfistedtongue
+undefined
+undefined
+following function
+[]
+got followers
+{ users: [], status: 'OK' }
+ SEARCH ID SJWg1-eB4Re
+
+CHECK SEARCH ID SJWg1-eB4Re
+about to memcache search for SJWg1-eB4Re
+before memcached SJWg1-eB4Re
+searching mongo
+something found
+Error: couldnt find tweet
+Shit went though search
+ SEARCH ID r1MeyWlHVRg
+
+CHECK SEARCH ID r1MeyWlHVRg
+about to memcache search for r1MeyWlHVRg
+before memcached r1MeyWlHVRg
+got memcached r1MeyWlHVRg
+r1MeyWlHVRg
+Cada virada que passa fica pior
+
+
+
+LOGGED IN
+LOGGED IN
+ SEARCH ID rkVeJ-lHE0l
+
+CHECK SEARCH ID rkVeJ-lHE0l
+about to memcache search for rkVeJ-lHE0l
+before memcached rkVeJ-lHE0l
+searching mongo
+something found
+Error: couldnt find tweet
+ SEARCH ID HkLlyblr4Rg
+
+CHECK SEARCH ID HkLlyblr4Rg
+about to memcache search for HkLlyblr4Rg
+before memcached HkLlyblr4Rg
+searching mongo
+something found
+Error: couldnt find tweet
+LOGGED IN
+LOGGED IN
+ SEARCH ID rJYxyblrVAg
+
+CHECK SEARCH ID rJYxyblrVAg
+about to memcache search for rJYxyblrVAg
+before memcached rJYxyblrVAg
+searching mongo
+ SEARCH ID Skcxk-eHECx
+
+CHECK SEARCH ID Skcxk-eHECx
+about to memcache search for Skcxk-eHECx
+something found
+Error: couldnt find tweet
+before memcached Skcxk-eHECx
+searching mongo
+something found
+Error: couldnt find tweet
+LOGGED IN
+ SEARCH ID Sylg-gBNAl
+
+CHECK SEARCH ID Sylg-gBNAl
+about to memcache search for Sylg-gBNAl
+before memcached Sylg-gBNAl
+searching mongo
+something found
+Error: couldnt find tweet
+LOGGED IN
+ SEARCH ID SyfxWgr4Cl
+
+CHECK SEARCH ID SyfxWgr4Cl
+about to memcache search for SyfxWgr4Cl
+before memcached SyfxWgr4Cl
+searching mongo
+something found
+Error: couldnt find tweet
+IN ADDUSER
+IN ADDUSER
+username not in use
+IN ADDUSER
+IN ADDUSER
+username not in use
+username not in use
+username not in use
+IN ADDUSER
+IN ADDUSER
+username not in use
+username not in use
+IN ADDUSER
+username not in use
+IN ADDUSER
+username not in use
+IN ADDUSER
+username not in use
+IN ADDUSER
+username not in use
+IN ADDUSER
+username not in use
+IN ADDUSER
+username not in use
+IN ADDUSER
+username not in use
+IN ADDUSER
+username not in use
+IN ADDUSER
+username not in use
+IN ADDUSER
+username not in use
+IN ADDUSER
+username not in use
+IN ADDUSER
+IN ADDUSER
+IN ADDUSER
+username not in use
+username not in use
+username not in use
+{ __v: 0,
+  username: 'dummy1492566021.0',
+  email: 'dummy1492566021.0@eliza.cse356.compas.cs.stonybrook.edu',
+  password: '$2a$10$nmSafgrdX0CUUjWbpXCpk.dNqyd/0usbOtVzyr8/bwHPWH3A031Pi',
+  URL: 'ulS47NoBGLH8B5QekHHG',
+  status: 'OK',
+  _id: 58f6c005ecda5b535c814b22 }
+saved username to memcahed dummy1492566021.0t
+saved email to memcached dummy1492566021.0@eliza.cse356.compas.cs.stonybrook.edut
+before memcached
+in memcached
+found info from memcached
+in login module
+{ __v: 0,
+  username: 'dummy1492566021.02',
+  email: 'dummy1492566021.02@eliza.cse356.compas.cs.stonybrook.edu',
+  password: '$2a$10$v4yDTG0La4kLYM174kogl..u3m/10ltYmOAloFnGNYLMiKGzryDdq',
+  URL: 'aPGLxv4Zr4rN6RPcwdB7',
+  status: 'OK',
+  _id: 58f6c005ecda5b535c814b24 }
+saved username to memcahed dummy1492566021.02t
+saved email to memcached dummy1492566021.02@eliza.cse356.compas.cs.stonybrook.edut
+before memcached
+in memcached
+found info from memcached
+undefined
+saved username to memcahed dummy1492566021.02t
+saved email to memcached dummy1492566021.02@eliza.cse356.compas.cs.stonybrook.edut
+in login module
+before memcached
+in memcached
+{ __v: 0,
+  username: 'dummy1492566021.01',
+  email: 'dummy1492566021.01@eliza.cse356.compas.cs.stonybrook.edu',
+  password: '$2a$10$NQ6aV2BayJuIfzCi3VCpOuJFWpikbjlAukWndNtYpq.JRy91EauOC',
+  URL: 'Q6BxAGI7kjYtcQHqa12W',
+  status: 'OK',
+  _id: 58f6c005ecda5b535c814b27 }
+saved username to memcahed dummy1492566021.01t
+saved email to memcached dummy1492566021.01@eliza.cse356.compas.cs.stonybrook.edut
+error
+{ [MongoError: insertDocument :: caused by :: 11000 E11000 duplicate key error index: twitter.real_users.$username_1  dup key: { : "dummy1492566021.02" }]
+  name: 'MongoError',
+  message: 'insertDocument :: caused by :: 11000 E11000 duplicate key error index: twitter.real_users.$username_1  dup key: { : "dummy1492566021.02" }',
+  driver: true,
+  code: 11000,
+  index: 0,
+  errmsg: 'insertDocument :: caused by :: 11000 E11000 duplicate key error index: twitter.real_users.$username_1  dup key: { : "dummy1492566021.02" }',
+  getOperation: [Function],
+  toJSON: [Function],
+  toString: [Function] }
+undefined
+saved username to memcahed dummy1492566021.01t
+saved email to memcached dummy1492566021.01@eliza.cse356.compas.cs.stonybrook.edut
+before memcached
+in memcached
+in login module
+found info from memcached
+before memcached
+in memcached
+in login module
+error
+{ [MongoError: insertDocument :: caused by :: 11000 E11000 duplicate key error index: twitter.real_users.$username_1  dup key: { : "dummy1492566021.01" }]
+  name: 'MongoError',
+  message: 'insertDocument :: caused by :: 11000 E11000 duplicate key error index: twitter.real_users.$username_1  dup key: { : "dummy1492566021.01" }',
+  driver: true,
+  code: 11000,
+  index: 0,
+  errmsg: 'insertDocument :: caused by :: 11000 E11000 duplicate key error index: twitter.real_users.$username_1  dup key: { : "dummy1492566021.01" }',
+  getOperation: [Function],
+  toJSON: [Function],
+  toString: [Function] }
+in login module
+{ __v: 0,
+  username: 'dummy1492566021.03',
+  email: 'dummy1492566021.03@eliza.cse356.compas.cs.stonybrook.edu',
+  password: '$2a$10$mSiqN9CFRaU14nDNs75DPu69y7jden2/NbbnaaVaCCfrt1AoCmT32',
+  URL: 'aVerdYB7Ucbx0vLOMUgX',
+  status: 'OK',
+  _id: 58f6c005ecda5b535c814b2c }
+saved username to memcahed dummy1492566021.03t
+saved email to memcached dummy1492566021.03@eliza.cse356.compas.cs.stonybrook.edut
+before memcached
+in memcached
+found info from memcached
+in login module
+{ __v: 0,
+  username: 'dummy1492566021.05',
+  email: 'dummy1492566021.05@eliza.cse356.compas.cs.stonybrook.edu',
+  password: '$2a$10$cXnoIWn4tkOOEqX1J5Bxzev4pxQmMA/RfOlXh8Pn.hybw6WokshGK',
+  URL: 'QhGEjEjLuFxnhZ54whD5',
+  status: 'OK',
+  _id: 58f6c005ecda5b535c814b2e }
+saved username to memcahed dummy1492566021.05t
+saved email to memcached dummy1492566021.05@eliza.cse356.compas.cs.stonybrook.edut
+before memcached
+in memcached
+undefined
+saved username to memcahed dummy1492566021.03t
+saved email to memcached dummy1492566021.03@eliza.cse356.compas.cs.stonybrook.edut
+undefined
+saved username to memcahed dummy1492566021.03t
+saved email to memcached dummy1492566021.03@eliza.cse356.compas.cs.stonybrook.edut
+found info from memcached
+before memcached
+in memcached
+before memcached
+in login module
+error
+{ [MongoError: insertDocument :: caused by :: 11000 E11000 duplicate key error index: twitter.real_users.$username_1  dup key: { : "dummy1492566021.03" }]
+  name: 'MongoError',
+  message: 'insertDocument :: caused by :: 11000 E11000 duplicate key error index: twitter.real_users.$username_1  dup key: { : "dummy1492566021.03" }',
+  driver: true,
+  code: 11000,
+  index: 0,
+  errmsg: 'insertDocument :: caused by :: 11000 E11000 duplicate key error index: twitter.real_users.$username_1  dup key: { : "dummy1492566021.03" }',
+  getOperation: [Function],
+  toJSON: [Function],
+  toString: [Function] }
+in memcached
+in login module
+error
+{ [MongoError: insertDocument :: caused by :: 11000 E11000 duplicate key error index: twitter.real_users.$username_1  dup key: { : "dummy1492566021.03" }]
+  name: 'MongoError',
+  message: 'insertDocument :: caused by :: 11000 E11000 duplicate key error index: twitter.real_users.$username_1  dup key: { : "dummy1492566021.03" }',
+  driver: true,
+  code: 11000,
+  index: 0,
+  errmsg: 'insertDocument :: caused by :: 11000 E11000 duplicate key error index: twitter.real_users.$username_1  dup key: { : "dummy1492566021.03" }',
+  getOperation: [Function],
+  toJSON: [Function],
+  toString: [Function] }
+in login module
+undefined
+saved username to memcahed dummy1492566021.05t
+saved email to memcached dummy1492566021.05@eliza.cse356.compas.cs.stonybrook.edut
+before memcached
+in memcached
+error
+{ [MongoError: insertDocument :: caused by :: 11000 E11000 duplicate key error index: twitter.real_users.$username_1  dup key: { : "dummy1492566021.05" }]
+  name: 'MongoError',
+  message: 'insertDocument :: caused by :: 11000 E11000 duplicate key error index: twitter.real_users.$username_1  dup key: { : "dummy1492566021.05" }',
+  driver: true,
+  code: 11000,
+  index: 0,
+  errmsg: 'insertDocument :: caused by :: 11000 E11000 duplicate key error index: twitter.real_users.$username_1  dup key: { : "dummy1492566021.05" }',
+  getOperation: [Function],
+  toJSON: [Function],
+  toString: [Function] }
+in login module
+{ __v: 0,
+  username: 'dummy1492566021.06',
+  email: 'dummy1492566021.06@eliza.cse356.compas.cs.stonybrook.edu',
+  password: '$2a$10$D2GKa0EKU52GauD945e/2e3AgSO2skG0feN2je3aVc2ZBpkBeZZFi',
+  URL: 'Bhgruut6R7RR8t6Ux5uu',
+  status: 'OK',
+  _id: 58f6c005ecda5b535c814b36 }
+saved username to memcahed dummy1492566021.06t
+saved email to memcached dummy1492566021.06@eliza.cse356.compas.cs.stonybrook.edut
+{ __v: 0,
+  username: 'dummy1492566021.07',
+  email: 'dummy1492566021.07@eliza.cse356.compas.cs.stonybrook.edu',
+  password: '$2a$10$wW1jTXrMSawGlv/fioBNWe6ftDXm7L.CB7KXOzODJAvLHjq9LQO7m',
+  URL: 'wHjVnqt4RLQeOcfgYWQs',
+  status: 'OK',
+  _id: 58f6c005ecda5b535c814b37 }
+saved username to memcahed dummy1492566021.07t
+saved email to memcached dummy1492566021.07@eliza.cse356.compas.cs.stonybrook.edut
+before memcached
+undefined
+in memcached
+saved username to memcahed dummy1492566021.06t
+saved email to memcached dummy1492566021.06@eliza.cse356.compas.cs.stonybrook.edut
+before memcached
+before memcached
+in memcached
+in memcached
+found info from memcached
+error
+{ [MongoError: insertDocument :: caused by :: 11000 E11000 duplicate key error index: twitter.real_users.$username_1  dup key: { : "dummy1492566021.06" }]
+  name: 'MongoError',
+  message: 'insertDocument :: caused by :: 11000 E11000 duplicate key error index: twitter.real_users.$username_1  dup key: { : "dummy1492566021.06" }',
+  driver: true,
+  code: 11000,
+  index: 0,
+  errmsg: 'insertDocument :: caused by :: 11000 E11000 duplicate key error index: twitter.real_users.$username_1  dup key: { : "dummy1492566021.06" }',
+  getOperation: [Function],
+  toJSON: [Function],
+  toString: [Function] }
+error
+{ [MongoError: insertDocument :: caused by :: 11000 E11000 duplicate key error index: twitter.real_users.$username_1  dup key: { : "dummy1492566021.06" }]
+  name: 'MongoError',
+  message: 'insertDocument :: caused by :: 11000 E11000 duplicate key error index: twitter.real_users.$username_1  dup key: { : "dummy1492566021.06" }',
+  driver: true,
+  code: 11000,
+  index: 0,
+  errmsg: 'insertDocument :: caused by :: 11000 E11000 duplicate key error index: twitter.real_users.$username_1  dup key: { : "dummy1492566021.06" }',
+  getOperation: [Function],
+  toJSON: [Function],
+  toString: [Function] }
+in login module
+in login module
+in login module
+{ __v: 0,
+  username: 'dummy1492566021.09',
+  email: 'dummy1492566021.09@eliza.cse356.compas.cs.stonybrook.edu',
+  password: '$2a$10$Lp7hH5eAwJyy1VZCvfG2ieYRN8pO8mMHuLdhtUC8RW1QMgh2Vopea',
+  URL: 'DgE9FUpOvllXSZatEbhZ',
+  status: 'OK',
+  _id: 58f6c005ecda5b535c814b3c }
+saved username to memcahed dummy1492566021.09t
+saved email to memcached dummy1492566021.09@eliza.cse356.compas.cs.stonybrook.edut
+{ __v: 0,
+  username: 'dummy1492566021.08',
+  email: 'dummy1492566021.08@eliza.cse356.compas.cs.stonybrook.edu',
+  password: '$2a$10$qWvhxrP8ZPf8xYNy5NW6JOkuoeUNNiLhzAQvCjLuWXxJuBVoCEmuq',
+  URL: 'KYCMNuWdnIUiGeJDgxAU',
+  status: 'OK',
+  _id: 58f6c005ecda5b535c814b3d }
+saved username to memcahed dummy1492566021.08t
+saved email to memcached dummy1492566021.08@eliza.cse356.compas.cs.stonybrook.edut
+before memcached
+in memcached
+found info from memcached
+before memcached
+in memcached
+found info from memcached
+in login module
+in login module
+undefined
+saved username to memcahed dummy1492566021.07t
+saved email to memcached dummy1492566021.07@eliza.cse356.compas.cs.stonybrook.edut
+before memcached
+in memcached
+found info from memcached
+in login module
+undefined
+saved username to memcahed dummy1492566021.08t
+saved email to memcached dummy1492566021.08@eliza.cse356.compas.cs.stonybrook.edut
+before memcached
+in memcached
+error
+{ [MongoError: insertDocument :: caused by :: 11000 E11000 duplicate key error index: twitter.real_users.$username_1  dup key: { : "dummy1492566021.08" }]
+  name: 'MongoError',
+  message: 'insertDocument :: caused by :: 11000 E11000 duplicate key error index: twitter.real_users.$username_1  dup key: { : "dummy1492566021.08" }',
+  driver: true,
+  code: 11000,
+  index: 0,
+  errmsg: 'insertDocument :: caused by :: 11000 E11000 duplicate key error index: twitter.real_users.$username_1  dup key: { : "dummy1492566021.08" }',
+  getOperation: [Function],
+  toJSON: [Function],
+  toString: [Function] }
+in login module
+{ __v: 0,
+  username: 'dummy1492566021.1',
+  email: 'dummy1492566021.1@eliza.cse356.compas.cs.stonybrook.edu',
+  password: '$2a$10$ldkbStAYJvl28cfCkdnqmOfb4SXPx0vu2KDYykPk9EH0S38pvM.Om',
+  URL: 'd2rAU527ijq4umdSzw7D',
+  status: 'OK',
+  _id: 58f6c006ecda5b535c814b44 }
+saved username to memcahed dummy1492566021.1t
+saved email to memcached dummy1492566021.1@eliza.cse356.compas.cs.stonybrook.edut
+before memcached
+in memcached
+found info from memcached
+undefined
+saved username to memcahed dummy1492566021.1t
+saved email to memcached dummy1492566021.1@eliza.cse356.compas.cs.stonybrook.edut
+in login module
+before memcached
+in memcached
+error
+{ [MongoError: insertDocument :: caused by :: 11000 E11000 duplicate key error index: twitter.real_users.$username_1  dup key: { : "dummy1492566021.1" }]
+  name: 'MongoError',
+  message: 'insertDocument :: caused by :: 11000 E11000 duplicate key error index: twitter.real_users.$username_1  dup key: { : "dummy1492566021.1" }',
+  driver: true,
+  code: 11000,
+  index: 0,
+  errmsg: 'insertDocument :: caused by :: 11000 E11000 duplicate key error index: twitter.real_users.$username_1  dup key: { : "dummy1492566021.1" }',
+  getOperation: [Function],
+  toJSON: [Function],
+  toString: [Function] }
+in login module
+{ __v: 0,
+  username: 'dummy1492566021.11',
+  email: 'dummy1492566021.11@eliza.cse356.compas.cs.stonybrook.edu',
+  password: '$2a$10$pdCq.uNoWxSgPyhLa5Ouk.BYk1RLOLN6SYAkKDH.RXM/Zy3VqmcA6',
+  URL: 'jwCLY3nSghxKBsAMTpat',
+  status: 'OK',
+  _id: 58f6c006ecda5b535c814b48 }
+saved username to memcahed dummy1492566021.11t
+saved email to memcached dummy1492566021.11@eliza.cse356.compas.cs.stonybrook.edut
+before memcached
+in memcached
+found info from memcached
+in login module
+LOGGED IN
+ SEARCH ID Skg0Wgr4Cl
+
+CHECK SEARCH ID Skg0Wgr4Cl
+about to memcache search for Skg0Wgr4Cl
+LOGGED IN
+LOGGED IN
+ SEARCH ID S1Q0bxSNRg
+
+CHECK SEARCH ID S1Q0bxSNRg
+about to memcache search for S1Q0bxSNRg
+ SEARCH ID SkECbgBVCe
+
+CHECK SEARCH ID SkECbgBVCe
+about to memcache search for SkECbgBVCe
+LOGGED IN
+LOGGED IN
+ SEARCH ID rkkMeH4Rg
+
+CHECK SEARCH ID rkkMeH4Rg
+about to memcache search for rkkMeH4Rg
+ SEARCH ID ByZyzeSVRl
+
+CHECK SEARCH ID ByZyzeSVRl
+about to memcache search for ByZyzeSVRl
+LOGGED IN
+LOGGED IN
+ SEARCH ID rkVJGeB40l
+
+CHECK SEARCH ID rkVJGeB40l
+about to memcache search for rkVJGeB40l
+ SEARCH ID rJSJMgBVAx
+
+CHECK SEARCH ID rJSJMgBVAx
+about to memcache search for rJSJMgBVAx
+LOGGED IN
+LOGGED IN
+ SEARCH ID H1PkMgrVCx
+
+CHECK SEARCH ID H1PkMgrVCx
+about to memcache search for H1PkMgrVCx
+ SEARCH ID rkFJzgrEAe
+
+CHECK SEARCH ID rkFJzgrEAe
+about to memcache search for rkFJzgrEAe
+LOGGED IN
+LOGGED IN
+before memcached Skg0Wgr4Cl
+searching mongo
+before memcached S1Q0bxSNRg
+searching mongo
+before memcached SkECbgBVCe
+searching mongo
+before memcached rkkMeH4Rg
+searching mongo
+before memcached ByZyzeSVRl
+searching mongo
+something found
+Error: couldnt find tweet
+something found
+Error: couldnt find tweet
+something found
+Error: couldnt find tweet
+something found
+Error: couldnt find tweet
+something found
+Error: couldnt find tweet
+IN ADDUSER
+Email or username already in use
+IN ADDUSER
+Email or username already in use
+before memcached
+in memcached
+error
+{ [MongoError: insertDocument :: caused by :: 11000 E11000 duplicate key error index: twitter.real_users.$username_1  dup key: { : "penitentlock" }]
+  name: 'MongoError',
+  message: 'insertDocument :: caused by :: 11000 E11000 duplicate key error index: twitter.real_users.$username_1  dup key: { : "penitentlock" }',
+  driver: true,
+  code: 11000,
+  index: 0,
+  errmsg: 'insertDocument :: caused by :: 11000 E11000 duplicate key error index: twitter.real_users.$username_1  dup key: { : "penitentlock" }',
+  getOperation: [Function],
+  toJSON: [Function],
+  toString: [Function] }
+LOGGED IN
+ SEARCH ID SyTJMeBVAl
+
+CHECK SEARCH ID SyTJMeBVAl
+about to memcache search for SyTJMeBVAl
+before memcached SyTJMeBVAl
+searching mongo
+IN ADDUSER
+something found
+Error: couldnt find tweet
+Email or username already in use
+ SEARCH ID B1nyMgSERe
+
+CHECK SEARCH ID B1nyMgSERe
+about to memcache search for B1nyMgSERe
+IN ADDUSER
+IN ADDUSER
+in login module
+before memcached
+before memcached B1nyMgSERe
+searching mongo
+Email or username already in use
+Email or username already in use
+in memcached
+undefined
+before memcached
+before memcached
+before memcached
+error
+{ [MongoError: insertDocument :: caused by :: 11000 E11000 duplicate key error index: twitter.real_users.$username_1  dup key: { : "tantrail" }]
+  name: 'MongoError',
+  message: 'insertDocument :: caused by :: 11000 E11000 duplicate key error index: twitter.real_users.$username_1  dup key: { : "tantrail" }',
+  driver: true,
+  code: 11000,
+  index: 0,
+  errmsg: 'insertDocument :: caused by :: 11000 E11000 duplicate key error index: twitter.real_users.$username_1  dup key: { : "tantrail" }',
+  getOperation: [Function],
+  toJSON: [Function],
+  toString: [Function] }
+in memcached
+in memcached
+in memcached
+LOGGED IN
+LOGGED IN
+something found
+Error: couldnt find tweet
+spuriousclub
+IN ADDUSER
+in login module
+error
+{ [MongoError: insertDocument :: caused by :: 11000 E11000 duplicate key error index: twitter.real_users.$username_1  dup key: { : "abjectmorning" }]
+  name: 'MongoError',
+  message: 'insertDocument :: caused by :: 11000 E11000 duplicate key error index: twitter.real_users.$username_1  dup key: { : "abjectmorning" }',
+  driver: true,
+  code: 11000,
+  index: 0,
+  errmsg: 'insertDocument :: caused by :: 11000 E11000 duplicate key error index: twitter.real_users.$username_1  dup key: { : "abjectmorning" }',
+  getOperation: [Function],
+  toJSON: [Function],
+  toString: [Function] }
+error
+{ [MongoError: insertDocument :: caused by :: 11000 E11000 duplicate key error index: twitter.real_users.$username_1  dup key: { : "tightfistedtongue" }]
+  name: 'MongoError',
+  message: 'insertDocument :: caused by :: 11000 E11000 duplicate key error index: twitter.real_users.$username_1  dup key: { : "tightfistedtongue" }',
+  driver: true,
+  code: 11000,
+  index: 0,
+  errmsg: 'insertDocument :: caused by :: 11000 E11000 duplicate key error index: twitter.real_users.$username_1  dup key: { : "tightfistedtongue" }',
+  getOperation: [Function],
+  toJSON: [Function],
+  toString: [Function] }
+error
+{ [MongoError: insertDocument :: caused by :: 11000 E11000 duplicate key error index: twitter.real_users.$username_1  dup key: { : "gainfulcap" }]
+  name: 'MongoError',
+  message: 'insertDocument :: caused by :: 11000 E11000 duplicate key error index: twitter.real_users.$username_1  dup key: { : "gainfulcap" }',
+  driver: true,
+  code: 11000,
+  index: 0,
+  errmsg: 'insertDocument :: caused by :: 11000 E11000 duplicate key error index: twitter.real_users.$username_1  dup key: { : "gainfulcap" }',
+  getOperation: [Function],
+  toJSON: [Function],
+  toString: [Function] }
+spuriousclub
+
+
+
+
+
+
+undefined
+
+
+
+
+
+Email or username already in use
+in login module
+in login module
+before memcached
+in memcached
+in login module
+undefined
+error
+{ [MongoError: insertDocument :: caused by :: 11000 E11000 duplicate key error index: twitter.real_users.$username_1  dup key: { : "dizzyevent" }]
+  name: 'MongoError',
+  message: 'insertDocument :: caused by :: 11000 E11000 duplicate key error index: twitter.real_users.$username_1  dup key: { : "dizzyevent" }',
+  driver: true,
+  code: 11000,
+  index: 0,
+  errmsg: 'insertDocument :: caused by :: 11000 E11000 duplicate key error index: twitter.real_users.$username_1  dup key: { : "dizzyevent" }',
+  getOperation: [Function],
+  toJSON: [Function],
+  toString: [Function] }
+ SEARCH ID ry1gJGxHNRe
+
+CHECK SEARCH ID ry1gJGxHNRe
+about to memcache search for ry1gJGxHNRe
+before memcached ry1gJGxHNRe
+searching mongo
+in login module
+gainfulcap
+something found
+Error: couldnt find tweet
+gainfulcap
+
+
+
+
+
+
+undefined
+
+
+
+
+
+ SEARCH ID HkQgJflrNCe
+
+CHECK SEARCH ID HkQgJflrNCe
+about to memcache search for HkQgJflrNCe
+before memcached HkQgJflrNCe
+searching mongo
+ SEARCH ID ryGxJzeSVCl
+
+CHECK SEARCH ID ryGxJzeSVCl
+about to memcache search for ryGxJzeSVCl
+before memcached ryGxJzeSVCl
+searching mongo
+something found
+Error: couldnt find tweet
+something found
+Error: couldnt find tweet
+LOGGED IN
+LOGGED IN
+ SEARCH ID HyLlyfeSEAx
+
+CHECK SEARCH ID HyLlyfeSEAx
+about to memcache search for HyLlyfeSEAx
+before memcached HyLlyfeSEAx
+searching mongo
+something found
+Error: couldnt find tweet
+ SEARCH ID rkDeyMxrVRe
+
+CHECK SEARCH ID rkDeyMxrVRe
+about to memcache search for rkDeyMxrVRe
+before memcached rkDeyMxrVRe
+searching mongo
+something found
+Error: couldnt find tweet
+LOGGED IN
+ SEARCH ID ryKlkMgrERe
+
+CHECK SEARCH ID ryKlkMgrERe
+about to memcache search for ryKlkMgrERe
+before memcached ryKlkMgrERe
+searching mongo
+something found
+Error: couldnt find tweet
+LOGGED IN
+ SEARCH ID r1jgkMxrEAl
+
+CHECK SEARCH ID r1jgkMxrEAl
+about to memcache search for r1jgkMxrEAl
+before memcached r1jgkMxrEAl
+searching mongo
+LOGGED IN
+something found
+Error: couldnt find tweet
+tantrail
+tantrail
+
+
+
+
+
+
+[object Object]
+
+
+
+
+
+got followers
+IN FOLLOWING
+tantrail
+undefined
+undefined
+following function
+[]
+got followers
+{ users: [], status: 'OK' }
+Shit went though search
+ SEARCH ID SJ6l1MeBVRg
+
+CHECK SEARCH ID SJ6l1MeBVRg
+about to memcache search for SJ6l1MeBVRg
+before memcached SJ6l1MeBVRg
+got memcached SJ6l1MeBVRg
+SJ6l1MeBVRg
+@FunnelFiasco @codykirkpatrick Party like it's 1451606400 (epoch)!
+
+
+
+LOGGED IN
+ SEARCH ID BJkbkGlBN0l
+
+CHECK SEARCH ID BJkbkGlBN0l
+about to memcache search for BJkbkGlBN0l
+before memcached BJkbkGlBN0l
+searching mongo
+something found
+Error: couldnt find tweet
+LOGGED IN
+LOGGED IN
+tightfistedtongue
+tightfistedtongue
+
+
+
+
+
+
+[object Object]
+
+
+
+
+
+LOGGED IN
+got followers
+abjectmorning
+abjectmorning
+
+
+
+
+
+
+[object Object]
+
+
+
+
+
+IN FOLLOWING
+tightfistedtongue
+undefined
+undefined
+ SEARCH ID HyMZJfgr40x
+
+CHECK SEARCH ID HyMZJfgr40x
+about to memcache search for HyMZJfgr40x
+before memcached HyMZJfgr40x
+searching mongo
+following function
+[]
+got followers
+{ users: [], status: 'OK' }
+something found
+Error: couldnt find tweet
+got followers
+LOGGED IN
+IN FOLLOWING
+abjectmorning
+undefined
+undefined
+dizzyevent
+dizzyevent
+
+
+
+
+
+
+[object Object]
+
+
+
+
+
+following function
+[]
+got followers
+{ users: [], status: 'OK' }
+Shit went though search
+Shit went though search
+got followers
+ SEARCH ID r1rWJfxrNAe
+
+CHECK SEARCH ID r1rWJfxrNAe
+about to memcache search for r1rWJfxrNAe
+before memcached r1rWJfxrNAe
+got memcached r1rWJfxrNAe
+r1rWJfxrNAe
+Cada virada que passa fica pior
+
+
+
+IN FOLLOWING
+dizzyevent
+undefined
+undefined
+following function
+[]
+got followers
+{ users: [], status: 'OK' }
+ SEARCH ID SJgGgS4Rg
+
+CHECK SEARCH ID SJgGgS4Rg
+about to memcache search for SJgGgS4Rg
+before memcached SJgGgS4Rg
+got memcached SJgGgS4Rg
+SJgGgS4Rg
+kathryniall: madeinbatangas: nairaM17: chandriaxdj: pca_moh14: pca_moh11: yetzkieargente: SHIelabxKN: LOVEforKN: babykathniel2: #PushAwards…
+
+
+
+Shit went though search
+ SEARCH ID r1lxGgHN0x
+
+CHECK SEARCH ID r1lxGgHN0x
+about to memcache search for r1lxGgHN0x
+before memcached r1lxGgHN0x
+got memcached r1lxGgHN0x
+r1lxGgHN0x
+RT @jvizz_: Tell me everything.\nEven if it breaks my heart.
+
+
+
+before memcached rkVJGeB40l
+got memcached rkVJGeB40l
+rkVJGeB40l
+CSE 356 is a fun class, but this tweet should be deleted.
+
+
+
+before memcached rJSJMgBVAx
+got memcached rJSJMgBVAx
+rJSJMgBVAx
+CSE 356 is a fun class, but this tweet should be deleted.
+
+
+
+before memcached H1PkMgrVCx
+got memcached H1PkMgrVCx
+H1PkMgrVCx
+CSE 356 is a fun class, but this tweet should be deleted.
+
+
+
+before memcached rkFJzgrEAe
+got memcached rkFJzgrEAe
+rkFJzgrEAe
+CSE 356 is a fun class, but this tweet should be deleted.
+
+
+
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node twitter.js`[39m
+listening on port 3000
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node twitter.js`[39m
+listening on port 3000
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node twitter.js`[39m
+listening on port 3000
+[32m[nodemon] restarting due to changes...[39m
+[32m[nodemon] starting `node twitter.js`[39m
+listening on port 3000
