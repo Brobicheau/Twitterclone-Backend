@@ -107,12 +107,12 @@ var getItemById = function(search_id, callback){
 			}
 			else {
 				//console.log("Couldnt find tweet");
-				callback("Error: couldnt find tweet", {"status":"OK"});
+				callback("Error: couldnt find tweet", {"status":"error", 'error':'no tweet'});
 			}
 		});
 	}
 	else {
-		callback("invalid search ID",{"status":"PL"});
+		callback("invalid search ID",{"status":"error"});
 	}
 }
 
