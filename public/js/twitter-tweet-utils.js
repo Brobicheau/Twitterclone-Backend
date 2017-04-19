@@ -11,6 +11,7 @@ var randomstring = require("randomstring");
 var User = require('../../models/userModel.js');
 var TempUser = require("../../models/userTempModel.js");
 var Tweet = require("../../models/tweetModel.js");
+var Likes = require('../../models/likeModel.js');
 
 var add = function(currentUser, parent, content, callback){
 	//make sure there is a used logged in before we make the tweet
@@ -106,12 +107,12 @@ var getItemById = function(search_id, callback){
 			}
 			else {
 				//console.log("Couldnt find tweet");
-				callback("Error: couldnt find tweet", {"status":"error"});
+				callback("Error: couldnt find tweet", {"status":"OK"});
 			}
 		});
 	}
 	else {
-		callback("invalid search ID",{"status":"error"});
+		callback("invalid search ID",{"status":"PL"});
 	}
 }
 
@@ -169,58 +170,9 @@ var search = function(params, callback) {
 	}else{
 		timestamp = params.timestamp;
 	}
-	// var timestamp = params.timestamp;
-	// console.log("------------LIMIT-----------" + limit);
-
-
-	//THIS IS WHERE I SHIT
-	// Tweet.find({ "timestamp": {$lte: params.timestamp} }).limit(limit).lean().exec(function(err, data){
-
-	// 	console.log("---------FOUND IN SEARCH if(q !=={}) --------------");
-
-	// 	if(err){
-	// 		response = {
-	// 			"status": "error",
-	// 			"error": err
-	// 		};
-	// 		callback(err, response)
-	// 	}
-	// 	else {
-	// 		console.log("-------------TESTING----------------")
-
-	// 		var filler = new Array(data.length) ;
-
-	// 		console.log("---------data.length--------"+data.length);
-	// 		console.log(data);
-	// 		for( i = 0; i < data.length; i++){
-	// 			filler[i] = {
-	// 				"id": data[i].id,
-	// 				"username": data[i].username,
-	// 				"content": data[i].content,
-	// 				"timestamp": data[i].timestamp
-	// 			};
-	// 		}
-	// 		// console.log("----QUERY----- " + query);
-	// 		console.log("-----PARAMS-----" + params);
-	// 		var response = {
-	// 			items: filler ,
-	// 			"status":"OK"
-	// 		}			
-	// 		callback(null, response);
-	// 	}
-
-	// });	
-	//SHIT ENDS HERE
-
-
 
 	buildQuery(params, function(err, query){
-		// console.log("------query search-------"+query.username + " ---- " + username.following + " ------ " + username.q+" ------- ");
-		// console.log()
 
-	//	console.log("------query search------- limit ------" + limit);
-	//	console.log("------query search------- query ------ %j",query);
-	//	console.log("------query search------- timestamp ------ %j",timestamp);
 		if(query!=={}){
 			Tweet.find(query).where('timestamp').lte(timestamp).limit(limit).lean().exec(function(err, data){
 				if(err){
@@ -288,82 +240,6 @@ var search = function(params, callback) {
 
 		}
 	});
-	// 	if(q !=={}){
-	// 		console.log("---------q--------" + q);
-	// 		Tweet.find(query).limit(limit).lean().exec(function(err, data){
-
-	// 			console.log("---------FOUND IN SEARCH if(query !=={}) --------------");
-
-	// 			if(err){
-	// 				response = {
-	// 					"status": "error",
-	// 					"error": err
-	// 				};
-	// 				callback(err, response)
-	// 			}
-	// 			else {
-	// 				console.log("-------------TESTING----------------")
-
-	// 				var filler = new Array(data.length) ;
-
-	// 				console.log("---------data.length--------"+data.length);
-	// 				console.log(data);
-	// 				for( i = 0; i < data.length; i++){
-	// 					filler[i] = {
-	// 						"id": data[i].id,
-	// 						"username": data[i].username,
-	// 						"content": data[i].content,
-	// 						"timestamp": data[i].timestamp
-	// 					};
-	// 				}
-	// 				console.log("----QUERY----- " + query);
-	// 				console.log("-----PARAMS-----" + params);
-	// 				var response = {
-	// 					items: filler ,
-	// 					"status":"OK"
-	// 				}			
-	// 				callback(null, response);
-	// 			}
-
-	// 		});			
-	// 	}
-
-	// 	else {
-	// 	Tweet.find(query).limit(limit).lean().exec(function(err, data){
-
-	// 		console.log("-------FOUND IN SEARCH (else)---------------");
-
-	// 		if(err){
-	// 			response = {
-	// 				"status": "error",
-	// 				"error": err
-	// 			};
-	// 			callback(err, response)
-	// 		}
-	// 		else {
-	// 			var filler = new Array(data.length) ;
-
-	// 			console.log("----------data------------"+data);
-	// 			for( i = 0; i < data.length; i++){
-	// 				filler[i] = {
-	// 					"id": data[i].id,
-	// 					"username": data[i].username,
-	// 					"content": data[i].content,
-	// 					"timestamp": data[i].timestamp
-	// 				};
-	// 			}
-	// 			console.log(filler);
-
-	// 			var response = {
-	// 				"query":params,
-	// 				items: filler ,
-	// 				"status":"OK"
-	// 			}			
-	// 			callback(null, response);
-	// 		}
-	// 	});
-	// }
-
 }
 
 
@@ -372,23 +248,23 @@ var like = function(params, callback){
 	var like = params.like;
 	var currentUser = params.currentUser;
 
-	tweet.findOne({"id":id}, function(err, tweet){
+	newLike = Likes({
+		'id':id,
+		'username':currentUser
+	});
+	newLike.save(function(err, result){
 		if(err){
-			callback(err, {"status":"error"});
+			console.log(err);
+			callback(err, {'status':'error'});
 		}
-		if(typeof tweet !== "undefined")
-			if(like){
-				tweet.likes.append(currentUser);
-				callback(null,{"status":"OK"});
-			}
-			else{
-				tweet.likes(tweet.indexof(currentUser), 1);
-				callback(null, {"status":"OK"});
-			}
 		else {
-			callback("Couldnt find tweet with that id", {"status":"error"});
+			response = {
+				'status':'OK'
+			};
+			callback(err, response);
 		}
-	})
+
+	});
 }
 
 

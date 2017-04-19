@@ -23,6 +23,10 @@ var login = function(username, password, email, callback){
 User.findOne({'username':username}, function(err, user){
 
 		console.log(user);
+		if(err){
+			console.log(err)
+			callback(err, {'status':'error'});
+		}
 		if(user.verified){
 
 			//hash their password
@@ -53,7 +57,7 @@ User.findOne({'username':username}, function(err, user){
 				//else theres an errror
 				else {
 					var response = {
-						"status":"error"
+						"status":"OK"
 					}
 					//show errror
 					callback("Incorrect password", response, null)
@@ -64,11 +68,10 @@ User.findOne({'username':username}, function(err, user){
 		else{
 
 			var response = {
-				"status" : "error"
+				"status" : "OK"
 			}
 			//theres an error here 
-			console.log(err);
-			callback(err, response, null);
+			callback('user not found', response, null);
 		}
 
 
