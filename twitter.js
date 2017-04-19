@@ -103,7 +103,7 @@ app.get('/init', function(req, res){
 ************************************************/		
 app.post('/adduser', function(req,res){
 
-	var time = process.hrtime();
+//	var time = process.hrtime();
 
 	//get the username, password and email
 	var username = req.body.username;
@@ -111,8 +111,8 @@ app.post('/adduser', function(req,res){
 	var email = req.body.email;
 
 	accountUtils.add(username, password, email, function(err, response){
-					var diff = process.hrtime(time)
-			console.log(`adduser: ${(diff[0] * 1e9 + diff[1])/1e9} seconds`)
+		//			var diff = process.hrtime(time)
+		//	console.log(`adduser: ${(diff[0] * 1e9 + diff[1])/1e9} seconds`)
 		if (err){
 			var diff = process.hrtime(time);
 			res.send(response);
@@ -148,7 +148,7 @@ app.get("/login", function(req, res){
 });
 app.post("/login", function(req, res){
 
-	var time = process.hrtime()
+//	var time = process.hrtime()
 
 	var username = req.body.username;
 	var email = req.body.email;
@@ -164,8 +164,8 @@ app.post("/login", function(req, res){
 		else {
 			req.session.id = cookie_id;
 			req.session.currentUser = username;
-			var diff = process.hrtime(time);
-  			console.log(`login: ${(diff[0] * 1e9 + diff[1])/1e9} seconds`);
+		//	var diff = process.hrtime(time);
+  		//	console.log(`login: ${(diff[0] * 1e9 + diff[1])/1e9} seconds`);
   			res.status(200).json(response);
 		}
 
@@ -237,7 +237,7 @@ app.get('/verify/:URL', function(req, res){
 ************************************************/
 app.post('/verify', function(req,res){
 
-	var time = process.hrtime()
+	//var time = process.hrtime()
 	//grab the key and create varibales for the url and reutrn json
 	var key = req.body.key;
 	var email = req.body.email;
@@ -250,8 +250,8 @@ app.post('/verify', function(req,res){
 			res.send(response);
 		}
 		else {
-			var diff = process.hrtime(time)
-			console.log(`verify: ${(diff[0] * 1e9 + diff[1])/1e9} seconds`);
+			//var diff = process.hrtime(time)
+			//console.log(`verify: ${(diff[0] * 1e9 + diff[1])/1e9} seconds`);
 			res.send(response)
 		}
 
@@ -289,8 +289,8 @@ app.post('/additem', function(req,res){
 			res.send(response);
 		}
 		else {
-			var diff = process.hrtime(time);
-			console.log(`additem: ${(diff[0] * 1e9 + diff[1])/1e9} seconds`);
+		//	var diff = process.hrtime(time);
+		//	console.log(`additem: ${(diff[0] * 1e9 + diff[1])/1e9} seconds`);
 			res.send(response);
 		}
 
@@ -335,8 +335,8 @@ app.get('/item/:id', function(req,res){
 			res.send(response);
 		}
 		else{
-			var diff = process.hrtime(time)
-			console.log(`itemsearch: ${(diff[0] * 1e9 + diff[1])/1e9} seconds`);
+			//var diff = process.hrtime(time)
+		//	console.log(`itemsearch: ${(diff[0] * 1e9 + diff[1])/1e9} seconds`);
 			res.send(response);
 		}
 	});
@@ -419,7 +419,7 @@ app.delete('/item/:id', function(req,res){
 *
 ************************************************/
 app.post('/search', function(req,res){
-	var time = process.hrtime();
+//var time = process.hrtime();
 
 	//console.log("made it to search");
 	//console.log(req.body.q);
@@ -444,8 +444,8 @@ app.post('/search', function(req,res){
 			res.send(response);
 		}
 		else {
-			var diff = process.hrtime(time);
-			console.log(`search: ${(diff[0] * 1e9 + diff[1])/1e9} seconds`);
+	//		var diff = process.hrtime(time);
+	//		console.log(`search: ${(diff[0] * 1e9 + diff[1])/1e9} seconds`);
 			res.send(response);
 		}
 	})
