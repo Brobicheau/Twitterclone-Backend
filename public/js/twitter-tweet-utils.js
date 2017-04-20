@@ -28,6 +28,7 @@ var add = function(params, callback){
 		//make a new unique ID for the tweet
 		var id = shortid.generate();
 
+
 		//create the tweet schema object for storing in mongodb
 		newTweet = Tweet({
 			"id": id,
@@ -38,13 +39,17 @@ var add = function(params, callback){
 			"media":media
 		});
 
+		if(parent){
+			//console.log("\n\n\n\n --------PARENT TWEET------------")
+			//console.log(newTweet)
+		}
 		//save the sweet to the mongo database
 		newTweet.save(function (err, results){
 
 			//if there was an error
 			if(err){
 				//print out the error(and send back correct response)
-				console.log(err);
+				//////console.log(err);
 				response = {
 					"status" : "error"
 				}
@@ -79,13 +84,13 @@ var add = function(params, callback){
 var getItemById = function(search_id, callback){
 
 	if(typeof search_id !== 'undefined'){
-		//console.log("searching");
+		////////console.log("searching");
 		Tweet.findOne({"id": search_id}).lean().exec(function(err, tweet){
 
-			//console.log("found something  probably");
+			////////console.log("found something  probably");
 
 			if(err){
-				console.log(err);
+				//////console.log(err);
 				callback(err, {"status":"error"})
 			}
 
@@ -101,11 +106,11 @@ var getItemById = function(search_id, callback){
 						"media": tweet.media
 					}
 				};
-				//console.log("SENDING BACK TWEET");
+				////////console.log("SENDING BACK TWEET");
 				callback(null, response)
 			}
 			else {
-				//console.log("Couldnt find tweet");
+				////////console.log("Couldnt find tweet");
 				callback("Error: couldnt find tweet", {"status":"error", 'error':'no tweet'});
 			}
 		});
@@ -132,8 +137,8 @@ var buildQuery = function(params, callback){
 	// // 	queryArray["content"] = query  ;
 	// // }
 	// // if(typeof timestamp !== 'undefined'){
-	// // 	console.log("TIMESTAMP");
-	// // 	console.log(timestamp);
+	// // 	//////console.log("TIMESTAMP");
+	// // 	//////console.log(timestamp);
 	// // 	queryArray["timestamp"] = timestamp;
 	// // }else{
 	// // 	queryArray["timestamp"] = Math.floor(new Date() / 1000);
@@ -169,6 +174,7 @@ var buildQuery = function(params, callback){
 	}
 	if(typeof query !== 'undefined'){
 		queryArray["query"] = query;
+
 	}
 	if (following !== false){
 		queryArray["following"] = following;//user chosen
@@ -178,6 +184,55 @@ var buildQuery = function(params, callback){
 	}
 	callback(null, queryArray);
 
+}
+
+var sortFiller = function(filler,sortBy, callback){
+
+
+}
+
+
+
+
+var sortTweets = function(data, rank, timestamp, callback){
+
+	//	//////console.log("=-------------------------DATA")
+	var filler = new Array(data.length);
+	var i = 0;
+	//filler = [{id,username,content,timestamp,rating},{id,username,content,timestamp,rating},{id,username,content,timestamp,rating}..]
+	while(i < data.length){
+//		//////console.log('-------------------looop');(
+
+		Likes.count({"tweet_id":data[i].id}, function(err, likeCount){
+			//	console.log("\n\n\n\n DISPLAYING DATA");
+			//	console.log(data[currentCount]);
+			console.log("currentCount" + i);
+			Tweet.count({"parent":data[i].id},function(err,parentCount){
+				filler[i] = {
+					"id": data[i].id,
+					"username": data[i].username,
+					"content": data[i].content,
+					"timestamp": data[i].timestamp,
+					"rating": ((likeCount + (parentCount*10))*100000)/((Math.floor(new Date()/1000)) - data[i].timestamp)
+				}
+				i++;
+				if(i === data.length-1){	
+
+					if (rank === 'undefined' || rank === 'time'){
+						data.sort(function(a,b){
+							callback(null, b.timestamp - a.timestamp);
+						});
+
+					}
+					else{
+						data.sort(function(a,b){
+							callback(null, b.rating - a.timestamp);
+						});
+					}
+				}
+			});
+		});
+	}
 }
 
 //THIS IS WHERE I SHIT AGAIN - JAYBIRD
@@ -198,8 +253,7 @@ var search = function(params, callback) {
 	}
 
 	buildQuery(params, function(err, query){
-		console.log(query);
-		Tweet.find(query).where('timestamp').lte(timestamp).limit(limit).lean().exec(function(err, data){
+		Tweet.find(query).where('timestamp').lte(timestamp).sort({'timestamp':-1}).limit(limit).lean().exec(function(err, data){
 			if(err){
 				response = {
 					"status": "error",
@@ -208,37 +262,34 @@ var search = function(params, callback) {
 				callback(err, response)
 			}
 			else if (data){
-				var filler = new Array(data.length);
-				//filler = [{id,username,content,timestamp,rating},{id,username,content,timestamp,rating},{id,username,content,timestamp,rating}..]
-				for( i = 0; i < data.length; i++){
-					Likes.count({"tweet_id":data[i].id}, function(err, likeCount){
-							Tweet.count({"parent":data[i].id},function(err,parentCount){
-								filler[i] = {
-									"id": data[i].id,
-									"username": data[i].username,
-									"content": data[i].content,
-									"timestamp": data[i].timestamp,
-									"rating": ((likeCount + (parentCount*10))*100000)/((Math.floor(new Date()/1000)) - data[i].timestamp)
-								}
-							});
-					});
+
+/*				sortTweets(data, rank, timestamp, function(err, filler){
+					var response = {
+						items: filler ,
+						"status":"OK"
+					}			
+					callback(null, response);
+				});*/
+
+					if (rank === 'undefined' || rank === 'time'){
 
 
-				}
-				if (rank !== 'undefined' || rank === 'time'){
-					filler.sort(function(a,b){
-						return b.timestamp - a.timestamp;
-					});
-				}else if(rank === 'interest'){
-					filler.sort(function(a,b){
-						return b.rating - a.rating;
-					});
-				}
-				var response = {
-					items: filler ,
-					"status":"OK"
-				}			
-				callback(null, response);
+						var response = {
+							items: data,
+							'status':'OK'
+						}
+						callback(null, response);
+
+					}
+					else{
+						var response = {
+							items: data,
+							'status':'OK'
+						}
+
+						callback(null, response);
+					}
+
 			}
 			else{
 				callback('no items found', {'status':'OK'});
@@ -282,8 +333,8 @@ var search = function(params, callback) {
 // 				else{
 // 					var filler = new Array(data.length);
 
-// 		//			console.log("---------data.length--------"+data.length);
-// 					//console.log(data);
+// 		//			//////console.log("---------data.length--------"+data.length);
+// 					////////console.log(data);
 // 					for( i = 0; i < data.length; i++){
 // 						filler[i] = {
 // 							"id": data[i].id,
@@ -292,8 +343,8 @@ var search = function(params, callback) {
 // 							"timestamp": data[i].timestamp
 // 						};
 // 					}
-// 				//	console.log("----QUERY----- " + query);
-// 				//	console.log("-----PARAMS-----" + params);
+// 				//	//////console.log("----QUERY----- " + query);
+// 				//	//////console.log("-----PARAMS-----" + params);
 // 					var response = {
 // 						items: filler ,
 // 						"status":"OK"
@@ -314,8 +365,8 @@ var search = function(params, callback) {
 // 				else{
 // 					var filler = new Array(data.length);
 
-// 				//	console.log("---------data.length--------"+data.length);
-// 				//	console.log(data);
+// 				//	//////console.log("---------data.length--------"+data.length);
+// 				//	//////console.log(data);
 // 					for( i = 0; i < data.length; i++){
 // 						filler[i] = {
 // 							"id": data[i].id,
@@ -324,8 +375,8 @@ var search = function(params, callback) {
 // 							"timestamp": data[i].timestamp
 // 						};
 // 					}
-// 				//	console.log("----QUERY----- " + query);
-// 				//	console.log("-----PARAMS-----" + params);
+// 				//	//////console.log("----QUERY----- " + query);
+// 				//	//////console.log("-----PARAMS-----" + params);
 // 					var response = {
 // 						items: filler ,
 // 						"status":"OK"
@@ -354,7 +405,7 @@ var like = function(params, callback){
 	});
 	newLike.save(function(err, result){
 		if(err){
-			console.log(err);
+			//////console.log(err);
 			callback(err, {'status':'error'});
 		}
 		else {
