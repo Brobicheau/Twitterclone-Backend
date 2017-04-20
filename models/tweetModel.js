@@ -6,7 +6,7 @@ var tweetSchema = mongoose.Schema({
 	username: {type: String, index:true},
 	parent:{type: String, index:true},
 	timestamp: {type: Number, index:true},
-	likes: [String]
+	media: [String]
 });
 tweetSchema.index({content: 'text'});
 

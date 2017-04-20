@@ -22,7 +22,6 @@ var login = function(username, password, email, callback){
 
 User.findOne({'username':username}, function(err, user){
 
-		console.log(user);
 		if(err){
 			console.log(err)
 			callback(err, {'status':'error'});
@@ -30,10 +29,7 @@ User.findOne({'username':username}, function(err, user){
 		if(user.verified){
 
 			//hash their password
-			var time = process.hrtime();
 			bcrypt.compare(password, user.password).then(function(res){
-				var diff = process.hrtime(time);
-				console.log(`: ${(diff[0] * 1e9 + diff[1])/1e9} seconds`)
 				//set the data and ID fields for adding to database
 				var date = Date();
 				var id = shortid.generate();

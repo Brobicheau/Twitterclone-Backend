@@ -22,7 +22,6 @@ var multer = require('multer');
 var fs = require('fs');
 var cassandra = require('cassandra-driver');
 var upload = multer({dest: path.join(__dirname + '/uploads/temp/')})
-var client = new cassandra.Client({contactPoints: ['192.168.1.34'], keyspace: 'twitter'});
 
 
 /*My libraries*/
@@ -34,13 +33,14 @@ var accountUtils = require('./public/js/twitter-account-utils.js');
 var loginUtils = require('./public/js/twitter-login-utils.js');
 var tweetUtils = require('./public/js/twitter-tweet-utils.js');
 var followUtils = require('./public/js/twitter-follow-utils.js');
+var mediaUtils = require('./public/js/twitter-media-utils.js');
 
 
 
 
 
 mongoose.Promise = require('bluebird');
-mongoose.connect('mongodb://192.168.1.22/twitter');
+mongoose.connect('mongodb://192.168.1.35/twitter');
 
 const util = require('util');
 var app = express();
@@ -276,12 +276,16 @@ app.post('/verify', function(req,res){
 app.post('/additem', function(req,res){
 		
 	var time = process.hrtime()
+	console.log(req.body.media);
+	console.log(req.body);
+	var params = {
+		'currentUser': req.session.currentUser,
+		'parent':req.body.parent,
+		'content':req.body.content,
+		'media':req.body.media
+	}
 
-	var currentUser = req.session.currentUser
-	var parent = req.body.parent;
-	var content = req.body.content;
-
-	tweetUtils.add(currentUser, parent, content, function(err, response){
+	tweetUtils.add(params, function(err, response){
 
 		if (err){
 		//	console.log(err);
@@ -321,7 +325,7 @@ app.post('/additem', function(req,res){
 ************************************************/
 app.get('/item/:id', function(req,res){
 
-	var time = process.hrtime();
+	//var time = process.hrtime();
 
 	//get the id of the tweet to search for
 	var search_id = req.params.id;
@@ -331,7 +335,7 @@ app.get('/item/:id', function(req,res){
 
 		if(err){
 		//	console.log(err);
-		var diff = process.hrtime(time);
+	//	var diff = process.hrtime(time);
 			res.send(response);
 		}
 		else{
@@ -368,14 +372,28 @@ app.delete('/item/:id', function(req,res){
 
 	//find the item to remove via Tweet.find(id).remove(callback)
 	if(typeof delete_id !== 'undefined'){
-		Tweet.find(delete_id).remove({"id": delete_id}, function(err, tweet){
+		Tweet.findOne({"id": delete_id}).lean().exec(function(err, tweet){
 			if(err){
 				res.status(400).send({"status":"error"});
 			}
 			else if(tweet){	
-				res.status(200).send({"status":"OK"});
-			}
+				if(tweet.media.length > 0){
+					console.log("in tweet media removal \n\n\n\n");
+					mediaUtils.deleteMedia(tweet.media, function(err,response){
+						Tweet.remove({'id':delete_id}, function(err){
+							res.status(200).send({"status":"OK"});
 
+						});
+
+					})
+				}
+				else {
+					Tweet.remove({'id':delete_id}, function(err){
+						res.status(200).send({"status":"OK"});
+
+					});
+				}
+			}
 		});
 	}else{
 		res.status(404).send({"status":"error"});
@@ -440,7 +458,7 @@ app.post('/search', function(req,res){
 
 		if(err){
 		//	console.log(err);
-		process.hrtime(time);
+	//	process.hrtime(time);
 			res.send(response);
 		}
 		else {
@@ -729,7 +747,7 @@ app.post('/addmedia',  upload.single('content'), function(req,res){
 	fs.readFile(req.file.path, function(err, data){
 		var params = {
 			"data": data,
-			'client': client
+			'filename':req.file.filename,
 		};
 		mediaUtils.addmedia(params, function(err, response){
 			if(err){
@@ -759,20 +777,23 @@ app.post('/addmedia',  upload.single('content'), function(req,res){
 *	- returns media file (image or video)
 *
 *******************************************************************/
-app.post('/media/:id', function(req,res){
+app.get('/media/:id', function(req,res){
 
 	var params = {
-		"id":params.body.id
+		"id":req.params.id,
 	}
-
-	mediaUtils.getMedia(params, function(err, content){
+	mediaUtils.getMedia(params, function(err, data){
 
 		if(err){
+			console.log("error");
+			response = {
+				'status':'error'
+			};
 			res.status(400).send(response);
 		}
 		else {
-			res.writeHead(200, {'Content-Type': 'image/jpg'});
-  			res.end(content, 'binary');		
+			res.setHeader("Content-Type", "image/jpeg"); 		    
+			res.end(data.content, 'binary');
   		}
 
 	})

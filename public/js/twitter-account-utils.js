@@ -22,11 +22,6 @@ mongoose.Promise = require('bluebird');
 
 var add = function(username, password, email, callback){
 
-	var time = process.hrtime();
-
-//	checkForDuplicates(username, email, function(err, inUse){
-	var diff = process.hrtime(time);
-	console.log(`Hash time: ${(diff[0] * 1e9 + diff[1])/1e9}`);
 
 		bcrypt.hash(password, 1).then(function(hash, err){
 			newUser = User({
@@ -37,7 +32,6 @@ var add = function(username, password, email, callback){
 				verified: null,
 				status: "OK"
 			});
-			console.log(newUser);
 
 			newUser.save(function(err, results){
 		

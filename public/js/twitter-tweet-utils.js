@@ -13,17 +13,16 @@ var TempUser = require("../../models/userTempModel.js");
 var Tweet = require("../../models/tweetModel.js");
 var Likes = require('../../models/likeModel.js');
 
-var add = function(currentUser, parent, content, callback){
+var add = function(params, callback){
+	var currentUser = params.currentUser;
+	var parent = params.parent;
+	var content = params.content;
+	var media = params.media;
 	//make sure there is a used logged in before we make the tweet
 	if(typeof currentUser !== 'undefined'){
 
 
 		//check if the optional parent param was given
-		if(!(typeof parent !== "undefined")){
-			 parent = "null"
-
-		}
-
 		//Get the content of the new tweet
 
 		//make a new unique ID for the tweet
@@ -33,10 +32,10 @@ var add = function(currentUser, parent, content, callback){
 		newTweet = Tweet({
 			"id": id,
 			"username": currentUser,
-			"parent": null,
+			"parent": parent,
 			"timestamp": Math.floor(new Date() / 1000),
 			"content": content,
-			"likes": []
+			"media":media
 		});
 
 		//save the sweet to the mongo database
@@ -99,7 +98,7 @@ var getItemById = function(search_id, callback){
 						"username": tweet.username,
 						"content": tweet.content,
 						"timestamp": tweet.content,
-						"likes": tweet.likes
+						"media": tweet.media
 					}
 				};
 				//console.log("SENDING BACK TWEET");
@@ -118,6 +117,42 @@ var getItemById = function(search_id, callback){
 
 var buildQuery = function(params, callback){
 
+	// var limit = params.limit;
+	// var timestamp = params.timestamp;
+	// var following = params.following;
+	// var username = params.username;
+	// var rank = params.rank;
+	// var parent = params.parent;
+	// var query = params.query;
+	// var q = params.q;
+
+	// var queryArray = {};
+
+	// // if(typeof query !== 'undefined'){
+	// // 	queryArray["content"] = query  ;
+	// // }
+	// // if(typeof timestamp !== 'undefined'){
+	// // 	console.log("TIMESTAMP");
+	// // 	console.log(timestamp);
+	// // 	queryArray["timestamp"] = timestamp;
+	// // }else{
+	// // 	queryArray["timestamp"] = Math.floor(new Date() / 1000);
+	// // }
+	// if(typeof username !== 'undefined'){
+	// 	queryArray["username"] = username;
+	// }
+	// if(typeof query !== 'undefined'){
+	// 	queryArray["query"] = query;
+	// }
+	// // if(typeof following !== 'undefined'){
+	// // 	queryArray["following"] = true;//default
+	// // }else{
+	// 	if (following !== false){
+	// 	queryArray["following"] = following;//user chosen
+	// 	}
+	// // }
+	// callback(null, queryArray);
+
 	var limit = params.limit;
 	var timestamp = params.timestamp;
 	var following = params.following;
@@ -126,40 +161,31 @@ var buildQuery = function(params, callback){
 	var parent = params.parent;
 	var query = params.query;
 	var q = params.q;
+	var replies = params.replies;
 
 	var queryArray = {};
-
-	// if(typeof query !== 'undefined'){
-	// 	queryArray["content"] = query  ;
-	// }
-	// if(typeof timestamp !== 'undefined'){
-	// 	console.log("TIMESTAMP");
-	// 	console.log(timestamp);
-	// 	queryArray["timestamp"] = timestamp;
-	// }else{
-	// 	queryArray["timestamp"] = Math.floor(new Date() / 1000);
-	// }
 	if(typeof username !== 'undefined'){
 		queryArray["username"] = username;
 	}
 	if(typeof query !== 'undefined'){
 		queryArray["query"] = query;
 	}
-	// if(typeof following !== 'undefined'){
-	// 	queryArray["following"] = true;//default
-	// }else{
-		if (following !== false){
+	if (following !== false){
 		queryArray["following"] = following;//user chosen
-		}
-	// }
+	}
+	if (typeof parent !== 'undefined'){
+		queryArray['parent'] = parent;
+	}
 	callback(null, queryArray);
 
 }
 
+//THIS IS WHERE I SHIT AGAIN - JAYBIRD
 var search = function(params, callback) {	
 
 	var limit = params.limit;
 	var timestamp = params.timestamp;
+	var rank = params.rank;
 	if(typeof limit === 'undefined'){//setting the limit
 		limit = 25;
 	}else{
@@ -172,75 +198,149 @@ var search = function(params, callback) {
 	}
 
 	buildQuery(params, function(err, query){
+		console.log(query);
+		Tweet.find(query).where('timestamp').lte(timestamp).limit(limit).lean().exec(function(err, data){
+			if(err){
+				response = {
+					"status": "error",
+					"error": err
+				};
+				callback(err, response)
+			}
+			else if (data){
+				var filler = new Array(data.length);
+				//filler = [{id,username,content,timestamp,rating},{id,username,content,timestamp,rating},{id,username,content,timestamp,rating}..]
+				for( i = 0; i < data.length; i++){
+					Likes.count({"tweet_id":data[i].id}, function(err, likeCount){
+							Tweet.count({"parent":data[i].id},function(err,parentCount){
+								filler[i] = {
+									"id": data[i].id,
+									"username": data[i].username,
+									"content": data[i].content,
+									"timestamp": data[i].timestamp,
+									"rating": ((likeCount + (parentCount*10))*100000)/((Math.floor(new Date()/1000)) - data[i].timestamp)
+								}
+							});
+					});
 
-		if(query!=={}){
-			Tweet.find(query).where('timestamp').lte(timestamp).limit(limit).lean().exec(function(err, data){
-				if(err){
-					response = {
-						"status": "error",
-						"error": err
-					};
-					callback(err, response)
+
 				}
-				else{
-					var filler = new Array(data.length);
-
-		//			console.log("---------data.length--------"+data.length);
-					//console.log(data);
-					for( i = 0; i < data.length; i++){
-						filler[i] = {
-							"id": data[i].id,
-							"username": data[i].username,
-							"content": data[i].content,
-							"timestamp": data[i].timestamp
-						};
-					}
-				//	console.log("----QUERY----- " + query);
-				//	console.log("-----PARAMS-----" + params);
-					var response = {
-						items: filler ,
-						"status":"OK"
-					}			
-					callback(null, response);
+				if (rank !== 'undefined' || rank === 'time'){
+					filler.sort(function(a,b){
+						return b.timestamp - a.timestamp;
+					});
+				}else if(rank === 'interest'){
+					filler.sort(function(a,b){
+						return b.rating - a.rating;
+					});
 				}
+				var response = {
+					items: filler ,
+					"status":"OK"
+				}			
+				callback(null, response);
+			}
+			else{
+				callback('no items found', {'status':'OK'});
+			}
 
-			});
-		}else{
-			Tweet.find(query).where('timestamp').lte(timestamp).limit(limit).lean().exec(function(err, data){
-				if(err){
-					response = {
-						"status": "error",
-						"error": err
-					};
-					callback(err, response)
-				}
-				else{
-					var filler = new Array(data.length);
-
-				//	console.log("---------data.length--------"+data.length);
-				//	console.log(data);
-					for( i = 0; i < data.length; i++){
-						filler[i] = {
-							"id": data[i].id,
-							"username": data[i].username,
-							"content": data[i].content,
-							"timestamp": data[i].timestamp
-						};
-					}
-				//	console.log("----QUERY----- " + query);
-				//	console.log("-----PARAMS-----" + params);
-					var response = {
-						items: filler ,
-						"status":"OK"
-					}			
-					callback(null, response);
-				}
-
-			});
-
-		}
+		});
 	});
+
 }
+
+//THIS IS WHERE JAYBIRD STOPS SHITTING
+
+
+//THIS CODE BELONGS TO NEANDERTHAL
+// var search = function(params, callback) {	
+
+// 	var limit = params.limit;
+// 	var timestamp = params.timestamp;
+// 	if(typeof limit === 'undefined'){//setting the limit
+// 		limit = 25;
+// 	}else{
+// 		limit = params.limit;
+// 	}
+// 	if(typeof timestamp === 'undefined'){//Setting the time stamp
+// 		timestamp = Math.floor(new Date()/1000);
+// 	}else{
+// 		timestamp = params.timestamp;
+// 	}
+
+// 	buildQuery(params, function(err, query){
+
+// 		if(query!=={}){
+// 			Tweet.find(query).where('timestamp').lte(timestamp).limit(limit).lean().exec(function(err, data){
+// 				if(err){
+// 					response = {
+// 						"status": "error",
+// 						"error": err
+// 					};
+// 					callback(err, response)
+// 				}
+// 				else{
+// 					var filler = new Array(data.length);
+
+// 		//			console.log("---------data.length--------"+data.length);
+// 					//console.log(data);
+// 					for( i = 0; i < data.length; i++){
+// 						filler[i] = {
+// 							"id": data[i].id,
+// 							"username": data[i].username,
+// 							"content": data[i].content,
+// 							"timestamp": data[i].timestamp
+// 						};
+// 					}
+// 				//	console.log("----QUERY----- " + query);
+// 				//	console.log("-----PARAMS-----" + params);
+// 					var response = {
+// 						items: filler ,
+// 						"status":"OK"
+// 					}			
+// 					callback(null, response);
+// 				}
+
+// 			});
+// 		}else{
+// 			Tweet.find(query).where('timestamp').lte(timestamp).limit(limit).lean().exec(function(err, data){
+// 				if(err){
+// 					response = {
+// 						"status": "error",
+// 						"error": err
+// 					};
+// 					callback(err, response)
+// 				}
+// 				else{
+// 					var filler = new Array(data.length);
+
+// 				//	console.log("---------data.length--------"+data.length);
+// 				//	console.log(data);
+// 					for( i = 0; i < data.length; i++){
+// 						filler[i] = {
+// 							"id": data[i].id,
+// 							"username": data[i].username,
+// 							"content": data[i].content,
+// 							"timestamp": data[i].timestamp
+// 						};
+// 					}
+// 				//	console.log("----QUERY----- " + query);
+// 				//	console.log("-----PARAMS-----" + params);
+// 					var response = {
+// 						items: filler ,
+// 						"status":"OK"
+// 					}			
+// 					callback(null, response);
+// 				}
+
+// 			});
+
+// 		}
+// 	});
+// }
+
+
+//THIS CODE BELONGS TO NEANDERTHALIC CODE ENDS HERE
 
 
 var like = function(params, callback){
@@ -249,7 +349,7 @@ var like = function(params, callback){
 	var currentUser = params.currentUser;
 
 	newLike = Likes({
-		'id':id,
+		'tweet_id':id,
 		'username':currentUser
 	});
 	newLike.save(function(err, result){
