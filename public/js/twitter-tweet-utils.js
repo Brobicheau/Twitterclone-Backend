@@ -419,4 +419,4 @@ var like = function(params, callback){
 }
 
 
-module.exports = {add, getItemById, search}
+module.exports = {add, getItemById, search, like}
