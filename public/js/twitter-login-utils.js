@@ -23,7 +23,7 @@ var login = function(username, password, email, callback){
 User.findOne({'username':username}, function(err, user){
 
 		if(err){
-			//console.log(err)
+			//////console.log(err)
 			callback(err, {'status':'error'});
 		}
 		if(user.verified){
@@ -119,7 +119,7 @@ User.findOne({'username':username}, function(err, user){
 				"status" : "error"
 			}
 			//theres an error here 
-			////console.log(err);
+			////////console.log(err);
 			callback(err, response, null);
 		}
 

@@ -43,9 +43,9 @@ var add = function(username, password, email, callback){
 				    html: 'Mail of test sendmail ',
 				  }, function(err, reply) {
 				  	if(err)
-				  		console.log("THERE WAS AN ERROR IN SENDIN MAIL");
-				  	else console.log("SUCCESSFULLY SENT MIAL");
-				    console.log(err && err.stack);
+				  		//////console.log("THERE WAS AN ERROR IN SENDIN MAIL");
+				  	else //////console.log("SUCCESSFULLY SENT MIAL");
+				    //////console.log(err && err.stack);
 				    console.dir(reply);
 				});*/
 
@@ -67,7 +67,7 @@ var verify = function(email, key, callback) {
 		User.findOne({'email':email}, function(err, user){
 
 			if(err){
-				console.log(err);
+				//////console.log(err);
 				callback(null,{'status':'OK'})
 			}else{
 				user.verified = "verified";
