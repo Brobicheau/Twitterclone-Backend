@@ -506,17 +506,17 @@ app.get('/user/:username', function(req,res){
 
 		User.findOne({"username":username},function(err,user){//checks if user is found
 			if(err){
-				res.send(400).send({"status":"error"});//sends error status
+				res.send(400).send({"status":"error1"});//sends error status
 			}
 			else if(user){
 				Follow.find({"following":username}).count( function(err, followerCount){
 					if(err){
-						res.send({"status":"error"});
+						res.send({"status":"error2"});
 					}
 					else {
 						Follow.find({"username":username}).count( function(err, followingCount){
 							if(err){
-								res.send({"status":"error"});
+								res.send({"status":"error3"});
 							}
 							else {
 								var responseUser = {//All user data is stored in here
@@ -541,7 +541,7 @@ app.get('/user/:username', function(req,res){
 	}
 
 	else{
-		res.status(400).send({"status":"error"});
+		res.status(400).send({"status":"error4"});
 	}
 
 });
