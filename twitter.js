@@ -535,7 +535,7 @@ app.get('/user/:username', function(req,res){
 				})
 
 			}else{
-				res.status(400).send({"status":"error", 'err':'user not found'});
+				res.status(400).send({"status":"error6", 'err':'user not found'});
 			}
 		});
 	}
