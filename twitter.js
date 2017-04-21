@@ -504,12 +504,6 @@ app.get('/user/:username', function(req,res){
 	//Search for account with correct username via Users.findOne(username, function(err, user))
 	if(typeof username !== 'undefined'){//if user is not null
 
-
-
-
-
-
-
 		User.findOne({"username":username},function(err,user){//checks if user is found
 			if(err){
 				res.send(400).send({"status":"error"});//sends error status
@@ -541,7 +535,7 @@ app.get('/user/:username', function(req,res){
 				})
 
 			}else{
-				res.status(400).send({"status":"error"});
+				res.status(400).send({"status":"error", 'err':'user not found'});
 			}
 		});
 	}
