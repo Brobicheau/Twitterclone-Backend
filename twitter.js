@@ -499,7 +499,7 @@ app.get('/user/:username', function(req,res){
 	//pull username from params via req.params.username
 	var username = req.params.username;
 
-
+	console.log("IN GET USER INFO");
 
 	//Search for account with correct username via Users.findOne(username, function(err, user))
 	if(typeof username !== 'undefined'){//if user is not null
