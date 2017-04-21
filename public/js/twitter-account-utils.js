@@ -69,11 +69,14 @@ var verify = function(email, key, callback) {
 			if(err){
 				//////console.log(err);
 				callback(null,{'status':'OK'})
-			}else{
+			}else if(user){
 				user.verified = "verified";
 				user.URL = null;
 				user.save();
-				callback(null,{'status':'OK'})
+				callback(null,{'status':'OK'});
+			}
+			else {
+				callback('couldnt find user', {'status':'error'});
 			}
 
 		});
