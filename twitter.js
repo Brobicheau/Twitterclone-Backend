@@ -246,7 +246,6 @@ app.post('/verify', function(req,res){
 
 		if (err){
 			//////////console.log(err);
-			var diff = process.hrtime(time)
 			res.send(response);
 		}
 		else {
@@ -542,13 +541,13 @@ app.get('/user/:username', function(req,res){
 				})
 
 			}else{
-				res.send(400).send({"status":"error"});
+				res.status(400).send({"status":"error"});
 			}
 		});
 	}
 
 	else{
-		res.send(400).send({"status":"error"});
+		res.status(400).send({"status":"error"});
 	}
 
 });

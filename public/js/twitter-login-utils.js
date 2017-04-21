@@ -26,7 +26,7 @@ User.findOne({'username':username}, function(err, user){
 			//////console.log(err)
 			callback(err, {'status':'error'});
 		}
-		if(user.verified){
+		if(user && user.verified){
 
 			//hash their password
 			bcrypt.compare(password, user.password).then(function(res){
