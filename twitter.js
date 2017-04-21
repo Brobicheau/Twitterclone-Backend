@@ -40,7 +40,7 @@ var mediaUtils = require('./public/js/twitter-media-utils.js');
 
 
 mongoose.Promise = require('bluebird');
-mongoose.connect('mongodb://192.168.1.13:27017/twitter');
+mongoose.connect('mongodb://localhost:27017/twitter');
 
 const util = require('util');
 var app = express();
