@@ -599,9 +599,6 @@ app.get('/user/:username/followers', function(req,res){
 			res.send(response);
 		}
 	})
-
-	
-
 });
 
 
