@@ -244,7 +244,7 @@ var search = function(params, callback) {
 
 
 	buildQuery(params, function(err, query){
-		if(!query){
+		if(Object.keys(query).length !== 0){
 			var time = process.hrtime();
 			Tweet.find(query).where('timestamp').lte(timestamp).limit(limit).sort({'timestamp': -1}).lean().exec(function(err, data){
 				var diff = process.hrtime(time);
