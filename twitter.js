@@ -373,7 +373,6 @@ app.delete('/item/:id', function(req,res){
 			}
 			else if(tweet){	
 				if(tweet.media.length > 0){
-					console.log("in tweet media removal \n\n\n\n");
 					mediaUtils.deleteMedia(tweet.media, function(err,response){
 
 						Tweet.remove({'id':delete_id}, function(err){
