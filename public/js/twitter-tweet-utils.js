@@ -299,7 +299,7 @@ var search = function(params, callback) {
 				Tweet.find({}).sort({"timestamp":-1}).limit(limit).exec(function(err, data){
 
 					if(err)
-						res.send({"status": "error"});
+						callback(err,{"status": "error"});
 
 
 					var response = {
