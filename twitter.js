@@ -117,7 +117,6 @@ app.post('/adduser', function(req,res){
 			res.send(response);
 		}
 		else{
-
 			res.send(response);
 		}
 	})
@@ -147,7 +146,7 @@ app.get("/login", function(req, res){
 });
 app.post("/login", function(req, res){
 
-//	var time = process.hrtime()
+	var time = process.hrtime()
 
 	var username = req.body.username;
 	var email = req.body.email;
@@ -156,15 +155,15 @@ app.post("/login", function(req, res){
 	loginUtils.login(username, password, email, function(err, response, cookie_id){
 
 		if(response.status === 'error'){
-			//////////console.log(err);
+			console.log(err);
 			var diff = process.hrtime(time);
 			res.send(response);
 		}
 		else {
 			req.session.id = cookie_id;
 			req.session.currentUser = username;
-		//	var diff = process.hrtime(time);
-  		//	////////console.log(`login: ${(diff[0] * 1e9 + diff[1])/1e9} seconds`);
+			var diff = process.hrtime(time);
+  			//console.log(`login: ${(diff[0] * 1e9 + diff[1])/1e9} seconds`);
   			res.status(200).json(response);
 		}
 
@@ -324,7 +323,7 @@ app.post('/additem', function(req,res){
 ************************************************/
 app.get('/item/:id', function(req,res){
 
-	//var time = process.hrtime();
+	var time = process.hrtime();
 
 	//get the id of the tweet to search for
 	var search_id = req.params.id;
@@ -334,12 +333,13 @@ app.get('/item/:id', function(req,res){
 
 		if(err){
 			console.log(err);
-	//	var diff = process.hrtime(time);
+			var diff = process.hrtime(time);
+			console.log(`itemsearch: ${(diff[0] * 1e9 + diff[1])/1e9} seconds`);			
 			res.send(response);
 		}
 		else{
-			//var diff = process.hrtime(time)
-		//	////////console.log(`itemsearch: ${(diff[0] * 1e9 + diff[1])/1e9} seconds`);
+			var diff = process.hrtime(time)
+			console.log(`itemsearch: ${(diff[0] * 1e9 + diff[1])/1e9} seconds`);
 			res.send(response);
 		}
 	});
@@ -525,12 +525,12 @@ app.get('/user/:username', function(req,res){
 				res.send(400).send({"status":"error1"});//sends error status
 			}
 			else if(user){
-				Follow.find({"following":username}).count( function(err, followerCount){
+				Follow.count({"following":username}, function(err, followerCount){
 					if(err){console.log(err);
 						res.send({"status":"error2"});
 					}
 					else {
-						Follow.find({"username":username}).count( function(err, followingCount){
+						Follow.count({"username":username}, function(err, followingCount){
 							if(err){console.log(err);
 								res.send({"status":"error3"});
 							}
@@ -547,7 +547,7 @@ app.get('/user/:username', function(req,res){
 								var diff = process.hrtime(time);
 								console.log(`user info: ${(diff[0] * 1e9 + diff[1])/1e9} seconds`);
 								res.status(200).send(finalResponse);							}
-						})
+						});
 					}
 				})
 			}else{

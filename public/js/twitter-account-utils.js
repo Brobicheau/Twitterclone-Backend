@@ -28,27 +28,32 @@ var add = function(username, password, email, callback){
 			newUser.save(function(err, results){
 		
 				if(err){
-					console.log(err);
-					callback(err, {'status':'error'});
+					console.log('there was an error');
+					callback(null, {'status':'OK'});
 				}
-				console.log('saved user');
-				/*sendmail({
-				    from: 'ubuntu@brobicheaucse356',
-				    to: 'nexijifot@88clean.pro',
-				    subject: 'test sendmail',
-				    html: 'Mail of test sendmail ',
-				  }, function(err, reply) {
-				  	if(err)
-				  		//////console.log("THERE WAS AN ERROR IN SENDIN MAIL");
-				  	else //////console.log("SUCCESSFULLY SENT MIAL");
-				    //////console.log(err && err.stack);
-				    console.dir(reply);
-				});*/
+				else if (results){
+					console.log('saved user');
+					/*sendmail({
+					    from: 'ubuntu@brobicheaucse356',
+					    to: 'nexijifot@88clean.pro',
+					    subject: 'test sendmail',
+					    html: 'Mail of test sendmail ',
+					  }, function(err, reply) {
+					  	if(err)
+					  		//////console.log("THERE WAS AN ERROR IN SENDIN MAIL");
+					  	else //////console.log("SUCCESSFULLY SENT MIAL");
+					    //////console.log(err && err.stack);
+					    console.dir(reply);
+					});*/
 
-				response ={
-					"status":"OK"
+					response ={
+						"status":"OK"
+					}
+					callback(null, response);
 				}
-				callback(null, response);
+				else{
+					callback('no user found', {'status':'error'});
+				}
 			});
 		});
 
