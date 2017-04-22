@@ -20,9 +20,8 @@ var sendmail = require('sendmail')();
 var randomstring = require("randomstring");
 var multer = require('multer');
 var fs = require('fs');
-var cassandra = require('cassandra-driver');
 var upload = multer({dest: path.join(__dirname + '/uploads/temp/')})
-
+mongoose.Promise = require('bluebird');
 
 /*My libraries*/
 var User = require('./models/userModel.js');
@@ -38,8 +37,6 @@ var mediaUtils = require('./public/js/twitter-media-utils.js');
 
 
 
-mongoose.Promise = require('bluebird');
-mongoose.connect('mongodb://127.0.0.1:27017/twitter');
 
 const util = require('util');
 var app = express();
@@ -98,7 +95,6 @@ app.post('/adduser', function(req,res){
 	var username = req.body.username;
 	var password = req.body.password;
 	var email = req.body.email;
-
 	accountUtils.add(username, password, email, function(err, response){
 		if (err){
 			var diff = process.hrtime(time);
@@ -291,6 +287,7 @@ app.post('/additem', function(req,res){
 	});
 
 
+
 });//end additem
 
 
@@ -453,7 +450,7 @@ app.post('/search', function(req,res){
 
 	params =
 	 {
-		"query":req.body.q,
+		"q":req.body.q,
 		"timestamp": req.body.timestamp,
 		"limit":req.body.limit,
 		"username":req.body.username,
@@ -744,6 +741,7 @@ app.post('/item/:id/like', function(req,res){
 *******************************************************************/
 app.post('/addmedia',  upload.single('content'), function(req,res){
 	var time = process.hrtime()
+	console.log('adding media');
 	fs.readFile(req.file.path, function(err, data){
 		var params = {
 			"data": data,
@@ -756,7 +754,8 @@ app.post('/addmedia',  upload.single('content'), function(req,res){
 			}
 			else{
 				var diff = process.hrtime(time);
-
+				///if(diff[0] > 3)
+				console.log(`add media: ${(diff[0] * 1e9 + diff[1])/1e9} seconds`);
 				res.status(200).send(response);
 				fs.unlink(req.file.path);
 			}

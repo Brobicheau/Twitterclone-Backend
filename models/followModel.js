@@ -1,5 +1,5 @@
 var mongoose = require('mongoose');
-var bcrypt = require('bcrypt');
+var conn1 = mongoose.createConnection('mongodb://127.0.0.1:27017/twitter');
 
 var followSchema = mongoose.Schema({
 	"username":{type: String, index: true},
@@ -7,4 +7,4 @@ var followSchema = mongoose.Schema({
 });
 
 
-module.exports = mongoose.model('follow_data', followSchema);
+module.exports = conn1.model('follow_data', followSchema);

@@ -59,7 +59,7 @@ var add = function(params, callback){
 					"id": id,
 					"status" : "OK"
 				};
-			callback(null, response)		 
+				callback(null, response)		 
 			}
 		});
 
@@ -155,7 +155,6 @@ var buildQuery = function(params, callback){
 	var username = params.username;
 	var rank = params.rank;
 	var parent = params.parent;
-	var query = params.query;
 	var q = params.q;
 	var replies = params.replies;
 
@@ -163,8 +162,8 @@ var buildQuery = function(params, callback){
 	if(typeof username !== 'undefined'){
 		queryArray["username"] = username;
 	}
-	if(typeof query !== 'undefined'){
-		queryArray["query"] = query;
+	if(typeof q !== 'undefined'){
+		queryArray["query"] = q;
 
 	}
 	if (following !== false){
@@ -243,8 +242,13 @@ var search = function(params, callback) {
 		timestamp = params.timestamp;
 	}
 
+
 	buildQuery(params, function(err, query){
-		Tweet.find(query).where('timestamp').lte(timestamp).sort({'timestamp':-1}).limit(limit).lean().exec(function(err, data){
+		var time = process.hrtime();
+		Tweet.find(query).where('timestamp').lte(timestamp).limit(limit).sort({'timestamp': -1}).lean().exec(function(err, data){
+			var diff = process.hrtime(time);
+			console.log(`search query: ${(diff[0] * 1e9 + diff[1])/1e9} seconds`);
+
 			if(err){
 				response = {
 					"status": "error",

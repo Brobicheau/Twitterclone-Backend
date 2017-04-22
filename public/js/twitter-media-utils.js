@@ -1,17 +1,16 @@
 var mongoose = require("mongoose");
 var bcrypt = require('bcrypt');
-var User = require('../../models/userModel.js');
-var Tweet = require("../../models/tweetModel.js");
+
 var Media = require("../../models/mediaModel.js");
 var shortid = require('shortid');
 var sendmail = require('sendmail')();
 var randomstring = require("randomstring");
 var fs = require('fs');
-var cassandra = require('cassandra-driver');
-var client = new cassandra.Client({contactPoints: ['192.168.1.34'], keyspace: 'twitter'});
+
 
 
 var addmedia = function(params, callback){
+	var time = process.hrtime();
 
 	var id = shortid.generate();
 
@@ -25,12 +24,19 @@ var addmedia = function(params, callback){
 	});
 	newMedia.save(function(err){
 		if(err){
-			callback(err, {'status':'error'});
+			var diff = process.hrtime(time);
+			if(diff[0] > 3)
+				console.log(`add media query: ${(diff[0] * 1e9 + diff[1])/1e9} seconds`);
+			//callback(err, {'status':'error'});
 		}
 		else {
-			callback(null ,{'status':'OK', 'id':id});
+
 		}
 	})
+	var diff = process.hrtime(time);
+	if(diff[0] > 3)
+		console.log(`add media query: ${(diff[0] * 1e9 + diff[1])/1e9} seconds`);			
+	callback(null ,{'status':'OK', 'id':id});
 }
 
 
