@@ -51,6 +51,7 @@ var add = function(username, password, email, callback){
 					callback(null, response);
 				}
 				else{
+					console.log('results not saved?');
 					callback('no user found', {'status':'error'});
 				}
 			});
