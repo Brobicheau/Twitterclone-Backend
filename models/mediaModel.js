@@ -1,5 +1,4 @@
 var mongoose = require('mongoose');
-var conn2 = mongoose.createConnection('mongodb://192.168.1.49:27017/media');
 
 var mediaSchema = mongoose.Schema({
 	'id':{type: String, index: true},
@@ -8,4 +7,4 @@ var mediaSchema = mongoose.Schema({
 });
 
 
-module.exports = conn2.model('media', mediaSchema);
+module.exports = mongoose.model('media', mediaSchema);

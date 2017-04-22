@@ -21,8 +21,9 @@ var randomstring = require("randomstring");
 var multer = require('multer');
 var fs = require('fs');
 var upload = multer({dest: path.join(__dirname + '/uploads/temp/')})
-mongoose.Promise = require('bluebird');
-
+mongoose.Promise = require('bluebird')
+var options = {server: {socketOptions: {socketTimeoutMS: 10000000}}};
+mongoose.connect('mongodb://127.0.0.1:27017/twitter', options);
 /*My libraries*/
 var User = require('./models/userModel.js');
 var Tweet = require("./models/tweetModel.js");
@@ -104,6 +105,10 @@ app.post('/adduser', function(req,res){
 			res.send(response);
 		}
 		else{
+			console.log(' in add user');
+			var diff = process.hrtime(time);
+			if(diff[0] > 3)
+				console.log(`adduser: ${(diff[0] * 1e9 + diff[1])/1e9} seconds`);			
 			res.send(response);
 		}
 	})
@@ -505,7 +510,7 @@ app.get('/user/:username', function(req,res){
 	//pull username from params via req.params.username
 	//pull username from params via req.params.username
 	var username = req.params.username;
-
+	console.log("gettting this user " + username);
 	//Search for account with correct username via Users.findOne(username, function(err, user))
 	if(typeof username !== 'undefined'){//if user is not null
 		User.findOne({"username":username},function(err,user){//checks if user is found
