@@ -511,7 +511,6 @@ app.get('/user/:username', function(req,res){
 
 	//Search for account with correct username via Users.findOne(username, function(err, user))
 	if(typeof username !== 'undefined'){//if user is not null
-
 		User.findOne({"username":username},function(err,user){//checks if user is found
 			var diff = process.hrtime(time);
 			console.log(`user ; first query: ${(diff[0] * 1e9 + diff[1])/1e9} seconds`);
@@ -752,7 +751,6 @@ app.post('/addmedia',  upload.single('content'), function(req,res){
 		};
 		mediaUtils.addmedia(params, function(err, response){
 			if(err){
-			//	////////console.log(err);
 				fs.unlink(req.file.path);
 				res.status(400).send(response);
 			}
@@ -788,7 +786,6 @@ app.get('/media/:id', function(req,res){
 	mediaUtils.getMedia(params, function(err, data){
 
 		if(err){
-			////////console.log("error");
 			response = {
 				'status':'error'
 			};

@@ -32,7 +32,6 @@ var add = function(username, password, email, callback){
 					callback(null, {'status':'OK'});
 				}
 				else if (results){
-					console.log('saved user');
 					/*sendmail({
 					    from: 'ubuntu@brobicheaucse356',
 					    to: 'nexijifot@88clean.pro',
@@ -68,7 +67,6 @@ var verify = function(email, key, callback) {
 		User.findOne({'email':email}, function(err, user){
 
 			if(err){
-				//////console.log(err);
 				callback(null,{'status':'OK'})
 			}else if(user){
 				user.verified = "verified";

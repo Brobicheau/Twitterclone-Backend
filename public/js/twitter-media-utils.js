@@ -40,7 +40,6 @@ var addmedia = function(params, callback){
 var getMedia = function(params, callback){
 	var id = params.id;
 	Media.findOne({'id':id}, function(err, media){
-		//////////console.log(media);
 		if(err){
 			callback(err, {'status':'error'});
 		}
@@ -52,7 +51,6 @@ var getMedia = function(params, callback){
 			callback(null, response);
 		}
 		else {
-		//	////////console.log('could not find file');
 			callback('could not find media file', {'status':'OK'});
 		}
 	})

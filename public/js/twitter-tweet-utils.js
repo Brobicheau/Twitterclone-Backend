@@ -38,10 +38,7 @@ var add = function(params, callback){
 			"media":media
 		});
 
-		if(parent){
-			console.log("\n\n\n\n --------PARENT TWEET------------")
-			console.log(newTweet)
-		}
+
 		//save the sweet to the mongo database
 		newTweet.save(function (err, results){
 
@@ -83,13 +80,9 @@ var add = function(params, callback){
 var getItemById = function(search_id, callback){
 
 	if(typeof search_id !== 'undefined'){
-		//////////console.log("searching");
 		Tweet.findOne({"id": search_id}, function(err, tweet){
 
-			//////////console.log("found something  probably");
-
 			if(err){
-				////////console.log(err);
 				callback(err, {"status":"error"})
 			}
 			else if(tweet){	
