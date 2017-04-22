@@ -38,11 +38,12 @@ var add = function(params, callback){
 			"media":media
 		});
 
-
+		var time = process.hrtime();
 		//save the sweet to the mongo database
 		newTweet.save(function (err, results){
-
-			//if there was an error
+			var diff = process.hrtime(time)
+			console.log(`search: ${(diff[0] * 1e9 + diff[1])/1e9} seconds`);
+			//if there was an Error
 			if(err){
 				//print out the error(and send back correct response)
 				////////console.log(err);
