@@ -104,6 +104,7 @@ app.post('/adduser', function(req,res){
 			var diff = process.hrtime(time);
 			if(diff[0] > 3)
 				console.log(`adduser: ${(diff[0] * 1e9 + diff[1])/1e9} seconds`);
+			console.log(err);
 			res.send(response);
 		}
 		else{
@@ -545,7 +546,7 @@ app.get('/user/:username', function(req,res){
 					}
 				})
 			}else{
-				res.status(400).send({"status":"error6", 'err':'user not found'});
+				res.send({"status":"error6", 'err':'user not found'});
 			}
 		});
 	}
