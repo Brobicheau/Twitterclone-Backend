@@ -308,7 +308,7 @@ var search = function(params, callback) {
 					};
 
 
-					res.send(response);
+					callback(null,response);
 				});	
 			}	
 		});
