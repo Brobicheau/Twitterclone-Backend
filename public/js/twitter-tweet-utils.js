@@ -243,58 +243,75 @@ var search = function(params, callback) {
 
 
 	buildQuery(params, function(err, query){
-		var time = process.hrtime();
-		Tweet.find(query).where('timestamp').lte(timestamp).limit(limit).sort({'timestamp': -1}).lean().exec(function(err, data){
-			var diff = process.hrtime(time);
-			if(diff[0] > 1){
-				console.log(query);
-				console.log(`search query: ${(diff[0] * 1e9 + diff[1])/1e9} seconds`);
-			}
+		if(!query){
+			var time = process.hrtime();
+			Tweet.find(query).where('timestamp').lte(timestamp).limit(limit).sort({'timestamp': -1}).lean().exec(function(err, data){
+				var diff = process.hrtime(time);
+				if(diff[0] > 1){
+					console.log(query);
+					console.log(`search query: ${(diff[0] * 1e9 + diff[1])/1e9} seconds`);
+				}
 
-			if(err){
-				response = {
-					"status": "error",
-					"error": err
-				};
-				callback(err, response)
-			}
-			else if (data){
+				if(err){
+					response = {
+						"status": "error",
+						"error": err
+					};
+					callback(err, response)
+				}
+				else if (data){
 
-/*				sortTweets(data, rank, timestamp, function(err, filler){
+	/*				sortTweets(data, rank, timestamp, function(err, filler){
+						var response = {
+							items: filler ,
+							"status":"OK"
+						}			
+						callback(null, response);
+					});*/
+
+						if (rank === 'undefined' || rank === 'time'){
+
+
+							var response = {
+								items: data,
+								'status':'OK'
+							}
+							callback(null, response);
+
+						}
+						else{
+							var response = {
+								items: data,
+								'status':'OK'
+							}
+
+							callback(null, response);
+						}
+
+				}
+				else{
+					callback('no items found', {'status':'OK'});
+				}
+
+			});
+		}
+		else{
+				Tweet.find({}).sort({"timestamp":-1}).limit(limit).exec(function(err, data){
+
+					if(err)
+						res.send({"status": "error"});
+
+
 					var response = {
-						items: filler ,
-						"status":"OK"
-					}			
-					callback(null, response);
-				});*/
-
-					if (rank === 'undefined' || rank === 'time'){
+						items: data,
+						'status':'OK'
+					};
 
 
-						var response = {
-							items: data,
-							'status':'OK'
-						}
-						callback(null, response);
-
-					}
-					else{
-						var response = {
-							items: data,
-							'status':'OK'
-						}
-
-						callback(null, response);
-					}
-
-			}
-			else{
-				callback('no items found', {'status':'OK'});
-			}
-
+					res.send(response);
+				});	
+			}	
 		});
-	});
-
 }
 
 //THIS IS WHERE JAYBIRD STOPS SHITTING
