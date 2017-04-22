@@ -26,7 +26,6 @@ var upload = multer({dest: path.join(__dirname + '/uploads/temp/')})
 
 /*My libraries*/
 var User = require('./models/userModel.js');
-var TempUser = require("./models/userTempModel.js"); 
 var Tweet = require("./models/tweetModel.js");
 var Follow = require("./models/followModel.js");
 var accountUtils = require('./public/js/twitter-account-utils.js');

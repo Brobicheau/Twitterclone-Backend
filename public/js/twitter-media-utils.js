@@ -1,7 +1,6 @@
 var mongoose = require("mongoose");
 var bcrypt = require('bcrypt');
 var User = require('../../models/userModel.js');
-var TempUser = require("../../models/userTempModel.js");
 var Tweet = require("../../models/tweetModel.js");
 var Media = require("../../models/mediaModel.js");
 var shortid = require('shortid');

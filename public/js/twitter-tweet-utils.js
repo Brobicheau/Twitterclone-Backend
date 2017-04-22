@@ -9,7 +9,6 @@ var randomstring = require("randomstring");
 
 /*My libraries*/
 var User = require('../../models/userModel.js');
-var TempUser = require("../../models/userTempModel.js");
 var Tweet = require("../../models/tweetModel.js");
 var Likes = require('../../models/likeModel.js');
 
