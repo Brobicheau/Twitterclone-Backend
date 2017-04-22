@@ -85,7 +85,7 @@ var getItemById = function(search_id, callback){
 
 	if(typeof search_id !== 'undefined'){
 		//////////console.log("searching");
-		Tweet.findOne({"id": search_id}).lean().exec(function(err, tweet){
+		Tweet.findOne({"id": search_id}, function(err, tweet){
 
 			//////////console.log("found something  probably");
 
@@ -93,8 +93,6 @@ var getItemById = function(search_id, callback){
 				////////console.log(err);
 				callback(err, {"status":"error"})
 			}
-
-
 			else if(tweet){	
 				var response = {
 					"status": "OK",
