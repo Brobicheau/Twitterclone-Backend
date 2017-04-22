@@ -325,7 +325,7 @@ app.get('/item/:id', function(req,res){
 		if(err){
 			console.log(err);
 			var diff = process.hrtime(time);
-			if(deff[0] > 3)
+			if(diff[0] > 3)
 				console.log(`itemsearch: ${(diff[0] * 1e9 + diff[1])/1e9} seconds`);			
 			res.send(response);
 		}
@@ -508,7 +508,6 @@ app.get('/user/:username', function(req,res){
 	//pull username from params via req.params.username
 	//pull username from params via req.params.username
 	var username = req.params.username;
-	console.log("IN GET USER INFO");
 
 	//Search for account with correct username via Users.findOne(username, function(err, user))
 	if(typeof username !== 'undefined'){//if user is not null
