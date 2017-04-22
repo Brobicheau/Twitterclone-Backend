@@ -28,8 +28,8 @@ var add = function(username, password, email, callback){
 			newUser.save(function(err, results){
 		
 				if(err){
-					console.log('there was an error');
-					callback(null, {'status':'OK'});
+					console.log(err);
+					callback(err, {'status':'OK'});
 				}
 				else if (results){
 					/*sendmail({

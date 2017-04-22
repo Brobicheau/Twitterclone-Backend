@@ -515,7 +515,7 @@ app.get('/user/:username', function(req,res){
 			console.log(`user ; first query: ${(diff[0] * 1e9 + diff[1])/1e9} seconds`);
 			if(err){
 				console.log(err);
-				res.send(400).send({"status":"error1"});//sends error status
+				res.send({"status":"error1"});//sends error status
 			}
 			else if(user){
 				Follow.count({"following":username}, function(err2, followerCount){
