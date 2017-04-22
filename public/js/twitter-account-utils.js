@@ -29,7 +29,7 @@ var add = function(username, password, email, callback){
 		
 				if(err){
 					console.log(err);
-					callback(err, {'status':'OK'});
+					callback(err, {'status':'error'});
 				}
 				else if (results){
 					/*sendmail({
