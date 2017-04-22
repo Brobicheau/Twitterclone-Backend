@@ -52,16 +52,6 @@ app.use(cookieSession({
 	keys: ['key1, key2']
 }))
 
-/******* Hash setup **************/
-var myHasher = function (password, tempUserData, insertTempUser, callback){
-	var hash = bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
-	return insertTempUser(hash, tempUserData, callback);
-}
-
-/********** Configure Email verification **********/
-
-
-
 
 //MAIN PAGE OF TWITTER
 app.post('/', function(req, res) {
@@ -110,8 +100,6 @@ app.post('/adduser', function(req,res){
 	var email = req.body.email;
 
 	accountUtils.add(username, password, email, function(err, response){
-		//			var diff = process.hrtime(time)
-		//	////////console.log(`adduser: ${(diff[0] * 1e9 + diff[1])/1e9} seconds`)
 		if (err){
 			var diff = process.hrtime(time);
 			if(diff[0] > 3)
@@ -246,7 +234,7 @@ app.post('/verify', function(req,res){
 	accountUtils.verify(email, key, function(err, response) {
 
 		if (err){
-			//////////console.log(err);
+			console.log(err);
 			res.send(response);
 		}
 		else {
@@ -277,9 +265,7 @@ app.post('/verify', function(req,res){
 app.post('/additem', function(req,res){
 		
 	var time = process.hrtime()
-	//////////console.log(req.body);
-	////console.log("--------body of additem request---------");
-	////console.log(req.body);
+
 	var params = {
 		'currentUser': req.session.currentUser,
 		'parent':req.body.parent,
@@ -339,7 +325,8 @@ app.get('/item/:id', function(req,res){
 		if(err){
 			console.log(err);
 			var diff = process.hrtime(time);
-			console.log(`itemsearch: ${(diff[0] * 1e9 + diff[1])/1e9} seconds`);			
+			if(deff[0] > 3)
+				console.log(`itemsearch: ${(diff[0] * 1e9 + diff[1])/1e9} seconds`);			
 			res.send(response);
 		}
 		else{
@@ -463,9 +450,7 @@ app.delete('/item/:id', function(req,res){
 ************************************************/
 app.post('/search', function(req,res){
 	var time = process.hrtime();
-	//console.log('in search');
-	//////////console.log("made it to search");
-	//////////console.log(req.body.q);
+
 	params =
 	 {
 		"query":req.body.q,
@@ -476,15 +461,12 @@ app.post('/search', function(req,res){
 		"rank": req.body.rank,
 		"parent": req.body.parent
 	};
-	//////////console.log("GOT PARAMs");
-	//////////console.log(params);
 
 	tweetUtils.search(params, function(err, response){
 
 		if(err){
 			console.log(err);
-	//	process.hrtime(time);
-	//		console.log("out of search err");
+			process.hrtime(time);
 			res.send(response);
 		}
 		else {
@@ -532,6 +514,8 @@ app.get('/user/:username', function(req,res){
 	if(typeof username !== 'undefined'){//if user is not null
 
 		User.findOne({"username":username},function(err,user){//checks if user is found
+			var diff = process.hrtime(time);
+			console.log(`user ; first query: ${(diff[0] * 1e9 + diff[1])/1e9} seconds`);
 			if(err){
 				console.log(err);
 				res.send(400).send({"status":"error1"});//sends error status

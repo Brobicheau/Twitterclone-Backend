@@ -2,10 +2,10 @@ var mongoose = require('mongoose');
 
 var tweetSchema = mongoose.Schema({
 	content: String,
-	id: {type: String, index:true},
-	username: {type: String, index:true},
-	parent:{type: String, index:true},
-	timestamp: {type: Number, index:true},
+	id: {type: String, unique:true},
+	username: {type: String},
+	parent:{type: String},
+	timestamp: {type: Number},
 	media: [String]
 });
 tweetSchema.index({content: 'text'});
