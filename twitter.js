@@ -114,6 +114,8 @@ app.post('/adduser', function(req,res){
 		//	////////console.log(`adduser: ${(diff[0] * 1e9 + diff[1])/1e9} seconds`)
 		if (err){
 			var diff = process.hrtime(time);
+			if(diff[0] > 3)
+				console.log(`adduser: ${(diff[0] * 1e9 + diff[1])/1e9} seconds`);
 			res.send(response);
 		}
 		else{
@@ -163,7 +165,8 @@ app.post("/login", function(req, res){
 			req.session.id = cookie_id;
 			req.session.currentUser = username;
 			var diff = process.hrtime(time);
-  			//console.log(`login: ${(diff[0] * 1e9 + diff[1])/1e9} seconds`);
+			if(diff[0] > 3)
+  				console.log(`login: ${(diff[0] * 1e9 + diff[1])/1e9} seconds`);
   			res.status(200).json(response);
 		}
 
@@ -235,7 +238,7 @@ app.get('/verify/:URL', function(req, res){
 ************************************************/
 app.post('/verify', function(req,res){
 
-	//var time = process.hrtime()
+	var time = process.hrtime()
 	//grab the key and create varibales for the url and reutrn json
 	var key = req.body.key;
 	var email = req.body.email;
@@ -247,8 +250,9 @@ app.post('/verify', function(req,res){
 			res.send(response);
 		}
 		else {
-			//var diff = process.hrtime(time)
-			//////////console.log(`verify: ${(diff[0] * 1e9 + diff[1])/1e9} seconds`);
+			var diff = process.hrtime(time)
+			if(diff[0] > 3)
+				console.log(`verify: ${(diff[0] * 1e9 + diff[1])/1e9} seconds`);
 			res.send(response)
 		}
 
@@ -292,7 +296,8 @@ app.post('/additem', function(req,res){
 		}
 		else {
 			var diff = process.hrtime(time);
-	//		console.log(`additem: ${(diff[0] * 1e9 + diff[1])/1e9} seconds`);
+			if(diff[0] > 3)
+				console.log(`additem: ${(diff[0] * 1e9 + diff[1])/1e9} seconds`);
 			res.send(response);
 		}
 
@@ -339,7 +344,8 @@ app.get('/item/:id', function(req,res){
 		}
 		else{
 			var diff = process.hrtime(time)
-			console.log(`itemsearch: ${(diff[0] * 1e9 + diff[1])/1e9} seconds`);
+			if(diff[0] > 3)
+				console.log(`itemsearch: ${(diff[0] * 1e9 + diff[1])/1e9} seconds`);
 			res.send(response);
 		}
 	});
@@ -366,6 +372,8 @@ app.delete('/item/:id', function(req,res){
 *							JAY 
 *
 *******************************************************************/
+
+	var time = process.hrtime();
 	//Pull id from request ( req.params.id)
 	var delete_id = req.params.id;
 
@@ -385,6 +393,9 @@ app.delete('/item/:id', function(req,res){
 							if(err){
 								console.log(err);
 							}
+							var diff = process.hrtime(time);
+							if(diff[0] > 3)
+								console.log(`delete: ${(diff[0] * 1e9 + diff[1])/1e9} seconds`);
 							res.status(200).send({"status":"OK"});
 
 						});
@@ -479,7 +490,8 @@ app.post('/search', function(req,res){
 		else {
 	//		console.log('out of search')
 			var diff = process.hrtime(time);
-	//		console.log(`search: ${(diff[0] * 1e9 + diff[1])/1e9} seconds`);
+			if(diff[0] > 3)
+				console.log(`search: ${(diff[0] * 1e9 + diff[1])/1e9} seconds`);
 			res.send(response);
 		}
 	})
@@ -525,13 +537,13 @@ app.get('/user/:username', function(req,res){
 				res.send(400).send({"status":"error1"});//sends error status
 			}
 			else if(user){
-				Follow.count({"following":username}, function(err, followerCount){
-					if(err){console.log(err);
+				Follow.count({"following":username}, function(err2, followerCount){
+					if(err2){console.log(err2);
 						res.send({"status":"error2"});
 					}
 					else {
-						Follow.count({"username":username}, function(err, followingCount){
-							if(err){console.log(err);
+						Follow.count({"username":username}, function(err3, followingCount){
+							if(err3){console.log(err3);
 								res.send({"status":"error3"});
 							}
 							else {
@@ -545,7 +557,8 @@ app.get('/user/:username', function(req,res){
 									"user": responseUser
 								}
 								var diff = process.hrtime(time);
-								console.log(`user info: ${(diff[0] * 1e9 + diff[1])/1e9} seconds`);
+								if(diff[0] > 3)
+									console.log(`user info: ${(diff[0] * 1e9 + diff[1])/1e9} seconds`);
 								res.status(200).send(finalResponse);							}
 						});
 					}
