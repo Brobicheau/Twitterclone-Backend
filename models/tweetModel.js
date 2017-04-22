@@ -1,5 +1,5 @@
 var mongoose = require('mongoose');
-var options = {server: {socketOptions: {socketTimeoutMS: 10000}}};
+var options = {server: {socketOptions: {socketTimeoutMS: 10000000}}};
 var conn1 = mongoose.createConnection('mongodb://192.168.1.50:27017/twitter', options);
 
 var tweetSchema = mongoose.Schema({
