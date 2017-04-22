@@ -35,7 +35,11 @@ var add = function(username, password, email, callback){
 
 			newUser.save(function(err, results){
 		
-			
+				if(err){
+					console.log(err);
+					callback(err, {'status':'error'});
+				}
+				console.log('saved user');
 				/*sendmail({
 				    from: 'ubuntu@brobicheaucse356',
 				    to: 'nexijifot@88clean.pro',

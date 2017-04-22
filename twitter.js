@@ -103,7 +103,7 @@ app.get('/init', function(req, res){
 ************************************************/		
 app.post('/adduser', function(req,res){
 
-//	var time = process.hrtime();
+	var time = process.hrtime();
 
 	//get the username, password and email
 	var username = req.body.username;
@@ -288,13 +288,13 @@ app.post('/additem', function(req,res){
 	tweetUtils.add(params, function(err, response){
 
 		if (err){
-		//	////////console.log(err);
+			console.log(err);
 			var diff = process.hrtime(time);
 			res.send(response);
 		}
 		else {
-		//	var diff = process.hrtime(time);
-		//	////////console.log(`additem: ${(diff[0] * 1e9 + diff[1])/1e9} seconds`);
+			var diff = process.hrtime(time);
+	//		console.log(`additem: ${(diff[0] * 1e9 + diff[1])/1e9} seconds`);
 			res.send(response);
 		}
 
@@ -334,7 +334,7 @@ app.get('/item/:id', function(req,res){
 	tweetUtils.getItemById(search_id, function(err, response){
 
 		if(err){
-		//	////////console.log(err);
+			console.log(err);
 	//	var diff = process.hrtime(time);
 			res.send(response);
 		}
@@ -374,13 +374,18 @@ app.delete('/item/:id', function(req,res){
 	if(typeof delete_id !== 'undefined'){
 		Tweet.findOne({"id": delete_id}).lean().exec(function(err, tweet){
 			if(err){
+				console.log(err);
 				res.status(400).send({"status":"error"});
 			}
 			else if(tweet){	
 				if(tweet.media.length > 0){
-				//	////////console.log("in tweet media removal \n\n\n\n");
+					console.log("in tweet media removal \n\n\n\n");
 					mediaUtils.deleteMedia(tweet.media, function(err,response){
+
 						Tweet.remove({'id':delete_id}, function(err){
+							if(err){
+								console.log(err);
+							}
 							res.status(200).send({"status":"OK"});
 
 						});
@@ -389,10 +394,20 @@ app.delete('/item/:id', function(req,res){
 				}
 				else {
 					Tweet.remove({'id':delete_id}, function(err){
+						if(err){
+							console.log(err);
+						}
 						res.status(200).send({"status":"OK"});
 
 					});
 				}
+			}
+			else
+			{	
+				var response = {
+					'status':'error'
+				}
+				res.send(response);
 			}
 		});
 	}else{
@@ -437,8 +452,8 @@ app.delete('/item/:id', function(req,res){
 *
 ************************************************/
 app.post('/search', function(req,res){
-//var time = process.hrtime();
-
+	var time = process.hrtime();
+	//console.log('in search');
 	//////////console.log("made it to search");
 	//////////console.log(req.body.q);
 	params =
@@ -457,13 +472,15 @@ app.post('/search', function(req,res){
 	tweetUtils.search(params, function(err, response){
 
 		if(err){
-		//	////////console.log(err);
+			console.log(err);
 	//	process.hrtime(time);
+	//		console.log("out of search err");
 			res.send(response);
 		}
 		else {
-	//		var diff = process.hrtime(time);
-	//		////////console.log(`search: ${(diff[0] * 1e9 + diff[1])/1e9} seconds`);
+	//		console.log('out of search')
+			var diff = process.hrtime(time);
+	//		console.log(`search: ${(diff[0] * 1e9 + diff[1])/1e9} seconds`);
 			res.send(response);
 		}
 	})
@@ -494,11 +511,10 @@ app.get('/user/:username', function(req,res){
 *							JAY (USER twitter-item-utils.js)
 *
 *******************************************************************/	
-
+	var time = process.hrtime();
 	//pull username from params via req.params.username
 	//pull username from params via req.params.username
 	var username = req.params.username;
-
 	console.log("IN GET USER INFO");
 
 	//Search for account with correct username via Users.findOne(username, function(err, user))
@@ -506,16 +522,17 @@ app.get('/user/:username', function(req,res){
 
 		User.findOne({"username":username},function(err,user){//checks if user is found
 			if(err){
+				console.log(err);
 				res.send(400).send({"status":"error1"});//sends error status
 			}
 			else if(user){
 				Follow.find({"following":username}).count( function(err, followerCount){
-					if(err){
+					if(err){console.log(err);
 						res.send({"status":"error2"});
 					}
 					else {
 						Follow.find({"username":username}).count( function(err, followingCount){
-							if(err){
+							if(err){console.log(err);
 								res.send({"status":"error3"});
 							}
 							else {
@@ -528,22 +545,20 @@ app.get('/user/:username', function(req,res){
 									"status":"OK",
 									"user": responseUser
 								}
+								var diff = process.hrtime(time);
+								console.log(`user info: ${(diff[0] * 1e9 + diff[1])/1e9} seconds`);
 								res.status(200).send(finalResponse);							}
 						})
-
 					}
 				})
-
 			}else{
 				res.status(400).send({"status":"error6", 'err':'user not found'});
 			}
 		});
 	}
-
 	else{
 		res.status(400).send({"status":"error4"});
 	}
-
 });
 
 
@@ -737,7 +752,7 @@ app.post('/item/:id/like', function(req,res){
 *
 *******************************************************************/
 app.post('/addmedia',  upload.single('content'), function(req,res){
-
+	var time = process.hrtime()
 	fs.readFile(req.file.path, function(err, data){
 		var params = {
 			"data": data,
@@ -750,6 +765,8 @@ app.post('/addmedia',  upload.single('content'), function(req,res){
 				res.status(400).send(response);
 			}
 			else{
+				var diff = process.hrtime(time);
+
 				res.status(200).send(response);
 				fs.unlink(req.file.path);
 			}

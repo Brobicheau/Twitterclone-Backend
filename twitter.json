@@ -1,35 +1,7 @@
-// Applications part
+{
   "apps" : [{
-    "name"      : "Twitter",
     "script"    : "twitter.js",
-    "env": {
-      "COMMON_VARIABLE": "true"
-    },
-    // Environment variables injected when starting with --env production
-    // http://pm2.keymetrics.io/docs/usage/application-declaration/#switching-to-different-environments
-    "env_production" : {
-      "NODE_ENV": "production"
-    },
-  // Deployment part
-  // Here you describe each environment
-  "deploy" : {
-    "production" : {
-      "user" : "ubuntu",
-      // Multi host is possible, just by passing IPs/hostname as an array
-      "host" : ["192.168.1.13", "192.168.1.20", "192.168.1.29","192.168.1.30","192.168.1.33"],
-      // Branch
-          "env"  : {
-        "NODE_ENV": "production"
-      }
-    },
-    "staging" : {
-      "user" : "ubuntu",
-      "host" : "192.168.1.13",
-      "path" : "/var/www/html/twitter",
-      "ssh_options": ["StrictHostKeyChecking=no", "PasswordAuthentication=no"],
-      "post-deploy" : "pm2 start ecosystem.json",
-      "env"  : {
-        "NODE_ENV": "staging"
-      }
-    }
-  }
+    "instances" : 4,
+    "exec_mode" : "cluster"
+  }]
+}

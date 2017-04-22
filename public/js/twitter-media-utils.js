@@ -64,7 +64,6 @@ var deleteMedia = function(id_array, callback){
 	for(i = 0; i< id_array.length; i++){
 		var id = id_array[i];
 		Media.findOne({'id':id}).remove().exec(function(err){});
-		console.log("deleting media");
 	}
 	callback(null, {'status':'OK'});
 }
