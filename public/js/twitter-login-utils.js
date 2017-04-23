@@ -10,6 +10,9 @@ mongoose.Promise = require('bluebird');
 
 var login = function(username, password, email, callback){ 
 
+
+	User.aggregate
+
 User.findOne({'username':username}, function(err, user){
 
 		if(err){
@@ -64,56 +67,7 @@ User.findOne({'username':username}, function(err, user){
 
 });
 
-/*//use the mongoose User model to find the user data with the username given
-	User.findOne({'username': username}).lean().exec(function(err, user){
-		//if we found a user by that name
-		if(user){
 
-			//hash their password
-			bcrypt.compare(password, user.password).then(function(res){
-
-				//set the data and ID fields for adding to database
-				var date = Date();
-				var id = shortid.generate();
-
-
-				//if the password we got from the user is the one in the database
-				if (res){
-
-
-					//prepare response to sendt o the user
-					var response = {
-						"username": username,
-						"date": date,
-						"status": "OK"
-					};	
-
-
-					//respond to user
-					callback(null, response, id)
-				}
-				//else theres an errror
-				else {
-					var response = {
-						"status":"error"
-					}
-					//show errror
-					callback("Incorrect password", response, null)
-				}
-			});
-		}
-		//else error
-		else{
-
-			var response = {
-				"status" : "error"
-			}
-			//theres an error here 
-			////////console.log(err);
-			callback(err, response, null);
-		}
-
-	});// end find one function*/
 }
 
 

@@ -14,48 +14,103 @@ mongoose.Promise = require('bluebird');
 
 var add = function(username, password, email, callback){
 
+	User.aggregate([
+			
+				{'$match':{'username':username}},
+				{'$match':{'email':email}}
+		],
+		function(err, results){
+			if(results.lengh > 0){
+				callback('username or email in use', {'status':'error'});
+			}
+			else{
+				bcrypt.hash(password, 1).then(function(hash, err){
+					newUser = User({
+						username: username,
+						email: email,
+						password: hash,
+						URL: randomstring.generate(20),
+						verified: null,
+						status: "OK"
+					});
 
-		bcrypt.hash(password, 1).then(function(hash, err){
-			newUser = User({
-				username: username,
-				email: email,
-				password: hash,
-				URL: randomstring.generate(20),
-				verified: null,
-				status: "OK"
-			});
+					newUser.save(function(err, results){
+				
+						if(err){
+							console.log(err);
+							callback(err, {'status':'error'});
+						}
+						else if (results){
 
-			newUser.save(function(err, results){
-		
+
+							response ={
+								"status":"OK"
+							}
+							callback(null, response);
+						}
+						else{
+							
+							callback('results not saved', {'status':'error'});
+						}
+					});
+				});			
+			}
+		}
+	);
+			
+
+	/*User.findOne({'username':username}, function(err, user){
+		if(err){
+			console.log(err);
+		}
+		else if(!user){
+			User.findOne({'email':email}, function(err, user2){
 				if(err){
 					console.log(err);
-					callback(err, {'status':'error'});
 				}
-				else if (results){
-					/*sendmail({
-					    from: 'ubuntu@brobicheaucse356',
-					    to: 'nexijifot@88clean.pro',
-					    subject: 'test sendmail',
-					    html: 'Mail of test sendmail ',
-					  }, function(err, reply) {
-					  	if(err)
-					  		//////console.log("THERE WAS AN ERROR IN SENDIN MAIL");
-					  	else //////console.log("SUCCESSFULLY SENT MIAL");
-					    //////console.log(err && err.stack);
-					    console.dir(reply);
-					});*/
+				else if(!user2){
 
-					response ={
-						"status":"OK"
-					}
-					callback(null, response);
+					bcrypt.hash(password, 1).then(function(hash, err){
+								newUser = User({
+									username: username,
+									email: email,
+									password: hash,
+									URL: randomstring.generate(20),
+									verified: null,
+									status: "OK"
+								});
+
+								newUser.save(function(err, results){
+							
+									if(err){
+										console.log(err);
+										callback(err, {'status':'error'});
+									}
+									else if (results){
+
+
+										response ={
+											"status":"OK"
+										}
+										callback(null, response);
+									}
+									else{
+										
+										callback('results not saved', {'status':'error'});
+									}
+								});
+							});
+
+				}	
+				else {
+					callback('email in use', {'status':'error'});
 				}
-				else{
-					console.log('results not saved?');
-					callback('no user found', {'status':'error'});
-				}
-			});
-		});
+			})
+		}
+		else{
+			callback('name in use', {'status':'error'});
+		}
+	})*/
 
 	//});
 };
@@ -63,6 +118,7 @@ var add = function(username, password, email, callback){
 
 var verify = function(email, key, callback) {
 
+	console.log('trying t o verify' + email);
 	if (key === "abracadabra"){
 
 		User.findOne({'email':email}, function(err, user){
@@ -85,3 +141,16 @@ var verify = function(email, key, callback) {
 }
 
 module.exports = {add, verify}
+
+					/*sendmail({
+					    from: 'ubuntu@brobicheaucse356',
+					    to: 'nexijifot@88clean.pro',
+					    subject: 'test sendmail',
+					    html: 'Mail of test sendmail ',
+					  }, function(err, reply) {
+					  	if(err)
+					  		//////console.log("THERE WAS AN ERROR IN SENDIN MAIL");
+					  	else //////console.log("SUCCESSFULLY SENT MIAL");
+					    //////console.log(err && err.stack);
+					    console.dir(reply);
+					});*/

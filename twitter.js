@@ -23,7 +23,7 @@ var fs = require('fs');
 var upload = multer({dest: path.join(__dirname + '/uploads/temp/')})
 mongoose.Promise = require('bluebird')
 var options = {server: {socketOptions: {socketTimeoutMS: 10000000}}};
-mongoose.connect('mongodb://127.0.0.1:27017/twitter', options);
+mongoose.connect('mongodb://192.168.1.43:27017/twitter', options);
 /*My libraries*/
 var User = require('./models/userModel.js');
 var Tweet = require("./models/tweetModel.js");
@@ -461,7 +461,8 @@ app.post('/search', function(req,res){
 		"username":req.body.username,
 		"following":req.body.following,
 		"rank": req.body.rank,
-		"parent": req.body.parent
+		"parent": req.body.parent,
+		'currentUser':req.session.currentUser
 	};
 
 	tweetUtils.search(params, function(err, response){
@@ -505,56 +506,68 @@ app.get('/user/:username', function(req,res){
 *
 *							JAY (USER twitter-item-utils.js)
 *
-*******************************************************************/	
-	var time = process.hrtime();
-	//pull username from params via req.params.username
-	//pull username from params via req.params.username
+*******************************************************************/
 	var username = req.params.username;
-	console.log("gettting this user " + username);
-	//Search for account with correct username via Users.findOne(username, function(err, user))
-	if(typeof username !== 'undefined'){//if user is not null
-		User.findOne({"username":username},function(err,user){//checks if user is found
-			var diff = process.hrtime(time);
-			console.log(`user ; first query: ${(diff[0] * 1e9 + diff[1])/1e9} seconds`);
-			if(err){
-				console.log(err);
-				res.send({"status":"error1"});//sends error status
-			}
-			else if(user){
-				Follow.count({"following":username}, function(err2, followerCount){
-					if(err2){console.log(err2);
-						res.send({"status":"error2"});
+
+	var time = process.hrtime();
+
+	User.aggregate([
+
+				{
+					$match: {'username':username} 
+				},			
+				{
+				 	$lookup:
+					{
+						from:'following_data',
+						localField:'username',						
+						foreignField:'following',
+						as:"follows"
 					}
-					else {
-						Follow.count({"username":username}, function(err3, followingCount){
-							if(err3){console.log(err3);
-								res.send({"status":"error3"});
-							}
-							else {
-								var responseUser = {//All user data is stored in here
-									"email": user.email,
-									"followers": followerCount,
-									"following": followingCount
-								}
-								var finalResponse = {//building the final response JSON object
-									"status":"OK",
-									"user": responseUser
-								}
-								var diff = process.hrtime(time);
-								if(diff[0] > 3)
-									console.log(`user info: ${(diff[0] * 1e9 + diff[1])/1e9} seconds`);
-								res.status(200).send(finalResponse);							}
-						});
+				},
+				{
+					$lookup:
+					{
+						from:'following_data',
+						localField:'username',						
+						foreignField:'username',
+						as:"following"						
 					}
-				})
-			}else{
-				res.send({"status":"error6", 'err':'user not found'});
+				},
+				{
+					$addFields:
+					{
+						followers: "$followers",
+						following: "$following"
+					}
+
+				}
+			
+			], function(err, data){
+				if(err){
+					console.log(err);
+					res.send({'status':'error'});
+				}
+				else if(data){
+				var user = {
+					'email': data[0].email,
+					'following':data[0].following.length,
+					'followers':data[0].follows.length
+				}
+				var response = {
+					'user': user,
+					'status':'OK'
+				};
+				res.send(response);
+				}
+				else {
+					console.log('couldnt find user') 
+					res.send({'status':'error'});
+				}
 			}
-		});
-	}
-	else{
-		res.status(400).send({"status":"error4"});
-	}
+
+		);
+
 });
 
 
