@@ -1,5 +1,14 @@
 var mongoose = require('mongoose');
-
+var options = {
+	  server: {
+	    socketOptions: {
+	      socketTimeoutMS: 9000000000,
+	      connectionTimeout: 900000000,
+	      poolSize: 100
+	    }
+	  }
+  }
+var conn = mongoose.createConnection("192.168.1.44", options);
 var userSchema = mongoose.Schema({
 	username: { type: String, index: true},
 	email: { type: String},
@@ -8,4 +17,4 @@ var userSchema = mongoose.Schema({
 	verified: String, 
 });
 
-module.exports = mongoose.model('real_users', userSchema);
+module.exports = conn.model('real_users', userSchema);

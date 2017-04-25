@@ -10,8 +10,8 @@ var follow = function(params, callback){
 
 	if(follow){
 		newFollow = Follow({
-			username: currentUser,
-			following: toFollow
+			'username': currentUser,
+			'following': toFollow
 		});
 
 		newFollow.save(function(err, results){
@@ -41,7 +41,7 @@ var unFollow = function(params, callback){
 		if(err){
 			callback("couldnt find user to unfollow", {"status":"error"});
 		}
-		else {
+		else if(toRemove) {
 			toRemove.remove(function(err, removed){
 
 				if(err){
@@ -52,6 +52,9 @@ var unFollow = function(params, callback){
 					callback(null, {"status":"OK"});
 				}
 			})
+		}
+		else {
+			callback('cant find user to follow', {'status':'error'});
 		}
 
 	})	

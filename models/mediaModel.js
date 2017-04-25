@@ -1,8 +1,16 @@
 var mongoose = require('mongoose');
-var conn = mongoose.createConnection("192.168.1.44");
+var options = {
+	  server: {
+	    socketOptions: {
+	      socketTimeoutMS: 9000000000,
+	      connectionTimeout: 900000000,
+	      poolSize: 100
+	    }
+	  }
+  }
+var conn = mongoose.createConnection("192.168.1.44", options);
 
 var mediaSchema = mongoose.Schema({
-	'id':{type: String, index: true},
 	'filename': String,
 	'content': Buffer
 });

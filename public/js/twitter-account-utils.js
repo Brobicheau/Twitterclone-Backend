@@ -20,7 +20,7 @@ var add = function(username, password, email, callback){
 				{'$match':{'email':email}}
 		],
 		function(err, results){
-			if(results.lengh > 0){
+			if(results && results.length > 0){
 				callback('username or email in use', {'status':'error'});
 			}
 			else{
@@ -57,68 +57,12 @@ var add = function(username, password, email, callback){
 			}
 		}
 	);
-			
-
-	/*User.findOne({'username':username}, function(err, user){
-		if(err){
-			console.log(err);
-		}
-		else if(!user){
-			User.findOne({'email':email}, function(err, user2){
-				if(err){
-					console.log(err);
-				}
-				else if(!user2){
-
-					bcrypt.hash(password, 1).then(function(hash, err){
-								newUser = User({
-									username: username,
-									email: email,
-									password: hash,
-									URL: randomstring.generate(20),
-									verified: null,
-									status: "OK"
-								});
-
-								newUser.save(function(err, results){
-							
-									if(err){
-										console.log(err);
-										callback(err, {'status':'error'});
-									}
-									else if (results){
-
-
-										response ={
-											"status":"OK"
-										}
-										callback(null, response);
-									}
-									else{
-										
-										callback('results not saved', {'status':'error'});
-									}
-								});
-							});
-
-				}	
-				else {
-					callback('email in use', {'status':'error'});
-				}
-			})
-		}
-		else{
-			callback('name in use', {'status':'error'});
-		}
-	})*/
-
-	//});
+		
 };
 
 
 var verify = function(email, key, callback) {
 
-	console.log('trying t o verify' + email);
 	if (key === "abracadabra"){
 
 		User.findOne({'email':email}, function(err, user){

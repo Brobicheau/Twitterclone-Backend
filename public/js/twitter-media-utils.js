@@ -1,42 +1,34 @@
 var mongoose = require("mongoose");
 var bcrypt = require('bcrypt');
-
+var User = require('../../models/userModel.js');
+var Tweet = require("../../models/tweetModel.js");
 var Media = require("../../models/mediaModel.js");
 var shortid = require('shortid');
 var sendmail = require('sendmail')();
 var randomstring = require("randomstring");
 var fs = require('fs');
-
+var cassandra = require('cassandra-driver');
+var client = new cassandra.Client({contactPoints: ['192.168.1.43'], keyspace: 'twitter'});
 
 
 var addmedia = function(params, callback){
-	var time = process.hrtime();
 
-	var id = shortid.generate();
 
 	var filename = params.filename;
 	var data = params.data;
 
 	var newMedia = Media({
-		'id': id,
 		'filename':filename,
 		'content':data
 	});
-	newMedia.save(function(err){
+	newMedia.save(function(err, results){
 		if(err){
-			var diff = process.hrtime(time);
-			if(diff[0] > 3)
-				console.log(`add media query: ${(diff[0] * 1e9 + diff[1])/1e9} seconds`);
-			//callback(err, {'status':'error'});
+			callback(err, {'status':'error'});
 		}
 		else {
-
+			callback(null ,{'status':'OK', 'id':results._id});
 		}
 	})
-	var diff = process.hrtime(time);
-	if(diff[0] > 3)
-		console.log(`add media query: ${(diff[0] * 1e9 + diff[1])/1e9} seconds`);			
-	callback(null ,{'status':'OK', 'id':id});
 }
 
 
@@ -45,7 +37,7 @@ var addmedia = function(params, callback){
 
 var getMedia = function(params, callback){
 	var id = params.id;
-	Media.findOne({'id':id}, function(err, media){
+	Media.findOne({'_id':id}, function(err, media){
 		if(err){
 			callback(err, {'status':'error'});
 		}
@@ -64,11 +56,13 @@ var getMedia = function(params, callback){
 
 	
 var deleteMedia = function(id_array, callback){
-	for(i = 0; i< id_array.length; i++){
-		var id = id_array[i];
-		Media.findOne({'id':id}).remove().exec(function(err){});
-	}
-	callback(null, {'status':'OK'});
+		Media.remove({'_id':{$in:id_array}} ,function(err){
+			if(err){
+				console.log(err);
+				callback(err, {'status':'error'});
+			}
+			callback(null, {'status':'OK'});
+		});
 }
 
 module.exports = {addmedia, getMedia, deleteMedia}

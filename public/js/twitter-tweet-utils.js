@@ -25,12 +25,10 @@ var add = function(params, callback){
 		//Get the content of the new tweet
 
 		//make a new unique ID for the tweet
-		var id = shortid.generate();
 
 
 		//create the tweet schema object for storing in mongodb
 		newTweet = Tweet({
-			"id": id,
 			"username": currentUser,
 			"parent": parent,
 			"timestamp": Math.floor(new Date() / 1000),
@@ -38,12 +36,9 @@ var add = function(params, callback){
 			"media":media
 		});
 
-		var time = process.hrtime();
 		//save the sweet to the mongo database
 		newTweet.save(function (err, results){
-			var diff = process.hrtime(time)
-			if(diff[0] > 3)
-				console.log(`item save: ${(diff[0] * 1e9 + diff[1])/1e9} seconds`);
+
 			//if there was an Error
 			if(err){
 				//print out the error(and send back correct response)
@@ -51,18 +46,18 @@ var add = function(params, callback){
 				response = {
 					"status" : "error"
 				}
-				//callback(err, response);
+				callback(err, response);
 			}
 			else{
 
 
 			//else lettuce know there was a success
-			var	response = {
-					"id": id,
-					"status" : "OK"
-				};
-				callback(null, response)		 
-			}
+				var	response = {
+						"id": results._id,
+						"status" : "OK"
+					};
+					callback(null, response)		 
+				}
 		});
 
 
@@ -81,9 +76,26 @@ var add = function(params, callback){
 
 var getItemById = function(search_id, callback){
 
-	Tweet.aggregate([
-			{$match:{'id':search_id}},
-			{'$project':{'parent':1, 'username':1,'id':1, 'timestamp':1, 'content':1, 'media':1, '_id':0}},
+	Tweet.findOne({'_id':search_id}, function(err, tweet){
+
+		if(err){
+			callback(err, {'status':'error'});
+		}
+		else if(tweet){
+			var response = {
+				'item': tweet,
+				'status':'OK'
+			}
+			callback(null, response);
+		}
+		else {
+			callback('cant find tweet', {'status':'error'});
+		}
+	})
+
+	/*Tweet.aggregate([
+			{$match:{'_id':search_id}},
+			{'$project':{'parent':1, 'username':1, 'timestamp':1, 'content':1, 'media':1, '_id':1}},
 
 		], function(err, tweets){
 			if(tweets){
@@ -103,7 +115,7 @@ var getItemById = function(search_id, callback){
 			}
 
 		}
-	)
+	)*/
 
 	/*if(typeof search_id !== 'undefined'){
 		Tweet.findOne({"id": search_id}, function(err, tweet){
@@ -150,6 +162,7 @@ var search = function(params, callback) {
 	var q = params.q;
 	var currentUser = params.currentUser;
 
+
 	if(rank){
 		sort = -1
 	}
@@ -157,45 +170,58 @@ var search = function(params, callback) {
 		sort = 1
 	}
 
+	if(typeof timestamp === 'undefined'){
+		timestamp = Math.floor(new Date() / 1000)
+	}
+
+	if(typeof limit === 'undefined'){
+		limit = 25;
+	}
+	else if(limit > 100){
+		limit = 99;
+	}
+	else {
+		limit = Number(limit)
+	}
+
 	if(following){
 			var agg = Tweet.aggregate([
-				{ $lookup: 
-					{
-						from:'following_datas',
-						localField:'username',						
-						foreignField:'username',
-						as:"follow"
-					}
-				},
-				{'$redact': {
-					'$cond': {
-						'if':{ '$in' :[ currentUser, "$follow" ]},
-						'then':'$$KEEP',
-						'else':'$$PRUNE'
-					}
-				}},			
-			{'$project':{'parent':1, 'username':1,'id':1, 'timestamp':1, 'content':1, 'media':1, '_id':0}},
 			{'$limit': limit},
-			{'$sort': {'timestamp':sort}}
+			{ $lookup: 
+				{
+					from:'follow_datas',
+					localField:'username',						
+					foreignField:'username',
+					as:"follow"
+				}
+			},
+			{'$redact': {
+				'$cond': {
+					'if':{ '$in' :[ currentUser, "$follow" ]},
+					'then':'$$KEEP',
+					'else':'$$PRUNE'
+				}
+			}},	
+			{'$project':{'parent':1, 'username':1, 'timestamp':1, 'content':1, 'media':1, 'id':'$_id', '_id':0}},
+			{'$sort': {'timestamp':sort}},
+	
 
 		]);
 	}
 	else if(typeof q !== 'undefined')
 	{
 		var agg = Tweet.aggregate([
-			
-				{'$match':{'$text':{'$search':q} } },
-				{'$project':{'parent':1, 'username':1,'id':1, 'timestamp':1, 'content':1, 'media':1, '_id':0}},
 				{'$limit': limit},
+				{'$match':{'$text':{'$search':q} } },
+				{'$project':{'parent':1, 'username':1, 'timestamp':1, 'content':1, 'media':1, 'id':'$_id', '_id':0}},
 				{'$sort': {'timestamp':sort}}
 					]);
 	}
 	else if (typeof username !== 'undefined')
 		var agg = Tweet.aggregate([
-			
-			{'$match':{'username':username} },
-			{'$project':{'parent':1, 'username':1,'id':1, 'timestamp':1, 'content':1, 'media':1, '_id':0}},
 			{'$limit': limit},
+			{'$match':{'username':username} },
+			{'$project':{'parent':1, 'username':1, 'timestamp':1, 'content':1, 'media':1, 'id':'$_id', '_id':0}},
 			{'$sort': {'timestamp':sort}}
 			
 		]);
@@ -206,21 +232,27 @@ var search = function(params, callback) {
 				 	//'$text': { $search: q },
 				 	'timestamp':{'$lte':timestamp} 
 				 }
-			},*/	
-			{'$project':{'parent':1, 'username':1,'id':1, 'timestamp':1, 'content':1, 'media':1, '_id':0}},
+			},*/				
 			{'$limit': limit},
-			{'$sort': {'timestamp':sort}}
+			{'$sort': {'timestamp':sort}},
+			{'$project':{'parent':1, 'username':1, 'timestamp':1, 'content':1, 'media':1, 'id':'$_id', '_id':0}},
+
 
 		]);
 	}
-
 	agg.exec(function(err, data){
-
-
-		var response = {
-			'items': data,
-			'status':'OK'
-		};
+		if(data){
+			var response = {
+				'items': data,
+				'status':'OK'
+			};
+		}
+		else{
+			var response = {
+				'items': [],
+				'status':'OK'
+			};
+		}
 		callback(null,response);
 	})
 
@@ -241,14 +273,14 @@ var like = function(params, callback){
 	});
 	newLike.save(function(err, result){
 		if(err){
-			////////console.log(err);
+			console.log(err);
 			callback(err, {'status':'error'});
 		}
 		else {
 			response = {
 				'status':'OK'
 			};
-			callback(err, response);
+			callback(null, response);
 		}
 
 	});
