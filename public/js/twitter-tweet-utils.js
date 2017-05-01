@@ -1,16 +1,57 @@
 var parser = require('body-parser');//forparsing req params, will change to multer
 var mongoose = require("mongoose");
 var path = require ("path");
-var bcrypt = require('bcrypt');
+var bcrypt = require('bcryptjs');
 var shortid = require('shortid');
 var cookieSession = require('cookie-session');
 var sendmail = require('sendmail')();
 var randomstring = require("randomstring");
-
+var ObjectID = require('bson-objectid');
+var queue = require('queue');
+var Q = require('./twitterQ.js');
 /*My libraries*/
 var User = require('../../models/userModel.js');
 var Tweet = require("../../models/tweetModel.js");
 var Likes = require('../../models/likeModel.js');
+var  tweetQueue = queue();
+var tweetQ = []
+
+var startSetInterval = function(){
+	setInterval(saveTweet, 2)
+}
+
+
+var acknowledgeTweet = function(err, job){
+	if(err)
+		console.log(err);
+
+}
+
+var saveTweet = function(){
+	if(tweetQ.length !== 0){
+		newTweet = tweetQ.pop();
+		//var time = process.hrtime()
+		newTweet.save(function (err, results){
+			//var diff = process.hrtime(time);
+			//console.log(`save tweet time: ${(diff[0] * 1e9 + diff[1])/1e9} seconds`);
+			//if there was an Error
+			if(err){
+				//print out the error(and send back correct response)
+				console.log(err);
+			}
+			else{
+				if(tweetQ.length > 50){
+					console.log('shrinking queue')
+					saveTweet()
+				}
+			}
+		});
+	}
+}
+
+var addTweetToQueue = function(newTweet){
+	tweetQ.push(newTweet);
+}
 
 var add = function(params, callback){
 	var currentUser = params.currentUser;
@@ -25,10 +66,11 @@ var add = function(params, callback){
 		//Get the content of the new tweet
 
 		//make a new unique ID for the tweet
-
+		var id = ObjectID();
 
 		//create the tweet schema object for storing in mongodb
 		newTweet = Tweet({
+			'_id': id,
 			"username": currentUser,
 			"parent": parent,
 			"timestamp": Math.floor(new Date() / 1000),
@@ -37,28 +79,14 @@ var add = function(params, callback){
 		});
 
 		//save the sweet to the mongo database
-		newTweet.save(function (err, results){
-
-			//if there was an Error
-			if(err){
-				//print out the error(and send back correct response)
-				////////console.log(err);
-				response = {
-					"status" : "error"
-				}
-				callback(err, response);
-			}
-			else{
-
-
-			//else lettuce know there was a success
-				var	response = {
-						"id": results._id,
-						"status" : "OK"
-					};
-					callback(null, response)		 
-				}
-		});
+		//addTweetToQueue(newTweet)
+		tweetQ.push(newTweet);
+		var	response = {
+				"id": id,
+				"status" : "OK"
+		};
+		callback(null, response)		 
+	
 
 
 
@@ -204,8 +232,6 @@ var search = function(params, callback) {
 			}},	
 			{'$project':{'parent':1, 'username':1, 'timestamp':1, 'content':1, 'media':1, 'id':'$_id', '_id':0}},
 			{'$sort': {'timestamp':sort}},
-	
-
 		]);
 	}
 	else if(typeof q !== 'undefined')
@@ -227,12 +253,7 @@ var search = function(params, callback) {
 		]);
 	else {
 		var agg = Tweet.aggregate([
-			/*{ '$match':
-				 { 
-				 	//'$text': { $search: q },
-				 	'timestamp':{'$lte':timestamp} 
-				 }
-			},*/				
+		
 			{'$limit': limit},
 			{'$sort': {'timestamp':sort}},
 			{'$project':{'parent':1, 'username':1, 'timestamp':1, 'content':1, 'media':1, 'id':'$_id', '_id':0}},
@@ -271,7 +292,8 @@ var like = function(params, callback){
 		'tweet_id':id,
 		'username':currentUser
 	});
-	newLike.save(function(err, result){
+	Q.addToQ()
+	/*newLike.save(function(err, result){
 		if(err){
 			console.log(err);
 			callback(err, {'status':'error'});
@@ -283,8 +305,9 @@ var like = function(params, callback){
 			callback(null, response);
 		}
 
-	});
+	});*/
+	callback(null, {'status':'OK'});
 }
 
 
-module.exports = {add, getItemById, search, like}
+module.exports = {add, getItemById, search, like, startSetInterval}

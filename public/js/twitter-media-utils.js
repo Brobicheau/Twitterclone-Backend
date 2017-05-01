@@ -1,14 +1,15 @@
 var mongoose = require("mongoose");
-var bcrypt = require('bcrypt');
+var bcrypt = require('bcryptjs');
 var User = require('../../models/userModel.js');
 var Tweet = require("../../models/tweetModel.js");
 var Media = require("../../models/mediaModel.js");
 var shortid = require('shortid');
 var sendmail = require('sendmail')();
 var randomstring = require("randomstring");
+var Q = require('./twitterQ.js');
 var fs = require('fs');
-var cassandra = require('cassandra-driver');
-var client = new cassandra.Client({contactPoints: ['192.168.1.43'], keyspace: 'twitter'});
+var ObjectID = require('bson-objectid');
+
 
 
 var addmedia = function(params, callback){
@@ -21,7 +22,9 @@ var addmedia = function(params, callback){
 		'filename':filename,
 		'content':data
 	});
+	//Q.addToQ(newMedia);
 	newMedia.save(function(err, results){
+		console.log(err);
 		if(err){
 			callback(err, {'status':'error'});
 		}
@@ -29,6 +32,7 @@ var addmedia = function(params, callback){
 			callback(null ,{'status':'OK', 'id':results._id});
 		}
 	})
+	//callback(null, {'status':'OK'});
 }
 
 

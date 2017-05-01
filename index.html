@@ -90,7 +90,7 @@ body {
 
 
 
-<div ng-switch-when="main-page">
+		<div ng-switch-when="main-page">
 			Tweet: <input id="addTweetTextBox" class="form-controller" ng-model="tweet.tweet">
 
 			<button class="btn-primary" ng-click="addTweet()">Post Tweet!</button>
@@ -299,6 +299,11 @@ v
 			<!--		<img src="https://media.rockstargames.com/rockstargames/img/global/news/upload/actual_1378781698.jpg"/>
 				</div>
 			</div>-->
+		</div>
+
+		<div ng-switch-when="mediaPage">
+			Media file you want to add: <input type="file" id="file" name="file"/>
+				<button ng-click="addMedia()">Add</button>
 		</div>
 
 

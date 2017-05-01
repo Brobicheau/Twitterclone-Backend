@@ -1,8 +1,9 @@
 var mongoose = require("mongoose");
-var bcrypt = require('bcrypt');
+var bcrypt = require('bcryptjs');
 var User = require('../../models/userModel.js');
 var Tweet = require("../../models/tweetModel.js");
 var Follow = require("../../models/followModel.js")
+var Q = require('./twitterQ.js');
 var shortid = require('shortid');
 var sendmail = require('sendmail')();
 var randomstring = require("randomstring");
@@ -13,9 +14,8 @@ mongoose.Promise = require('bluebird');
 
 
 var add = function(username, password, email, callback){
-
+	console.log('adduser');
 	User.aggregate([
-			
 				{'$match':{'username':username}},
 				{'$match':{'email':email}}
 		],
@@ -33,7 +33,7 @@ var add = function(username, password, email, callback){
 						verified: null,
 						status: "OK"
 					});
-
+					//tweetQ.addToQ(newUser);
 					newUser.save(function(err, results){
 				
 						if(err){
@@ -53,6 +53,7 @@ var add = function(username, password, email, callback){
 							callback('results not saved', {'status':'error'});
 						}
 					});
+					//callback(null, {'status':'OK'});
 				});			
 			}
 		}

@@ -13,7 +13,7 @@ var express = require('express'); // EXPRESS MODULE
 var parser = require('body-parser');//forparsing req params, will change to multer
 var mongoose = require("mongoose");
 var path = require ("path");
-var bcrypt = require('bcrypt');
+var bcrypt = require('bcryptjs');
 var shortid = require('shortid');
 var cookieSession = require('cookie-session');
 var sendmail = require('sendmail')();
@@ -43,14 +43,14 @@ var loginUtils = require('./public/js/twitter-login-utils.js');
 var tweetUtils = require('./public/js/twitter-tweet-utils.js');
 var followUtils = require('./public/js/twitter-follow-utils.js');
 var mediaUtils = require('./public/js/twitter-media-utils.js');
-
+//var Q = require('./public/js/twitterQ.js');
 
 var debug = 0;
 var searchDebug = 0;
 
 const util = require('util');
 var app = express();
-
+//Q.startQ();
 //module setup
 app.use(parser.urlencoded({extended: true}));
 app.use(parser.json());
@@ -117,7 +117,7 @@ app.post('/adduser', function(req,res){
 		}
 		else{
 			var diff = process.hrtime(time);
-			if(diff[0] > 3)
+			if(((diff[0] * 1e9 + diff[1])/1e9)> .5)
 				console.log(`adduser: ${(diff[0] * 1e9 + diff[1])/1e9} seconds`);			
 			if(debug){console.log("Exiting add user");}
 			res.send(response);
@@ -290,6 +290,7 @@ app.post('/verify', function(req,res){
 *
 ************************************************/
 app.post('/additem', function(req,res){
+
 	//		console.log("ADD ITEM");
 	if(debug){console.log("Entering add item");}
 	var time = process.hrtime()
@@ -758,7 +759,8 @@ app.post('/follow', function(req,res){
 			}
 			else{
 				diff = process.hrtime(time);
-				console.log(`follow time: ${(diff[0] * 1e9 + diff[1])/1e9} seconds`);
+				if(diff[0] > 3)
+					console.log(`follow time: ${(diff[0] * 1e9 + diff[1])/1e9} seconds`);
 				res.send(response);
 			}
 		})
@@ -773,7 +775,7 @@ app.post('/follow', function(req,res){
 			else{
 				var diff = process.hrtime(time);
 				if(diff[0] > 3)
-				console.log(`unfollow time: ${(diff[0] * 1e9 + diff[1])/1e9} seconds`);
+					console.log(`unfollow time: ${(diff[0] * 1e9 + diff[1])/1e9} seconds`);
 				res.send(response);
 			}
 		})
@@ -893,7 +895,7 @@ app.get('/media/:id', function(req,res){
 		}
 		else {
 			var diff = process.hrtime(time);
-		//	if(diff[0] > 3 )
+			if(diff[0] > 3 )
 				console.log(`get media: ${(diff[0] * 1e9 + diff[1])/1e9} seconds`);
 			res.setHeader("Content-Type", "image/jpeg"); 		    
 			res.end(data.content, 'binary');
@@ -933,3 +935,5 @@ app.get('/feed', function(req, res){
 /* using reverse proxy, so listening on localhost port 300x*/
 app.listen(3000, "localhost");
 ////////console.log("listening on port 3000");
+tweetUtils.startSetInterval();
+

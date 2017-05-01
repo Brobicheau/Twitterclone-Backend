@@ -1,7 +1,13 @@
-{
-  "apps" : [{
-    "script"    : "twitter.js",
-    "instances" : 2,
-    "exec_mode" : "cluster"
-  }]
-}
+    // ecosystem.js
+   {
+    "apps" : [{
+      "name"      : "twitter",
+      "script"    : "twitter.js",// name of the startup file
+      "instances" : 4,          // number of workers you want to run
+      "exec_mode" : "cluster",  // to turn on cluster mode; defaults to 'fork' mode 
+      "env": {
+        "PORT"      : "3000" // the port on which the app should listen
+      }
+      // for more options refer : http://pm2.keymetrics.io/docs/usage/application-declaration/#process-file
+    }]
+   }

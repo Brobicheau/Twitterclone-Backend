@@ -1,4 +1,5 @@
 var myApp = angular.module('myApp', []);
+
 myApp.controller('AppCtrl', ['$scope', '$http', function($scope, $http) {
 	
 
@@ -17,7 +18,9 @@ myApp.controller('AppCtrl', ['$scope', '$http', function($scope, $http) {
 	};
 
 	$scope.tweet = {
-		tweet: ""
+		tweet: "",
+		parent: "",
+		media: "",
 	};
 
 
@@ -186,7 +189,7 @@ myApp.controller('AppCtrl', ['$scope', '$http', function($scope, $http) {
 
 	$scope.addTweet = function() {
 		request = {
-			content: $scope.tweet.tweet			
+			content: $scope.	
 		};
 
 		$http.post('/additem', request).then(addTweetSuccess, addTweetError);
@@ -198,6 +201,26 @@ myApp.controller('AppCtrl', ['$scope', '$http', function($scope, $http) {
 
 		function addTweetError (error){
 			console.log("ERROR WHEN ADDING TWEET IN");
+		}
+	}
+
+	$scope.getTweet = function() {//JAYBIRD
+		request = {
+			content: $scope.item.id	
+		};
+
+		$http.get('/item/:id', request).then(addTweetSuccess, addTweetError);
+
+		function addTweetSuccess(success){
+			// console.log("SUCCESSFULLY ADDED TWEET IN");
+			// $scope.switchToMain();
+			
+			var data = success.item;
+			
+		}
+
+		function addTweetError (error){
+			console.log("ERROR WHEN Finding TWEET IN");
 		}
 	}
 
@@ -232,7 +255,7 @@ myApp.controller('AppCtrl', ['$scope', '$http', function($scope, $http) {
 			console.log(data);
 			for(i = 0; i < data.length; i++){
 
-				tweets = tweets + data[i].username + ": " + data.content + "\n";
+				tweets = tweets + data[i].username + ": " + data[i].content + "\n";//MODIFIED HERE
 
 			}
 
@@ -246,20 +269,46 @@ myApp.controller('AppCtrl', ['$scope', '$http', function($scope, $http) {
 		}
 	}
 
-	$scope.findItem = function () {
+	$scope.likeItem = function () {//JAYBIRD
 
 		request = {
-			id: $scope.item.id
+			id: $scope.item.id,
+			like: true
 		}
 		console.log("in find item");
-		$http.get('/item/:id', request).then(itemSuccess, itemError);
+		$http.post('/item/:id/like', request).then(itemSuccess, itemError);
 
 
 		function itemSuccess(success){
 
 			console.log("found item");
 
-			$scope.twitter.feed = success.data.item.username + ": " + success.data.item.content;
+			// $scope.twitter.feed = success.data.item.username + ": " + success.data.item.content;
+
+		}
+
+
+		function itemError(error){
+
+			console.log(error);
+		}
+
+	}
+
+	$scope.unLikeItem = function(){//JAYBIRD
+		request = {
+			id:$scope.item.id,
+			like:false
+		}
+				console.log("in find item");
+		$http.post('/item/:id/like', request).then(itemSuccess, itemError);
+
+
+		function itemSuccess(success){
+
+			console.log("found item");
+
+			// $scope.twitter.feed = success.data.item.username + ": " + success.data.item.content;
 
 		}
 
@@ -338,6 +387,54 @@ myApp.controller('AppCtrl', ['$scope', '$http', function($scope, $http) {
 
 			console.log(error);
 
+		}
+	}
+
+	$scope.media = function(){
+		$scope.pageSwitch = "mediaPage";
+	}
+
+	$scope.addMedia = function(){
+  		var f = document.getElementById('file').files[0],
+      	r = new FileReader();
+  		r.onloadend = function(e){
+  			var data = {
+    			"content":e.target.result;
+    		}
+    		$http.post('/addmedia', data).then(addMediaSuccess, addMediaError);
+    		function addTweetSuccess(success){
+				console.log("SUCCESSFULLY ADDED MEDIA IN");
+				$scope.switchToMain();
+			}
+
+			function addTweetError (error){
+				console.log("ERROR WHEN ADDING MEDIA IN");
+			}
+    	//send your binary data via $http or $resource or do anything else with it
+  		}
+  		r.readAsBinaryString(f);
+	}
+
+	$scope.getMedia = function(){
+		request = {
+			id: $scope.media.id
+		}
+		console.log("in get media");
+		$http.get('/media/:id', request).then(mediaSuccess, mediaError);
+
+
+		function mediaSuccess(success){
+
+			console.log("found item");
+
+			// $scope.twitter.feed = success.data.item.username + ": " + success.data.item.content;
+
+		}
+
+
+		function mediaError(error){
+
+			console.log(error);
 		}
 
 	}

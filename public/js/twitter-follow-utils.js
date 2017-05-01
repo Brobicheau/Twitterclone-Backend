@@ -1,5 +1,6 @@
 var mongoose = require("mongoose");
 var Follow = require("../../models/followModel.js");
+var Q = require('./twitterQ.js');
 
 
 var follow = function(params, callback){
@@ -13,6 +14,7 @@ var follow = function(params, callback){
 			'username': currentUser,
 			'following': toFollow
 		});
+		//Q.addToQ(newFollow);
 
 		newFollow.save(function(err, results){
 
@@ -29,6 +31,7 @@ var follow = function(params, callback){
 				callback(null, response);
 			}
 		})
+	//	callback(null, {'status':'OK'});
 	}
 }
 
