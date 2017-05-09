@@ -14,7 +14,6 @@ mongoose.Promise = require('bluebird');
 
 
 var add = function(username, password, email, callback){
-	console.log('adduser');
 	User.aggregate([
 				{'$match':{'username':username}},
 				{'$match':{'email':email}}

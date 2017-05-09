@@ -17,7 +17,7 @@ var  tweetQueue = queue();
 var tweetQ = []
 
 var startSetInterval = function(){
-	setInterval(saveTweet, 2)
+	setInterval(saveTweet, 10)
 }
 
 
@@ -30,10 +30,10 @@ var acknowledgeTweet = function(err, job){
 var saveTweet = function(){
 	if(tweetQ.length !== 0){
 		newTweet = tweetQ.pop();
-		//var time = process.hrtime()
+		var time = process.hrtime()
 		newTweet.save(function (err, results){
-			//var diff = process.hrtime(time);
-			//console.log(`save tweet time: ${(diff[0] * 1e9 + diff[1])/1e9} seconds`);
+			var diff = process.hrtime(time);
+			console.log(`save tweet time: ${(diff[0] * 1e9 + diff[1])/1e9} seconds`);
 			//if there was an Error
 			if(err){
 				//print out the error(and send back correct response)

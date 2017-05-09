@@ -101,7 +101,6 @@ app.post('/adduser', function(req,res){
 
 	//console.log("ADD USER");
 	var time = process.hrtime();
-	if(debug){console.log("Entering add user");}
 	//get the username, password and email
 	var username = req.body.username;
 	var password = req.body.password;
@@ -111,15 +110,13 @@ app.post('/adduser', function(req,res){
 			var diff = process.hrtime(time);
 			if(diff[0] > 3)
 				console.log(`adduser: ${(diff[0] * 1e9 + diff[1])/1e9} seconds`);
-			console.log(err);
-			if(debug){console.log("Exiting add user");}
+			//console.log(err);
 			res.send(response);
 		}
 		else{
 			var diff = process.hrtime(time);
 			if(((diff[0] * 1e9 + diff[1])/1e9)> .5)
 				console.log(`adduser: ${(diff[0] * 1e9 + diff[1])/1e9} seconds`);			
-			if(debug){console.log("Exiting add user");}
 			res.send(response);
 		}
 	})
@@ -161,10 +158,9 @@ app.post("/login", function(req, res){
 
 	loginUtils.login(username, password, email, function(err, response, cookie_id){
 
-		if(response.status === 'error'){
-			console.log(err);
+		if(err){
+			//console.log(err);
 			var diff = process.hrtime(time);
-			if(debug){console.log("Exiting login");}
 			res.send(response);
 		}
 		else {
@@ -173,7 +169,6 @@ app.post("/login", function(req, res){
 			var diff = process.hrtime(time);
 			if(diff[0] > 3)
   				console.log(`login: ${(diff[0] * 1e9 + diff[1])/1e9} seconds`);
-  			if(debug){console.log("Exiting login");}
 			res.status(200).json(response);
 		}
 
@@ -194,20 +189,17 @@ app.post("/login", function(req, res){
 *
 ************************************************/
 app.post('/logout', function(req,res){
-	if(debug){console.log("Entering logout");}
 
 	//set the cookies to null
 	req.session = null;
 
 	//tell the client everything is peachy
-	if(debug){console.log("Exiting logout");}
 	res.send({status: "OK"});
 });//end /logout
 
 
 app.get('/verify/:URL', function(req, res){
 	//console.log("VERIFY");
-	if(debug){console.log("Entering verify URL");}
 	var url = req.params.URL;
 
 	TempUser.findOne({URL:url}, function(err, user){
@@ -250,7 +242,6 @@ app.get('/verify/:URL', function(req, res){
 ************************************************/
 app.post('/verify', function(req,res){
 //	console.log("VERIFY");
-	if(debug){console.log("Entering verify");}
 	var time = process.hrtime()
 	//grab the key and create varibales for the url and reutrn json
 	var key = req.body.key;
@@ -292,7 +283,6 @@ app.post('/verify', function(req,res){
 app.post('/additem', function(req,res){
 
 	//		console.log("ADD ITEM");
-	if(debug){console.log("Entering add item");}
 	var time = process.hrtime()
 
 	var params = {
@@ -307,15 +297,13 @@ app.post('/additem', function(req,res){
 		if (err){
 			console.log(err);
 			var diff = process.hrtime(time);
-			if(debug){console.log(`additem: ${(diff[0] * 1e9 + diff[1])/1e9} seconds`);}
-			if(debug){console.log("Exiting add item");}
+			console.log(`additem: ${(diff[0] * 1e9 + diff[1])/1e9} seconds`);
 			res.send(response);
 		}
 		else {
 			var diff = process.hrtime(time);
 			if(diff[0] > 3)
 				console.log(`additem: ${(diff[0] * 1e9 + diff[1])/1e9} seconds`);
-			if(debug){console.log("Exiting add item");}
 			res.send(response);
 		}
 
@@ -347,7 +335,6 @@ app.post('/additem', function(req,res){
 ************************************************/
 app.get('/item/:id', function(req,res){
 //	console.log("GET ITEM");
-	if(debug){console.log("Entering get item:/id");}
 	var time = process.hrtime();
 
 	//get the id of the tweet to search for
@@ -361,14 +348,12 @@ app.get('/item/:id', function(req,res){
 			var diff = process.hrtime(time);
 			if(diff[0] > 3)
 				console.log(`itemsearch: ${(diff[0] * 1e9 + diff[1])/1e9} seconds`);			
-			if(debug){console.log("Exiting get item:/id");}
 			res.send(response);
 		}
 		else{
 			var diff = process.hrtime(time)
 			if(diff[0] > 3)
 				console.log(`itemsearch: ${(diff[0] * 1e9 + diff[1])/1e9} seconds`);
-			if(debug){console.log("Exiting get item:/id");}
 			res.send(response);
 		}
 	});
@@ -408,7 +393,6 @@ app.delete('/item/:id', function(req,res){
 		Tweet.findOne({"_id": delete_id}, function(err, tweet){
 			if(err){
 				console.log(err);
-				if(debug){console.log("Exiting delete item");}
 				res.status(400).send({"status":"error"});
 			}
 			else if(tweet){	
@@ -422,7 +406,6 @@ app.delete('/item/:id', function(req,res){
 							var diff = process.hrtime(time);
 							if(diff[0] > 3)
 								console.log(`delete: ${(diff[0] * 1e9 + diff[1])/1e9} seconds`);
-							if(debug){console.log("Exiting delete item");}
 							res.status(200).send({"status":"OK"});
 
 						});
@@ -434,7 +417,6 @@ app.delete('/item/:id', function(req,res){
 						if(err){
 							console.log(err);
 						}
-						if(debug){console.log("Exiting delete item");}
 						res.status(200).send({"status":"OK"});
 
 					});
@@ -445,12 +427,10 @@ app.delete('/item/:id', function(req,res){
 				var response = {
 					'status':'error'
 				}
-				if(debug){console.log("Exiting delete item");}
 				res.send(response);
 			}
 		});
 	}else{
-		if(debug){console.log("Exiting delete item");}
 		res.status(404).send({"status":"error"});
 	}
 });
@@ -493,7 +473,6 @@ app.delete('/item/:id', function(req,res){
 app.post('/search', function(req,res){
 
 //		console.log("SEARCH");
-	if(searchDebug){console.log("Entering search item");}
 	var time = process.hrtime();
 
 	params =
@@ -529,7 +508,6 @@ app.post('/search', function(req,res){
 				console.log(response);
 			}
 			
-			if(searchDebug){console.log("Exiting delete item");}
 			res.send(response);
 		}
 	})
@@ -562,7 +540,6 @@ app.get('/user/:username', function(req,res){
 *******************************************************************/
 
 //	console.log("USER INFO");
-	if(debug){console.log("Entering get username");}
 	var username = req.params.username;
 
 	var time = process.hrtime();
