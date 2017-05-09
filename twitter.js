@@ -110,7 +110,7 @@ app.post('/adduser', function(req,res){
 			var diff = process.hrtime(time);
 			if(diff[0] > 3)
 				console.log(`adduser: ${(diff[0] * 1e9 + diff[1])/1e9} seconds`);
-			//console.log(err);
+			console.log(err);
 			res.send(response);
 		}
 		else{
@@ -158,8 +158,8 @@ app.post("/login", function(req, res){
 
 	loginUtils.login(username, password, email, function(err, response, cookie_id){
 
-		if(err){
-			//console.log(err);
+		if(response.status === 'error'){
+			console.log(err);
 			var diff = process.hrtime(time);
 			res.send(response);
 		}
@@ -354,6 +354,7 @@ app.get('/item/:id', function(req,res){
 			var diff = process.hrtime(time)
 			if(diff[0] > 3)
 				console.log(`itemsearch: ${(diff[0] * 1e9 + diff[1])/1e9} seconds`);
+			if(debug){console.log("Exiting get item:/id");}
 			res.send(response);
 		}
 	});
@@ -393,6 +394,7 @@ app.delete('/item/:id', function(req,res){
 		Tweet.findOne({"_id": delete_id}, function(err, tweet){
 			if(err){
 				console.log(err);
+				if(debug){console.log("Exiting delete item");}
 				res.status(400).send({"status":"error"});
 			}
 			else if(tweet){	
@@ -406,6 +408,7 @@ app.delete('/item/:id', function(req,res){
 							var diff = process.hrtime(time);
 							if(diff[0] > 3)
 								console.log(`delete: ${(diff[0] * 1e9 + diff[1])/1e9} seconds`);
+							if(debug){console.log("Exiting delete item");}
 							res.status(200).send({"status":"OK"});
 
 						});
@@ -417,6 +420,7 @@ app.delete('/item/:id', function(req,res){
 						if(err){
 							console.log(err);
 						}
+						if(debug){console.log("Exiting delete item");}
 						res.status(200).send({"status":"OK"});
 
 					});
@@ -427,10 +431,12 @@ app.delete('/item/:id', function(req,res){
 				var response = {
 					'status':'error'
 				}
+				if(debug){console.log("Exiting delete item");}
 				res.send(response);
 			}
 		});
 	}else{
+		if(debug){console.log("Exiting delete item");}
 		res.status(404).send({"status":"error"});
 	}
 });
@@ -473,6 +479,7 @@ app.delete('/item/:id', function(req,res){
 app.post('/search', function(req,res){
 
 //		console.log("SEARCH");
+	if(searchDebug){console.log("Entering search item");}
 	var time = process.hrtime();
 
 	params =
@@ -508,6 +515,7 @@ app.post('/search', function(req,res){
 				console.log(response);
 			}
 			
+			if(searchDebug){console.log("Exiting delete item");}
 			res.send(response);
 		}
 	})
@@ -540,6 +548,7 @@ app.get('/user/:username', function(req,res){
 *******************************************************************/
 
 //	console.log("USER INFO");
+	if(debug){console.log("Entering get username");}
 	var username = req.params.username;
 
 	var time = process.hrtime();

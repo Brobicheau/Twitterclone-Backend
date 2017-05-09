@@ -17,7 +17,7 @@ var  tweetQueue = queue();
 var tweetQ = []
 
 var startSetInterval = function(){
-	setInterval(saveTweet, 5)
+	setInterval(saveTweet, 2)
 }
 
 
@@ -40,7 +40,7 @@ var saveTweet = function(){
 				console.log(err);
 			}
 			else{
-				if(tweetQ.length > 50){
+				if(tweetQ.length > 100){
 					console.log('shrinking queue')
 					saveTweet()
 				}
