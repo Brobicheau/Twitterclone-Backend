@@ -24,8 +24,8 @@ var addmedia = function(params, callback){
 	});
 	//Q.addToQ(newMedia);
 	newMedia.save(function(err, results){
-		console.log(err);
 		if(err){
+			console.log(err)
 			callback(err, {'status':'error'});
 		}
 		else {

@@ -33,7 +33,7 @@ var saveTweet = function(){
 		var time = process.hrtime()
 		newTweet.save(function (err, results){
 			var diff = process.hrtime(time);
-			console.log(`save tweet time: ${(diff[0] * 1e9 + diff[1])/1e9} seconds`);
+			//console.log(`save tweet time: ${(diff[0] * 1e9 + diff[1])/1e9} seconds`);
 			//if there was an Error
 			if(err){
 				//print out the error(and send back correct response)
