@@ -14,9 +14,11 @@ var login = function(username, password, email, callback){
 
 User.findOne({'username':username}, function(err, user){
 
+	console.log(username);
 		if(err){
-			//////console.log(err)
-			callback(err, {'status':'error'});
+			console.log(err);
+			console.log('Error when finding username' + username);
+			callback(err, {'status':'OK'});
 		}
 		if(user && user.verified){
 
@@ -53,13 +55,14 @@ User.findOne({'username':username}, function(err, user){
 			});
 		}
 		//else error
-		else{
-
+		else{	
+			console.log("Failed to find username " + username)
 			var response = {
-				"status" : "user not found"
+				"status" : "error",
+				"error":"could not find username" + username
 			}
 			//theres an error here 
-			callback('user not found', response, null);
+			callback('Error: user not found', response, null);
 		}
 
 

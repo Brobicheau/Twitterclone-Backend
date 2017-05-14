@@ -158,7 +158,7 @@ app.post("/login", function(req, res){
 
 	loginUtils.login(username, password, email, function(err, response, cookie_id){
 
-		if(response.status === 'error'){
+		if(err){
 			console.log(err);
 			var diff = process.hrtime(time);
 			res.send(response);
