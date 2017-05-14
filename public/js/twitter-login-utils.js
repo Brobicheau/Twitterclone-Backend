@@ -14,13 +14,13 @@ var login = function(username, password, email, callback){
 
 User.findOne({'username':username}, function(err, user){
 
-	console.log(username);
+		console.log(username);
 		if(err){
 			console.log(err);
 			console.log('Error when finding username' + username);
 			callback(err, {'status':'OK'});
 		}
-		if(user && user.verified){
+		if(user){
 
 			//hash their password
 			bcrypt.compare(password, user.password).then(function(res){
@@ -59,7 +59,7 @@ User.findOne({'username':username}, function(err, user){
 			console.log("Failed to find username " + username)
 			var response = {
 				"status" : "error",
-				"error":"could not find username" + username
+				"error":"could not find username " + username
 			}
 			//theres an error here 
 			callback('Error: user not found', response, null);
