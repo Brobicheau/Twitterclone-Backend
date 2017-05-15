@@ -9,7 +9,7 @@ var options = {
 	    }
 	  }
   }
-var conn = mongoose.createConnection("192.168.1.135", options);
+var conn = mongoose.createConnection("192.168.1.141", options);
 var followSchema = mongoose.Schema({
 	"username":String,
 	"following": {type: String, index:true}
