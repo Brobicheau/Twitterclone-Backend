@@ -8,7 +8,7 @@ var options = {
 	    }
 	  }
   }
-var conn = mongoose.createConnection("192.168.1.109", options);
+var conn = mongoose.createConnection("192.168.1.135", options);
 var userSchema = mongoose.Schema({
 	username: { type: String, index: true},
 	email: { type: String},
