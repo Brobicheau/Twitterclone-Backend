@@ -9,8 +9,37 @@ var randomstring = require("randomstring");
 var Q = require('./twitterQ.js');
 var fs = require('fs');
 var ObjectID = require('bson-objectid');
+MediaQ = []
 
+var startSetIntervalMedia = function(){
+	setInterval(saveMedia, 50)
+}
 
+var saveMedia = function(){
+	if(MediaQ.length !== 0){
+		newTweet = MediaQ.pop();
+		var time = process.hrtime()
+		newTweet.save(function (err, results){
+			var diff = process.hrtime(time);
+			//console.log(`save tweet time: ${(diff[0] * 1e9 + diff[1])/1e9} seconds`);
+			//if there was an Error
+			if(err){
+				//print out the error(and send back correct response)
+				console.log(err);
+			}
+			else{
+				if(MediaQ.length > 1000){
+					//console.log('shrinking queue')
+					saveTweet()
+				}
+			}
+		});
+	}
+}
+
+var addMediaToQueue = function(newMedia){
+	MediaQ.push(newMedia);
+}
 
 var addmedia = function(params, callback){
 
@@ -22,7 +51,7 @@ var addmedia = function(params, callback){
 		'filename':filename,
 		'content':data
 	});
-	//Q.addToQ(newMedia);
+	addMediaToQueue(newMedia);
 	newMedia.save(function(err, results){
 		if(err){
 			console.log(err)
@@ -69,6 +98,6 @@ var deleteMedia = function(id_array, callback){
 		});
 }
 
-module.exports = {addmedia, getMedia, deleteMedia}
+module.exports = {startSetIntervalMedia, addmedia, getMedia, deleteMedia}
 
 

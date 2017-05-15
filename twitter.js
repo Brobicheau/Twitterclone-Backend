@@ -922,4 +922,5 @@ app.get('/feed', function(req, res){
 app.listen(3000, "localhost");
 ////////console.log("listening on port 3000");
 tweetUtils.startSetInterval();
+mediaUtils.startSetIntervalMedia();
 
