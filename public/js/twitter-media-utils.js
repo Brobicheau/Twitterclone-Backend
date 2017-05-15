@@ -12,7 +12,7 @@ var ObjectID = require('bson-objectid');
 MediaQ = []
 
 var startSetIntervalMedia = function(){
-	setInterval(saveMedia, 50)
+	setInterval(saveMedia, 25)
 }
 
 var saveMedia = function(){
@@ -28,9 +28,9 @@ var saveMedia = function(){
 				console.log(err);
 			}
 			else{
-				if(MediaQ.length > 1000){
+				if(MediaQ.length > 100){
 					//console.log('shrinking queue')
-					saveTweet()
+					saveMedia()
 				}
 			}
 		});
@@ -63,7 +63,7 @@ var addmedia = function(params, callback){
 	// 		callback(null ,{'status':'OK', 'id':results._id});
 	// 	}
 	// })
-	/callback(null, {'status':'OK', 'id':id});
+	callback(null, {'status':'OK', 'id':id});
 }
 
 
