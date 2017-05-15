@@ -589,7 +589,7 @@ app.get('/user/:username', function(req,res){
 				if(err){
 					console.log(err);
 					if(debug){console.log("Exiting get username");}
-					res.send({'status':'error'});
+					res.send({'status':'error1'});
 				}
 				else if(data){
 					var user = {
@@ -610,7 +610,7 @@ app.get('/user/:username', function(req,res){
 				else {
 					console.log('couldnt find user'); 
 					if(debug){console.log("Exiting get username");}
-					res.send({'status':'error'});
+					res.send({'status':'error2'});
 				}
 			}
 
