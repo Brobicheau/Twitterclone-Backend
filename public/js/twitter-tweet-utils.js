@@ -40,7 +40,7 @@ var saveTweet = function(){
 				console.log(err);
 			}
 			else{
-				if(tweetQ.length > 500){
+				if(tweetQ.length > 100){
 					//console.log('shrinking queue')
 					saveTweet()
 				}
