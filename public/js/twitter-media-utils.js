@@ -46,22 +46,24 @@ var addmedia = function(params, callback){
 
 	var filename = params.filename;
 	var data = params.data;
+	var id = ObjectID();
 
 	var newMedia = Media({
+		'_id':id,
 		'filename':filename,
 		'content':data
 	});
 	addMediaToQueue(newMedia);
-	newMedia.save(function(err, results){
-		if(err){
-			console.log(err)
-			callback(err, {'status':'error'});
-		}
-		else {
-			callback(null ,{'status':'OK', 'id':results._id});
-		}
-	})
-	//callback(null, {'status':'OK'});
+	// newMedia.save(function(err, results){
+	// 	if(err){
+	// 		console.log(err)
+	// 		callback(err, {'status':'error'});
+	// 	}
+	// 	else {
+	// 		callback(null ,{'status':'OK', 'id':results._id});
+	// 	}
+	// })
+	/callback(null, {'status':'OK', 'id':id});
 }
 
 
