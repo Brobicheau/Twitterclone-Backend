@@ -12,7 +12,7 @@ var login = function(username, password, email, callback){
 
 
 
-User.find({'username':username}, function(err, user){
+User.findOne({'username':username}, function(err, user){
 
 		console.log(username);
 		if(err){
