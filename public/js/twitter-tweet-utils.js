@@ -17,7 +17,7 @@ var  tweetQueue = queue();
 var tweetQ = []
 
 var startSetInterval = function(){
-	setInterval(saveTweet, 7)
+	setInterval(saveTweet, 4)
 }
 
 
