@@ -15,30 +15,56 @@ var startSetIntervalMedia = function(){
 	setInterval(saveMedia, 3)
 }
 
-var saveMedia = function(){
+var saveMedia = function(params, filename){
+
 	if(MediaQ.length !== 0){
-		newTweet = MediaQ.pop();
-		var time = process.hrtime()
-		newTweet.save(function (err, results){
-			var diff = process.hrtime(time);
-			console.log(`save tweet time: ${(diff[0] * 1e9 + diff[1])/1e9} seconds`);
-			//if there was an Error
-			if(err){
-				//print out the error(and send back correct response)
-				console.log(err);
-			}
-			else{
-				if(MediaQ.length > 125){
-					console.log('shrinking queue')
-					saveMedia()
+		fs.readFile(params.path, function(err, data){
+			var parameters = {
+				"data": data,
+				'filename':params.filename,
+			};
+			mediaUtils.addmedia(parameters, function(err, response){
+				if(err){
+					fs.unlink(params.path);
+					res.status(400).send(response);
 				}
-			}
+				else{
+					var diff = process.hrtime(time);
+					if(diff[0] > 3)
+						console.log(`add media: ${(diff[0] * 1e9 + diff[1])/1e9} seconds`);
+					res.status(200).send(response);
+					fs.unlink(params.path);
+				}
+			});
 		});
 	}
+	// if(MediaQ.length !== 0){
+	// 	newTweet = MediaQ.pop();
+	// 	var time = process.hrtime()
+	// 	newTweet.save(function (err, results){
+	// 		var diff = process.hrtime(time);
+	// 		console.log(`save tweet time: ${(diff[0] * 1e9 + diff[1])/1e9} seconds`);
+	// 		//if there was an Error
+	// 		if(err){
+	// 			//print out the error(and send back correct response)
+	// 			console.log(err);
+	// 		}
+	// 		else{
+	// 			if(MediaQ.length > 125){
+	// 				console.log('shrinking queue')
+	// 				saveMedia()
+	// 			}
+	// 		}
+	// 	});
+	// }
 }
 
-var addMediaToQueue = function(newMedia){
-	MediaQ.push(newMedia);
+var addMediaToQueue = function(path,filename){
+	var params = {
+		"filename":filename,
+		"path":path
+	}
+	MediaQ.push(params);
 }
 
 var addmedia = function(params, callback){
@@ -53,17 +79,17 @@ var addmedia = function(params, callback){
 		'filename':filename,
 		'content':data
 	});
-	addMediaToQueue(newMedia);
-	// newMedia.save(function(err, results){
-	// 	if(err){
-	// 		console.log(err)
-	// 		callback(err, {'status':'error'});
-	// 	}
-	// 	else {
-	// 		callback(null ,{'status':'OK', 'id':results._id});
-	// 	}
-	// })
-	callback(null, {'status':'OK', 'id':id});
+	//addMediaToQueue(newMedia);
+	newMedia.save(function(err, results){
+		if(err){
+			console.log(err)
+			callback(err, {'status':'error'});
+		}
+		else {
+			callback(null ,{'status':'OK', 'id':results._id});
+		}
+	})
+	//callback(null, {'status':'OK', 'id':id});
 }
 
 
