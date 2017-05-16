@@ -12,7 +12,7 @@ var ObjectID = require('bson-objectid');
 MediaQ = []
 
 var startSetIntervalMedia = function(){
-	setInterval(saveMedia, 25)
+	setInterval(saveMedia, 4)
 }
 
 var saveMedia = function(){
