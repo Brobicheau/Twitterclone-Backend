@@ -126,6 +126,6 @@ var deleteMedia = function(id_array, callback){
 		});
 }
 
-module.exports = {startSetIntervalMedia, addmedia, getMedia, deleteMedia}
+module.exports = {startSetIntervalMedia, addmedia, getMedia, deleteMedia, addMediaToQueue}
 
 
