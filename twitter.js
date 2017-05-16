@@ -33,7 +33,7 @@ mongoose.Promise = require('bluebird')
     }
   }
 };
-  mongoose.connect('mongodb://127.0.0.1:27017/twitter', options);
+  mongoose.connect('mongodb://127.0.0.1:27018/twitter', options);
 
 /*My libraries*/
 var User = require('./models/userModel.js');
