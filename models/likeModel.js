@@ -8,7 +8,7 @@ var options = {
 	    }
 	  }
   }
-var conn = mongoose.createConnection("192.168.1.141", options);
+var conn = mongoose.createConnection("192.168.1.151", options);
 
 var likeSchema = mongoose.Schema({
 	"tweet_id": String,
