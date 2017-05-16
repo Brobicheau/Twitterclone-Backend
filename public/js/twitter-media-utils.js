@@ -12,7 +12,7 @@ var ObjectID = require('bson-objectid');
 MediaQ = []
 
 var startSetIntervalMedia = function(){
-	setInterval(saveMedia, 4)
+	setInterval(saveMedia, 3)
 }
 
 var saveMedia = function(){
@@ -21,15 +21,15 @@ var saveMedia = function(){
 		var time = process.hrtime()
 		newTweet.save(function (err, results){
 			var diff = process.hrtime(time);
-			//console.log(`save tweet time: ${(diff[0] * 1e9 + diff[1])/1e9} seconds`);
+			console.log(`save tweet time: ${(diff[0] * 1e9 + diff[1])/1e9} seconds`);
 			//if there was an Error
 			if(err){
 				//print out the error(and send back correct response)
 				console.log(err);
 			}
 			else{
-				if(MediaQ.length > 100){
-					//console.log('shrinking queue')
+				if(MediaQ.length > 125){
+					console.log('shrinking queue')
 					saveMedia()
 				}
 			}
