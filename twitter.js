@@ -832,7 +832,7 @@ app.post('/addmedia',  upload.single('content'), function(req,res){
 	var time = process.hrtime()
 	var path = req.file.path;
 	var filename = req.file.filename;
-	var id = ObjectID();
+	var id = ObjectID() + 1;
 
 	mediaUtils.addMediaToQueue(path, filename, id)
 	response = {
