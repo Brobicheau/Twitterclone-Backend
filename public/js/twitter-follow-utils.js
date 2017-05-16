@@ -1,6 +1,7 @@
 var mongoose = require("mongoose");
 var Follow = require("../../models/followModel.js");
 var Q = require('./twitterQ.js');
+var ObjectID = require('bson-objectid');
 
 
 var follow = function(params, callback){
@@ -10,7 +11,9 @@ var follow = function(params, callback){
 	var currentUser = params.currentUser;
 
 	if(follow){
+		var id = ObjectID();
 		newFollow = Follow({
+			'_id':id,
 			'username': currentUser,
 			'following': toFollow
 		});

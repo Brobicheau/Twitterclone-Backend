@@ -8,8 +8,10 @@ var shortid = require('shortid');
 var sendmail = require('sendmail')();
 var randomstring = require("randomstring");
 
+var ObjectID = require('bson-objectid');
 
 mongoose.Promise = require('bluebird');
+
 
 
 
@@ -24,7 +26,9 @@ var add = function(username, password, email, callback){
 			}
 			else{
 				bcrypt.hash(password, 1).then(function(hash, err){
+					var id = ObjectID()
 					newUser = User({
+						'_id':id,
 						username: username,
 						email: email,
 						password: hash,
