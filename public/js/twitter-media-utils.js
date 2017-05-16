@@ -15,9 +15,10 @@ var startSetIntervalMedia = function(){
 	setInterval(saveMedia, 3)
 }
 
-var saveMedia = function(params, filename){
+var saveMedia = function(){
 
 	if(MediaQ.length !== 0){
+		params = MediaQ.pop();
 		fs.readFile(params.path, function(err, data){
 			var parameters = {
 				"data": data,
