@@ -19,23 +19,24 @@ var saveMedia = function(){
 
 	if(MediaQ.length !== 0){
 		params = MediaQ.pop();
-		fs.readFile(params.path, function(err, data){
+		var path = params.path
+		fs.readFile(path, function(err, data){
 			var parameters = {
 				"data": data,
 				'filename':params.filename,
 				'id':params.id
 			};
-			mediaUtils.addmedia(parameters, function(err, response){
+			addmedia(parameters, function(err, response){
 				if(err){
-					fs.unlink(params.path);
-					res.status(400).send(response);
+					fs.unlink(ath);
+					//res.status(400).send(response);
 				}
 				else{
-					var diff = process.hrtime(time);
-					if(diff[0] > 3)
-						console.log(`add media: ${(diff[0] * 1e9 + diff[1])/1e9} seconds`);
-					res.status(200).send(response);
-					fs.unlink(params.path);
+				//	var diff = process.hrtime(time);
+					//if(diff[0] > 3)
+					//	console.log(`add media: ${(diff[0] * 1e9 + diff[1])/1e9} seconds`);
+					//res.status(200).send(response);
+					fs.unlink(path);
 				}
 			});
 		});
