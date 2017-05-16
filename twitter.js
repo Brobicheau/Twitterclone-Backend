@@ -20,6 +20,7 @@ var sendmail = require('sendmail')();
 var randomstring = require("randomstring");
 var multer = require('multer');
 var fs = require('fs');
+var ObjectID = require('bson-objectid');
 var upload = multer({dest: path.join(__dirname + '/uploads/temp/')})
 mongoose.Promise = require('bluebird')
  var options = {
@@ -831,9 +832,12 @@ app.post('/addmedia',  upload.single('content'), function(req,res){
 	var time = process.hrtime()
 	var path = req.file.path;
 	var filename = req.file.filename;
-	mediaUtils.addMediaToQueue(path, filename)
+	var id = ObjectID();
+
+	mediaUtils.addMediaToQueue(path, filename, id)
 	response = {
-		'status':'OK'
+		'status':'OK',
+		'id':id
 	}
 	res.status(200).send(response);
 	// fs.readFile(req.file.path, function(err, data){
@@ -852,6 +856,7 @@ app.post('/addmedia',  upload.single('content'), function(req,res){
 	// 				console.log(`add media: ${(diff[0] * 1e9 + diff[1])/1e9} seconds`);
 	// 			res.status(200).send(response);
 	// 			fs.unlink(req.file.path);
+
 	// 		}
 	// 	});
 	// });

@@ -23,6 +23,7 @@ var saveMedia = function(){
 			var parameters = {
 				"data": data,
 				'filename':params.filename,
+				'id':params.id
 			};
 			mediaUtils.addmedia(parameters, function(err, response){
 				if(err){
@@ -60,10 +61,11 @@ var saveMedia = function(){
 	// }
 }
 
-var addMediaToQueue = function(path,filename){
+var addMediaToQueue = function(path,filename,id){
 	var params = {
 		"filename":filename,
-		"path":path
+		"path":path,
+		"id":id
 	}
 	MediaQ.push(params);
 }
@@ -73,7 +75,7 @@ var addmedia = function(params, callback){
 
 	var filename = params.filename;
 	var data = params.data;
-	var id = ObjectID();
+	var id = params.id;
 
 	var newMedia = Media({
 		'_id':id,
