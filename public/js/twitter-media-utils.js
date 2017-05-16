@@ -28,7 +28,7 @@ var saveMedia = function(){
 			};
 			addmedia(parameters, function(err, response){
 				if(err){
-					fs.unlink(ath);
+					fs.unlink(path);
 					//res.status(400).send(response);
 				}
 				else{
