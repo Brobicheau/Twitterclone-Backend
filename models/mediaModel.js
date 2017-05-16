@@ -8,7 +8,7 @@ var options = {
 	    }
 	  }
   }
-var conn = mongoose.createConnection("192.168.1.151", options);
+var conn = mongoose.createConnection("192.168.1.151:27017", options);
 
 var mediaSchema = mongoose.Schema({
 	'filename': String,
