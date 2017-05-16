@@ -22,6 +22,8 @@ var multer = require('multer');
 var fs = require('fs');
 var ObjectID = require('bson-objectid');
 var upload = multer({dest: path.join(__dirname + '/uploads/temp/')})
+var Media = require("./models/mediaModel.js");
+
 mongoose.Promise = require('bluebird')
  var options = {
   server: {
@@ -830,36 +832,29 @@ app.post('/addmedia',  upload.single('content'), function(req,res){
 	//	console.log("ADD MEDIA");
 
 	var time = process.hrtime()
-	var path = req.file.path;
+	var path = String(req.file.path);
 	var filename = req.file.filename;
-	var id = ObjectID() 
 
-	mediaUtils.addMediaToQueue(path, filename, id)
-	response = {
-		'status':'OK',
-		'id':id
-	}
-	res.status(200).send(response);
-	// fs.readFile(req.file.path, function(err, data){
-	// 	var params = {
-	// 		"data": data,
-	// 		'filename':req.file.filename,
-	// 	};
-	// 	mediaUtils.addmedia(params, function(err, response){
-	// 		if(err){
-	// 			fs.unlink(req.file.path);
-	// 			res.status(400).send(response);
-	// 		}
-	// 		else{
-	// 			var diff = process.hrtime(time);
-	// 			if(diff[0] > 3)
-	// 				console.log(`add media: ${(diff[0] * 1e9 + diff[1])/1e9} seconds`);
-	// 			res.status(200).send(response);
-	// 			fs.unlink(req.file.path);
+	fs.readFile(path, function(err, data){
+		var params = {
+			"data": data,
+			'filename':req.file.filename,
+		};
+		mediaUtils.addmedia(params, function(err, response){
+			if(err){
+				fs.unlink(path);
+				res.status(400).send(response);
+			}
+			else{
+				var diff = process.hrtime(time);
+				if(diff[0] > 3)
+					console.log(`add media: ${(diff[0] * 1e9 + diff[1])/1e9} seconds`);
+				res.status(200).send(response);
+				fs.unlink(path);
 
-	// 		}
-	// 	});
-	// });
+			}
+		});
+	});
 
 
 });
@@ -886,6 +881,7 @@ app.get('/media/:id', function(req,res){
 	mediaUtils.getMedia(params, function(err, data){
 
 		if(err){
+			console.log(err)
 			response = {
 				'status':'error'
 			};

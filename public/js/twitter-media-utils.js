@@ -12,7 +12,7 @@ var ObjectID = require('bson-objectid');
 MediaQ = []
 
 var startSetIntervalMedia = function(){
-	setInterval(saveMedia, 3)
+	//setInterval(saveMedia, 3)
 }
 
 var saveMedia = function(){
@@ -21,12 +21,8 @@ var saveMedia = function(){
 		params = MediaQ.pop();
 		var path = params.path
 		fs.readFile(path, function(err, data){
-			var parameters = {
-				"data": data,
-				'filename':params.filename,
-				'id':params.id
-			};
-			addmedia(parameters, function(err, response){
+			newMedia.data = data
+			addmedia(newMedia, function(err, response){
 				if(err){
 					fs.unlink(path);
 					//res.status(400).send(response);
@@ -62,11 +58,10 @@ var saveMedia = function(){
 	// }
 }
 
-var addMediaToQueue = function(path,filename,id){
+var addMediaToQueue = function(path,newMedia){
 	var params = {
-		"filename":filename,
 		"path":path,
-		"id":id
+		'content':newMedia
 	}
 	MediaQ.push(params);
 }
@@ -76,14 +71,12 @@ var addmedia = function(params, callback){
 
 	var filename = params.filename;
 	var data = params.data;
-	var id = params.id;
 
-	var newMedia = Media({
-		'_id':id,
+	newMedia = Media({
 		'filename':filename,
 		'content':data
 	});
-	//addMediaToQueue(newMedia);
+	addMediaToQueue(newMedia);
 	newMedia.save(function(err, results){
 		if(err){
 			console.log(err)
@@ -101,9 +94,10 @@ var addmedia = function(params, callback){
 
 
 var getMedia = function(params, callback){
-	var id = params.id;
+	var id = ObjectID(params.id)
 	Media.findOne({'_id':id}, function(err, media){
 		if(err){
+			console.log(err)
 			callback(err, {'status':'error'});
 		}
 		else if(media){
